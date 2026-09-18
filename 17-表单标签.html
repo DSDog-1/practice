@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表单标签</title>
+</head>
+<body>
+  <!-- 表单容器，主要作用是包裹表单控件 -->
+  <form action="">
+  <!--1.单行文本框和密码框、placeholder提示信息、name元素名称、maxlength最大字符数、accesskey快速访问键alt+u、autocomplete自动记录on/off-->
+  <ul>
+    <li>
+      账号：<input type="text" placeholder="请输入账号" name="username" accesskey="u" autocomplete="off">
+    </li>
+    <li>
+      密码：<input type="password" placeholder="请输入密码" name="password" maxlength="6">
+    </li>
+    <!--2.radio单选框，name属性相同，只能选择一个选项，checked属性默认选中一个选项、checkbox复选框，name相同也可多选、file文件域，multiple属性可选择多个文件,accept属性指定文件类型-->
+    <li>
+      性别：
+      <input type="radio" name="gender" value="0" checked>女
+      <input type="radio" name="gender" value="1">男
+    </li>
+    <li>
+      爱好：
+      <input type="checkbox" name="hobby" value="0" checked>篮球
+      <input type="checkbox" name="hobby" value="1">足球
+      <input type="checkbox" name="hobby" value="2">跑步
+    </li>
+    <li>
+      头像：<input type="file" name="file" multiple accept=".jpg,.png,.gif">
+    </li>
+<!--3.textarea文本域，cols属性可见区域内指定列数，默认20，rows属性可见区域内指定行数，默认2、select下拉列表，option选项，selected属性默认选中一个选项、button按钮，disabled属性禁用按钮，不能点击-->
+    <li>
+      留言：<textarea name="msg" id="" cols="30" rows="10" placeholder="请输入留言"></textarea>
+    </li>
+    <li>
+      请选择您的居住地：
+      <select name="city" id="">
+        <option value="0">北京</option>
+        <option value="1" selected>上海</option>
+        <option value="2">广州</option>
+      </select>
+    </li>
+    <li>
+      <button disabled>登录</button>
+    </li>
+  </ul>
+  </form>
+</body>
+</html>

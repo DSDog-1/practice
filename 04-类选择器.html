@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>类选择器</title>
+  <style>
+    /* 类选择器 选择一个或多个 实现差异化选择 */
+    .pink {
+      color: pink;
+    }
+    .sub-nav {
+      font-size: 16px;
+    }
+    /* 类选择器优先级高于类型选择器 */
+    div{
+      color: blue;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="pink">郭奉孝</div>
+  <div>贾文和</div>
+  <div>荀文若</div>
+  <div class="pink sub-nav">张孟卓</div>
+</body>
+</html>

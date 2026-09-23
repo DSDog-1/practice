@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>字体样式</title>
+  <style>
+    .pink {
+      color: pink;
+    }
+    .color16 {
+      color: #5e85b8;
+    }
+    .rgb {
+      color: rgb(255, 105, 180);
+    }
+    /* 半透明，0是完全透明，1是完全不透明 */
+    .rgba {
+      color: rgba(255, 105, 105, 0.5);
+      background-color: green;
+    }
+    .font {
+      font-family: "宋体", "微软雅黑";
+    }
+    .font12 {
+      font-size: 12px;/* fz12 */
+    }
+    .font16 {
+      font-size: 16px;
+    }
+    .font24 {
+      font-size: 24px;
+    }
+    .italic {
+      font-style: italic;/* 斜体 */
+    }
+    .normal {
+      font-style: normal;/* 让em或i取消斜体 */
+    }
+    .nobold1 {
+      font-weight: normal;/* 让h不加粗 */
+    }
+    .nobold2 {
+      font-weight: 400;/* 让h不加粗 */
+    }
+    .bold1 {
+      font-weight: bold;/* 加粗 */
+    }
+    .bold2 {
+      font-weight: 700;/* 加粗 */
+    }
+    a {
+      text-decoration: none;/* 链接td取消下划线 */
+    }
+    .underline {
+      text-decoration: underline;/* 下划线 */
+    }
+    .overline {
+      text-decoration: overline;/* 上划线 */
+    }
+    .line-through {
+      text-decoration: line-through;/* 删除划线 */
+    }
+  </style>
+</head>
+<body>
+  <h2>1.字体颜色</h2>
+  <p class="pink">颜色名称</p>
+  <p class="color16">十六进制颜色值</p>
+  <p class="rgb">RGB、A颜色值</p>
+  <p class="rgba">半透明</p>
+  <h2>设置字体族</h2>
+  <p class="font">字体名称设置</p>
+  <h2>3.设置字体大小</h2>
+  <p class="font12">px设置</p>
+  <p class="font16">px设置</p>
+  <p class="font24">px设置</p>
+  <h2>4.设置字体样式倾斜</h2>
+  <p class="italic">italic</p>
+  <em class="normal">normal</em>
+  <h2 class="nobold1">5.设置字体粗细</h2>
+  <h2 class="nobold2">5.设置字体粗细</h2>
+  <p class="bold1">关键词</p>
+  <p class="bold2">数字</p>
+  <h2>6.设置字体装饰</h2>
+  <p class="underline">下划线</p>
+  <p class="overline">上划线</p>
+  <p class="line-through">删除线</p>
+  <a href="#">链接用none取消下划线</a>
+</body>
+</html>

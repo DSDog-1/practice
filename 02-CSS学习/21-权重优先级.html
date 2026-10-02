@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>权重优先级</title>
+  <style>
+    * {
+      color: red !important;
+    }
+    div {
+      color: blue;
+    }
+    .font {
+      color: green;
+    }
+    #box {
+      color: pink;
+    }
+  </style>
+</head>
+<body>
+  <div class="font" id="box" style="color: orange;">
+    权重优先级：！important>内联样式>id选择器>类/属性/伪类>类型（标签）/伪元素>通配符/继承</div> 
+</body>
+</html>

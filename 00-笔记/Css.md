@@ -6,7 +6,6 @@
 
 - 动画交互
 
-  > **继承性：**继承父级属性，但优先自己的样式
 
 ## 1.位置分类
 
@@ -118,7 +117,7 @@ div {
 
 ### 关系选择器
 
-#### 后代选择器
+#### 后代选择器 空格
 
 ~~~css
 ul li a {
@@ -133,7 +132,7 @@ ul li a {
 >
 > 最常用
 
-#### 子代选择器
+#### 子代选择器 >
 
 ~~~css
 div > span {
@@ -145,7 +144,7 @@ div > span {
 >
 > 父级 **>** 某层子元素
 
-#### 邻接兄弟选择器
+#### 邻接兄弟选择器 +
 
 ~~~css
     h2 + p {
@@ -157,7 +156,7 @@ div > span {
 >
 > 兄弟1 **+** 兄弟2
 
-#### 通用兄弟选择器
+#### 通用兄弟选择器 ~
 
 ~~~css
     h3 ~ p {
@@ -168,6 +167,164 @@ div > span {
 > 选择紧跟在兄弟后面的**所有**同级元素
 >
 > 兄弟1 **~** 兄弟2
+
+### 分组选择器（并集选择器），
+
+~~~css
+    .contene img,
+    .contene video {
+      width: 100%;
+    }
+~~~
+
+> 不同选择器组合在一起，用**逗号**分隔
+>
+> 多个元素具备相同样式
+
+### 伪类选择器 ：
+
+#### 状态伪类
+
+~~~css
+    /* 链接伪类 */
+	/* 未访问链接 */
+    a:link {
+      color: #000;
+      text-decoration: none;
+    }
+    /* 已访问链接 */
+    a:visited {
+      color: orange;
+      text-decoration: none;
+    }
+    /* 鼠标悬停链接 */
+    a:hover {
+      color: red;
+      text-decoration: underline;
+    }
+    /* 鼠标点击链接 */
+    a:active {
+      color: green;
+      text-decoration: none;
+      font-size: 20px;
+    }
+~~~
+
+~~~css
+    /* 用户行为伪类 */
+	/* 鼠标悬停 */
+    .box:hover {
+      background-color: red;
+      color: #fff;
+    }
+    /* 搜索框获得焦点 */
+    .search:focus {
+      background-color: red;
+      width: 200px;
+    }
+~~~
+
+#### 结构伪类
+
+~~~css
+     /* 选择第一个小li */
+    .ul1 li:first-child {
+      color: red;
+    }
+    /* 选择最后一个小li */
+    .ul1 li:last-child {
+      color: blue;
+    }
+    /* 选择第5个li */
+    .ul1 li:nth-child(5) {
+      color: green;
+    }
+
+    /* 选择奇数个li */
+    .ul2 li:nth-child(odd) {
+      color: blue;
+    }
+    /* 选择偶数个li */
+    .ul2 li:nth-child(even) {
+      color: red;
+    }
+    /* 公式n=0开始 */
+	/* 3的倍数3n 第2个及其以后的元素n+2 前面三个元素-n+3 */
+    .ul2 li:nth-child(3n) {
+      color: pink;
+    }
+~~~
+
+#### 表单伪类
+
+~~~css
+    /*表单禁用状态*/
+    button:disabled {
+      /* 透明度 */
+      opacity: .4;
+    }
+    /* 表单选中状态 */
+    input:checked+label {
+    color: #ff6900;
+    }
+~~~
+
+### 伪元素选择器 ：：
+
+~~~cs
+    /* 选择首行 */
+    p::first-line {
+      color: red;
+    }
+    /* 选择首字母 */
+    p::first-letter {
+      color: blue;
+      font-size: 30px;
+    }
+    /* 选择文本域占位符 */
+    textarea::placeholder {
+      color: red;
+      font-size: 15px;
+    }
+~~~
+
+~~~css
+    /* before */
+    div::before {
+      content: '我是';/* 不可省略，可用""''替代 */
+      color: red;
+    }
+    /* after */
+    .box::after {
+      content: '老师';
+      color: pink;
+    }
+~~~
+
+### 属性选择器 [ ]
+
+~~~css
+    /* 选择包含属性class */
+    a[class] {
+      color: red;
+    }
+    /* 选择属性完全匹配的值font */
+    a[class="font"] {
+      color: blue;
+    }
+    /* 选择属性以指定值开头font- */
+    a[class^="font-"] {
+      color: green;
+    }
+    /* 选择属性以指定值结尾14 */
+    a[class$="14"] {
+      color: pink;
+    }
+    /* 选择属性包含指定值ed */
+    a[class*="ed"] {
+      color: orange;
+    }
+~~~
 
 ## 3.文本样式
 
@@ -333,3 +490,30 @@ div > span {
 > 让**单行**文本**垂直居中**
 >
 > 数字px/不带单位（当前字体大小的倍数）
+
+## 4.三大特性
+
+**继承性：**继承父级属性，但优先自己的样式
+
+**层叠性：**后面覆盖前面，要看选择器权重来确定优先级
+
+**优先级：**由选择器权重决定，高覆盖低的
+
+> 原则：
+>
+> 1.优先级相等时遵循层叠性
+>
+> 2.其余判断选择器权重
+>
+> 3.权重4位一组（0，0，0，0），是分开的层级，不能进位，可累加
+>
+> 4.权重优先级：！important>内联样式>id选择器>类/属性/伪类>类型（标签）/伪元素>通配符/继承
+
+## 5.盒子模型
+
+### 组成
+
+边框
+
+
+

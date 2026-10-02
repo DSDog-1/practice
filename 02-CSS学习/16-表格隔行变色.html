@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表格隔行变色</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .data {
+    /* 合并边框 */
+    border-collapse: collapse;
+    /* 边框1像素 实线 颜色 */
+    border: 1px solid #f1f1f1;
+    width: 400px;
+    margin: 0 auto;
+    /* 让表格里面的文字居中 */
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .data tr {
+    height: 35px;
+  }
+
+
+
+  /* 让奇数行隔行变色 */
+  .data tr:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+
+    /* 表格第一行 */
+  .data tr:first-child {
+    background-color: #202d3b !important;
+    color: #fff;
+  }
+
+  /* 鼠标经过表格 */
+  .data tr:hover {
+    background-color: #8fbcf1;
+    color: #fff;
+  }
+</style>
+<body>
+  
+  <table class="data">
+    <tr>
+      <th>姓名</th>
+      <th>数据</th>
+      <th>日期</th>
+    </tr>
+    <tr>
+      <td>张三</td>
+      <td>100</td>
+      <td>2023-01-01</td>
+    </tr>
+    <tr>
+      <td>李四</td>
+      <td>200</td>
+      <td>2023-01-02</td>
+    </tr>
+    <tr>
+      <td>王五</td>
+      <td>300</td>
+      <td>2023-01-03</td>
+    </tr>
+    <tr>
+      <td>赵六</td>
+      <td>400</td>
+      <td>2023-01-04</td>
+    </tr>
+    <tr>
+      <td>王二</td>
+      <td>500</td>
+      <td>2023-01-05</td>
+    </tr>
+  </table>
+</body>
+</html>

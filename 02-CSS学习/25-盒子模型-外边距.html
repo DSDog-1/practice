@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>盒子模型-外边距</title>
+  <style>
+    [class^="box"] {
+      width: 200px;
+      height: 200px;
+      background-color: pink;
+    }
+    .box1 {
+      margin: 10px 20px;
+    }
+    .box2 {
+      margin-top: 20px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      margin-left: 20px;
+    }
+    span {
+      width: 100px;/* 行内元素宽高度无效 */
+      height: 100px;
+      background-color: pink;
+      margin: 100px 50px;/* 行内盒子上下外边距无效 */
+      padding: 50px;
+      border: 2px solid red;
+    }
+  </style>
+</head>
+<body>
+  <div class="box1">第一个盒子</div>
+  <div class="box2">第二个盒子</div>
+  <span>行内盒子</span>
+</body>
+</html>

@@ -513,7 +513,124 @@ div > span {
 
 ### 组成
 
-边框
+#### （1）盒子内容
 
+#### （2）内边距 padding
 
+~~~css
+    .box1 {
+      padding: 10px 20px;/* 内边距顺时针上 右 下 左未赋值时与对边相等 */
+    }
+    .box2 {
+      padding-top: 10px;   
+      padding-right: 10px;
+      padding-bottom: 10px;
+      padding-left: 10px;
+    }
+~~~
+
+#### （3）边框 border
+
+~~~css
+    .box {
+      border-top: 10px solid #000;/* 实线 */
+      border-bottom: 10px dashed red;/* 虚线 */
+      border-left: 10px dotted green;/* 点线 */
+      border-right: 10px double blue;/* 双线 */
+    }
+~~~
+
+~~~css
+    .radius1 {
+     border-radius: 0 10px 20px;/* 圆角边框顺时针上 右 下 左未赋值时与对角相等 */
+    }
+    .radius2 {
+      width: 200px;
+      height: 200px;
+      border-radius: 100px;/* 圆形圆角为方形宽度一半或50% */
+    }
+    .radius3 {
+      width: 200px;
+      height: 40px;
+      border-radius: 20px;/* 胶囊按钮圆角为较小值的一半 */
+    }
+~~~
+
+> 层叠性：后面覆盖前面
+
+#### （4）外边距 margin
+
+~~~css
+    .box1 {
+      margin: 10px 20px;/* 外边距顺时针上 右 下 左未赋值时与对边相等 */
+    }
+    .box2 {
+      margin-top: 20px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      margin-left: 20px;
+    }
+~~~
+
+~~~css
+    span {
+      width: 100px;
+      height: 100px;/* 行内元素宽高度无效 */
+      margin: 100px 50px;/* 行内盒子上下外边距无效 */
+	}
+~~~
+
+~~~css
+    .box1 {
+      margin: 0 auto;/* 水平居中1 */
+
+      margin: auto;/* 水平居中2 */
+
+      margin-left: auto;
+      margin-right: auto;/* 水平居中3 */
+   
+    div {
+      text-align: center;
+    }
+    /* 行内盒子水平居中 */
+<div><span>行内盒子</span></div>
+~~~
+
+> 行内元素左右外边距生效，**上下外边距无效**
+>
+> 行内元素设置**宽度和高度也无效**
+>
+> 区块元素可以利用margin实现**水平居中**（有宽度+左右外边距为auto）
+>
+> **区块兄弟**元素上下外边距会出现**合并**情况（以最大单个外边距为准）
+>
+> **区块父子级**元素上下外边距会出现**塌陷**情况（给子级设置上下外边距会让父盒子塌陷移动）
+>
+> **`解决方案:`**
+>
+> **`1.给父级添加上边框`**
+>
+> **`2.给父添加上内边距`**
+>
+> **`3.给父级添加overflow：hidden；属性`**
+
+~~~css
+    /* 区块兄弟合并情况 */
+	.box1 {
+    margin-bottom: 100px;/* 外边距合并为100px */
+    }
+    .box2 {
+    margin-top: 50px;
+    }
+
+	/* 区块父子级塌陷情况 */
+    .father {
+      border-top: 1px solid red;/* 1. 父盒子有上边框 */
+      padding-top: 0.1px;/* 2. 父盒子有上内边距 */
+      overflow: hidden;/* 3.给父盒子添加属性 */
+    }
+    .son {
+      margin-top: 20px;
+    }
+~~~
 

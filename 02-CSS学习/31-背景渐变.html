@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>背景渐变</title>
+  <style>
+  .box {
+    width: 249px;
+    height: 100px;
+    background: linear-gradient(to right, red, blue);/* to 方位名词 */
+    background: linear-gradient(90deg, red, blue);/* deg角度 */
+    background: linear-gradient(to right, red 20%, blue 100%);/* 色标的位置不必须写 */
+  }
+  .text {
+    font-size: 20px;
+    font-weight: 700;
+    background-image: linear-gradient(to right, red, blue);
+    -webkit-background-clip: text;/* 谷歌浏览器老版本的兼容性 */
+    background-clip: text;/* 文字背景裁剪 */
+    -webkit-text-fill-color: transparent;/* 文本填充色为透明 */
+  }
+</style>
+</head>
+<body>
+  <div class="box"></div>
+  <div class="text">渐变文字2223333333333333333333</div>
+  <button>搜索</button>
+</body>
+</html>

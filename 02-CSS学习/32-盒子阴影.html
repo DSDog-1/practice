@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>盒子阴影</title>
+  <style>
+    .box {
+      width: 200px;
+      height: 200px;
+      background-color: pink;
+      margin: 100px auto;
+      transition: all 0.5s;/* 过渡效果 */
+    }
+    
+    .box:hover {
+     box-shadow: 10px 10px 10px 1px rgba(0, 0, 0, 0.5);
+     /* 水平偏移量 垂直偏移量 模糊半径 扩散半径 内阴影inset 阴影颜色 */
+     }
+  </style>
+</head>
+<body>
+  <div class="box"></div>
+</body>
+</html>

@@ -1,10 +1,31 @@
 # CSS（Cascading Style Sheets）
 
 - 样式美化
-
 - 布局与定位
-
 - 动画交互
+
+## 样式初始化
+
+~~~css
+    /* 简单重置 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    /* 清除列表项默认样式 */
+    ul,ol {
+      list-style: none;
+    }
+    /* 清除链接默认样式 */
+    a {
+      text-decoration: none;
+    }
+    /* 清除input默认样式 */
+    input {
+      outline: none;
+    }
+~~~
 
 
 ## 1.位置分类
@@ -515,6 +536,15 @@ div > span {
 
 #### （1）盒子内容
 
+~~~css
+    .box1 {
+      box-sizing: content-box;/* 默认，width=内容宽度 */
+    }
+    .box2 {
+      box-sizing: border-box;/* width=内容宽度+padding+border */
+    }
+~~~
+
 #### （2）内边距 padding
 
 ~~~css
@@ -634,3 +664,74 @@ div > span {
     }
 ~~~
 
+### 背景
+
+#### 图片
+
+~~~css
+    .box {
+      /* 背景图片 文字压住背景 */
+      background-image: url(./img/w2.webp);
+      /* 背景平铺 */
+      background-repeat: repeat;/* 默认平铺 */
+      background-repeat: no-repeat;/* 不平铺 */
+      background-repeat: repeat-x;/* 横向平铺 */
+      background-repeat: repeat-y;/* 纵向平铺 */
+      /* 背景位置 */
+      background-position: 100px 100px;/* x y 也可以是百分比、方位名词，只写一个值默认y为center */
+      /* 背景尺寸 */
+      background-size: 200px 200px;/* 宽度 高度 也可以是百分比 */
+      background-size: cover;/* 覆盖 */
+      background-size: contain;/* 包含 */
+      /* 背景固定 */
+      background-attachment: scroll;/* 默认随盒子滚动 */
+      background-attachment: fixed;/* 相对于浏览器视口固定 */
+   }
+~~~
+
+> 复合写法：background：颜色 图片 重复 固定 **位置/尺寸** ；`顺序无关`
+
+#### 渐变
+
+~~~css
+  	/* 盒子渐变 */
+	.box {
+    background: linear-gradient(to right, red, blue);/* to 方位名词 */
+    background: linear-gradient(90deg, red, blue);/* deg角度 */
+    background: linear-gradient(to right, red 20%, blue 100%);/* 色标的位置不必须写 */
+  }
+	/* 文本渐变 */
+ 	.text {
+    font-size: 20px;
+    font-weight: 700;
+    background-image: linear-gradient(to right, red, blue);
+    -webkit-background-clip: text;/* 谷歌浏览器老版本的兼容性 */
+    background-clip: text;/* 文字背景裁剪 */
+    -webkit-text-fill-color: transparent;/* 文本填充色为透明 */
+  }
+~~~
+
+### 动效
+
+#### 阴影
+
+~~~css
+    .box:hover {
+     box-shadow: 10px 10px 10px 1px rgba(0, 0, 0, 0.5);
+     /* 水平偏移量 垂直偏移量 模糊半径 扩散半径 内阴影inset 阴影颜色 */
+     }
+~~~
+
+> **前两个偏移量必写**，其余可以采取默认值
+
+#### 过渡
+
+~~~css
+      transition: all 0.5s;
+~~~
+
+> 语法：**transition：过渡属性 过渡时间s；**
+>
+> 都要变化过渡属性写**all**
+>
+> 过渡写在盒子身上

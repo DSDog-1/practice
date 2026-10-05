@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多行文本显示省略号</title> 
+  <style>
+    /* 初始化 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .box {
+      width: 200px;
+      height: 50px;/* 高度修改为文字显示区域 */
+      background-color: pink;
+      overflow: hidden;/* 隐藏超出部分 */
+      text-overflow: ellipsis;/* 超出部分省略号 */
+      display: -webkit-box;/* 弹性盒子模型 */
+      -webkit-line-clamp: 2;/* 显示两行 */
+      -webkit-box-orient: vertical;/* 文本垂直显示 */
+
+    }
+  </style>
+</head>
+<body>
+  <div class="box">“小妖怪的夏天”团队！动画电影《小妖怪的夏天》新预告，取经赛道的离谱组合值得期待</div>
+</body>
+</html>

@@ -512,6 +512,77 @@ div > span {
 >
 > 数字px/不带单位（当前字体大小的倍数）
 
+#### 溢出显示省略号
+
+~~~css
+  	/* 单行文本显示省略号 */    
+	overflow: hidden;/* 隐藏超出部分 */
+     text-overflow: ellipsis;/* 超出部分省略号 */
+     white-space: nowrap;/* 不换行 */
+	/* 多行文本显示省略号 */
+    .box {
+      width: 200px;
+      height: 50px;/* 高度修改为文字显示区域 */
+      overflow: hidden;/* 隐藏超出部分 */
+      text-overflow: ellipsis;/* 超出部分省略号 */
+      display: -webkit-box;/* 弹性盒子模型 */
+      -webkit-line-clamp: 2;/* 显示两行 */
+      -webkit-box-orient: vertical;/* 文本垂直显示 */
+    }
+~~~
+
+### 字体图标
+
+- 导航菜单图标
+- 按钮操作图标
+- 结合动画效果
+
+> 优势：
+>
+> 矢量无损放大缩小
+>
+> 可通过css直接改属性
+>
+> 一个字体文件可包含多个图标，比图片高效，减少http请求
+>
+> 兼容好
+
+~~~css
+  <link rel="stylesheet" href="./iconfont/iconfont.css">
+  <style>
+    .icon-good {
+      font-size: 40px;
+      color: #ff5000;
+    }
+  </style>
+</head>
+<body>
+  <span class="iconfont icon-good"></span>
+~~~
+
+#### 精灵图
+
+> 多个小图标合并到一张大图，再由**background-position**属性显示特定部分
+>
+> 在线测量坐标工具：https://www.tugaigai.com/online_ps/
+
+~~~css
+    .box {
+      width: 28px;
+      height: 26px;
+      /* 精灵图的核心是作为背景 */
+      background: url(./img/wz.webp) no-repeat;
+    }
+    .box1 {
+      background-position: 0 -169px;
+    }
+    .box2 {
+      background-position: -90px -170px;
+      /* 背景跟着盒子走 */
+      margin-left: 10px;
+    }
+~~~
+
 ## 4.三大特性
 
 **继承性：**继承父级属性，但优先自己的样式
@@ -735,3 +806,123 @@ div > span {
 > 都要变化过渡属性写**all**
 >
 > 过渡写在盒子身上
+
+## 6.布局 
+
+### dislpay
+
+#### display：block 区块元素
+
+> **独占一行，可以设置宽高**，默认撑满父容器宽度
+
+~~~css
+    .subbar ul a {
+      /* 把链接转换为块级元素 修改a的范围 */
+      display: block;
+      height: 42px;
+      line-height: 42px;
+      color: #fff;
+      padding-left: 20px;
+    }
+~~~
+
+#### display：inline  行内元素
+
+> 不独占一行，不能设置宽高，默认宽度由内容决定
+
+#### display：inline-block  行内块元素
+
+> 表单元素默认
+>
+> 不独占一行，**可以设置宽高**，默认宽度由内容决定（可覆盖）
+>
+> 清除元素间距将父元素字号改为0
+
+~~~css
+    .box {
+      /* 清除列表项之间的间距 */
+        font-size: 0;
+    }
+    .box li {
+      /* 把列表转换为行内块元素 */
+      display: inline-block;
+      font-size: 14px;
+    }
+~~~
+
+### float 浮动
+
+float：let； 左浮动
+
+float：right； 右浮动
+
+float：none； 不浮动
+
+> 让元素脱离文档流，影响周围元素的布局
+
+#### 清除浮动（闭合浮动）：
+
+1.额外标签法
+
+~~~css
+    .clear {
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="son1"></div>
+    <div class="son2"></div>
+    <!-- 子盒子后添加一个清除浮动的元素 -->
+     <div class="clear"></div>
+  </div>
+~~~
+
+2.单伪元素清除浮动
+
+~~~css
+     .main::after {/* 父盒子后添加一个伪元素 */
+      content: "";
+      display: block;
+      clear: both;
+     }
+~~~
+
+3.双伪元素清除浮动
+
+~~~css
+    .main::after,
+    .main::before {
+      content: "";
+      display: table;
+    }
+    .main::after {
+      clear: both;
+    }
+~~~
+
+4.overflow清除浮动
+
+~~~css
+    .main {
+      overflow: hidden;
+~~~
+
+### flexbox 弹性布局
+
+> 父盒子`容器`控制子盒子`项目`（样式写给父亲）
+>
+> 主轴默认水平方向，交叉轴（侧轴）默认垂直方向，可更改（决定子盒子如何排列）
+
+~~~csss
+    .box {
+      /* 弹性布局容器 */
+      display: flex;
+~~~
+
+> 若子元素有大小，则按照给定大小显示
+>
+> 若子元素无大小，则高度拉伸充满父容器，宽度由内容决定
+>
+> 若子元素总宽度超过容器宽度，默认会压缩子元素

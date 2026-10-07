@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>清除浮动</title> 
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .main {
+      overflow: hidden;
+      width: 300px;
+      /* height: 100px; */
+      border: 1px solid #ff5000;
+      margin: 0 auto;
+    }
+    .main .son1 {
+      float: left;
+      width: 100px;
+      height: 100px;
+      background-color: pink;
+    }
+    .main .son2 {
+      float: left;
+      width: 100px;
+      height: 100px;
+      background-color: skyblue;
+    }
+    .footer {
+      width: 500px;
+      height: 100px;
+      background-color: black;
+      margin: 0 auto;
+    }
+    /* 额外标签法 */
+    /* .clear {
+      clear: both;
+    } */
+     /* 单伪元素法
+     .main::after {/* 父盒子后添加一个伪元素 
+      content: "";
+      display: block;
+      clear: both;
+     } */
+    /* 双伪元素法 */
+    /* .main::after,
+    .main::before {
+      content: "";
+      display: table;
+    }
+    .main::after {
+      clear: both;
+    } */
+  </style>
+</head>
+<body>
+  <div class="main clearfix">
+    <div class="son1"></div>
+    <div class="son2"></div>
+    <!-- 子盒子后添加一个清除浮动的元素 -->
+     <!-- <div class="clear"></div> -->
+  </div>
+  <div class="footer"></div>
+</body>
+</html>

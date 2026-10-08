@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>弹性布局-修改主轴方向</title>
+  <link rel="stylesheet" href="./iconfont(1)/iconfont.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    ul,
+    ol {
+      list-style: none;
+    }
+    a {
+      text-decoration: none;
+      color: #333;
+    }
+    .box {
+      font-size: 13px;
+      display: flex;
+    }
+    .iconfont {
+      font-size: 30px;
+    }
+    .box li {
+      width: 60px;
+      height: 80px;
+      /* border: 1px solid #ff5000; */
+    }
+    .box li a {
+      display: flex;
+      height: 100%;/* 给了flex布局可直接设置高度 */
+      flex-direction: column;/* 改变主轴方向 */
+      justify-content: center;/* 主轴居中对齐 */
+      align-items: center;/* 交叉轴居中对齐 */
+    }
+  </style>
+</head>
+<body>
+  <ul class="box">
+    <li>
+      <a href="#">
+        <i class="iconfont icon-dianzan"></i>
+        <p>点赞</p>
+      </a>
+    </li>
+        <li>
+      <a href="#">
+        <i class="iconfont icon-yingbi"></i>
+        <p>投币</p>
+      </a>
+    </li>
+        <li>
+      <a href="#">
+        <i class="iconfont icon-shoucang"></i>
+        <p>收藏</p>
+      </a>
+    </li>
+  </ul>
+</body>
+</html>

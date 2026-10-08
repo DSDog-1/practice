@@ -915,10 +915,14 @@ float：none； 不浮动
 >
 > 主轴默认水平方向，交叉轴（侧轴）默认垂直方向，可更改（决定子盒子如何排列）
 
+#### 容器
+
 ~~~csss
     .box {
       /* 弹性布局容器 */
       display: flex;
+      /* 间距gap：行间距 列间距 */
+      gap：10px
 ~~~
 
 > 若子元素有大小，则按照给定大小显示
@@ -926,3 +930,71 @@ float：none； 不浮动
 > 若子元素无大小，则高度拉伸充满父容器，宽度由内容决定
 >
 > 若子元素总宽度超过容器宽度，默认会压缩子元素
+
+#### 主轴对齐方式 justify-content
+
+~~~css
+      justify-content: flex-start;/* 默认左对齐 */
+      justify-content: flex-end;/* 右对齐 */
+      justify-content: center;/* 居中对齐 */
+      justify-content: space-between;/* 两端对齐A-B-C */
+      justify-content: space-around;/* 项目等外边距-A--B--C- */
+      justify-content: space-evenly;/* 间距平均分配-A-B-C- */
+~~~
+
+####  **单行**交叉轴对齐方式 alige-items
+
+~~~css
+	  align-items: flex-start;/* 默认上对齐 */
+      align-items: flex-end;/* 下对齐 */
+      align-items: center;/* 居中对齐 */
+      align-items: stretch;/* 拉伸对齐 子盒子不能有高度 */
+~~~
+
+#### 定义主轴方向  flex-direction
+
+~~~css
+      flex-direction: row;/* 默认水平 */
+      flex-direction: row-reverse;/* 水平反向 */
+      flex-direction: column;/* 垂直 */
+      flex-direction: column-reverse;/* 垂直反向 */ 
+~~~
+
+#### 控制是否换行 flex-wrap
+
+~~~css
+      flex-wrap: nowrap;/* 默认不换行 */
+      flex-wrap: wrap;/* 强制换行 */
+      flex-wrap: wrap-reverse;/* 强制换行并反向排列 */
+~~~
+
+#### **多行**交叉轴对齐方式 alige-content
+
+> 必须设置父盒子高度
+
+~~~css
+      align-content: start;/* 靠上对齐 */
+      align-content: end;/* 靠下对齐 */
+      align-content: center;/* 居中对齐 */
+      align-content: space-between;/* 两端对齐 */
+      align-content: space-around;/* 外边距相等 */
+      align-content: space-evenly;/* 间距平分 */
+~~~
+
+#### 子盒子属性
+
+~~~css
+	/* 写给子盒子优先执行flex属性 */
+     flex: 1;
+     /* 把父盒子的`剩余空间`平均分为几等份,一个子盒子占1份,来填满父盒子 */
+~~~
+
+> flex-grow 放大比例
+>
+> flex-shrink 缩小比例
+>
+> flex-basis 初始大小
+>
+> flex：1 -> 1 1 0%
+>
+> flex：2 -> 2 1 0%

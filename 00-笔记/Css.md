@@ -985,8 +985,15 @@ float：none； 不浮动
 
 ~~~css
 	/* 写给子盒子优先执行flex属性 */
-     flex: 1;
-     /* 把父盒子的`剩余空间`平均分为几等份,一个子盒子占1份,来填满父盒子 */
+	flex: 1;
+	/* 把父盒子的`剩余空间`平均分为几等份,一个子盒子占1份,来填满父盒子 */
+	flex: 0 0 16.6666666%;/* 淘宝多行伸缩尺寸 */
+	
+	flex: 1;
+	min-width: 16.66666666666666%;
+	max-width: 16.66666666666666%;/* 京东多行伸缩尺寸 */
+
+	vertical-align:middle;/* 垂直居中 */
 ~~~
 
 > flex-grow 放大比例
@@ -998,3 +1005,67 @@ float：none； 不浮动
 > flex：1 -> 1 1 0%
 >
 > flex：2 -> 2 1 0%
+
+### position 定位布局
+
+> 固定导航栏
+>
+> 吸顶效果
+>
+> 弹出菜单/下拉框
+>
+> 悬浮效果
+
+#### 相对定位 relative
+
+
+
+## 7.弹性盒子实战
+
+1.引入网页图标favicon
+
+2.引入字体图标
+
+3.引入css文件：初始化、公共样式、页面样式
+
+4.公共样式中 确定版心（页面宽度）
+
+5.快捷导航
+
+6.header部分
+
+> logo：h1提高权重，包含首页链接，背景图片添加title
+>
+> ~~~html
+>     <div class="logo">
+>       <h1>
+>         <a href="小兔鲜首页.html" title="小兔鲜儿">小兔鲜儿</a>
+>       </h1>
+>     </div>
+> ~~~
+>
+> ~~~css
+> .header .logo {
+>   width: 200px;
+>   height: 88px;
+>   background-color: #fff;
+> }
+> .header .logo h1 {
+>   width: 100%;
+>   height: 100%;
+> }
+> .header .logo a {
+>   display: block;
+>   width: 100%;
+>   height: 100%;
+>   background: url(../images/logo.png) no-repeat;
+>   text-indent: -9999px;/* 隐藏文字 */
+>   overflow: hidden;
+> }
+> ~~~
+
+7.footer部分
+
+> 口号模块、服务模块、版权模块
+
+8.页面主体部分

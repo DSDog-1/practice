@@ -1,4 +1,4 @@
-/* 公共样式 头部与底部 */
+ /* 公共样式 头部与底部 */
 .w {/* 版心 */
   width: 1240px;
   margin: 0 auto;
@@ -76,6 +76,16 @@
   border-bottom: 2px solid #5eb69c;/* 下边框 */
 }
 
+.search {
+  position: relative;
+}
+.search i {
+  position: absolute;
+  top: 9px;
+  left: 0px;
+font-size: 20px;
+color: #ccc;
+}
 .search input {
 width: 170px;
 height: 40px;
@@ -87,12 +97,23 @@ font-size: 16px;
   font-size: 16px;
   color: #ccc;
 }
-
+.car {
+  position: relative;
+}
 .car i {
   font-size: 40px;
   margin-right: 15px;
 }
-
+.car span {
+  position: absolute;
+  top: 0px;
+  left: 20px;
+  font-size: 12px;
+  color: #fff;
+  background-color: #e26237;
+  padding: 2px 5px;
+  border-radius: 8px;
+}
 /* 2.网页底部 */
 .footer {
   height: 580px;

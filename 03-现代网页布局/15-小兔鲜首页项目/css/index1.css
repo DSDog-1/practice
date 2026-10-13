@@ -1,18 +1,27 @@
 /* 首页样式 */
 /* 3.1ENTRY模块 */
-.entry{
+.entry {
   height: 500px;
   background-color: #f5f5f5;
 }
+
 .entry .w {
+  position: relative;
   height: 100%;
-  background: url(../uploads/banner1.png) no-repeat;
+  /* background: url(../uploads/banner1.png) no-repeat; */
 }
+
 .category {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  /* 提高定位层级 */
   width: 250px;
   height: 500px;
-  background:rgba(0, 0, 0, .42);
+  background: rgba(0, 0, 0, .42);
 }
+
 .category ul li {
   justify-content: space-between;
   display: flex;
@@ -22,17 +31,74 @@
   padding: 0 12px 0 29px;
   color: #fff;
 }
+
 .category ul li:hover {
   background-color: #00be9a;
 }
+
 .category ul li a {
   color: #fff;
   font-size: 14px;
 }
+
 .category ul li a:first-child {
   font-size: 16px;
   margin-right: 10px;
 }
+
+.banner {
+  position: relative;
+}
+
+.banner .circle {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+}
+
+.banner .circle li {
+  width: 14px;
+  height: 14px;
+  background-color: rgba(255, 255, 255, .5);
+  border-radius: 50%;
+  margin: 0 8px;
+}
+
+/*  鼠标悬停时，阴影实现边框效果 */
+.banner .circle li:hover {
+  background-color: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, .5);
+}
+
+.banner .next,
+.banner .prev {
+  position: absolute;
+  top: 50%;
+  margin-top: -30px;
+  /* 垂直居中 高度一半 */
+  width: 40px;
+  height: 60px;
+  background-color: rgba(0, 0, 0, .5);
+}
+
+.banner .prev {
+  left: 250px;
+}
+
+.banner .next {
+  right: 0;
+}
+
+.banner .next i,
+.banner .prev i {
+  display: block;
+  line-height: 60px;
+  text-align: center;
+  font-size: 35px;
+  color: #fff;
+}
+
 /* 2.新鲜好物模块 */
 .box-hd {
   height: 112px;
@@ -41,67 +107,82 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .box-hd h2 {
   font-size: 30px;
 }
+
 .box-hd h2 small {
   font-size: 16px;
   color: #a1a1a1;
-  margin-left:30px;
+  margin-left: 30px;
 }
+
 .box-hd a {
   font-size: 16px;
   color: #a1a1a1;
 }
+
 .box-bd ul {
   display: flex;
   justify-content: space-between;
 }
+
 .box-bd ul li {
   width: 304px;
   height: 404px;
   background-color: #eef9f4;
   text-align: center;
 }
+
 .box-bd ul li a {
   display: block;
   height: 100%;
 }
+
 .box-bd ul li img {
   width: 304px;
   height: 304px;
 }
+
 .box-bd ul li .title {
-margin: 18px 0 15px;
-font-size: 20px;
-padding: 0 25px;
-/* 超出部分省略号 */
-overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
+  margin: 18px 0 15px;
+  font-size: 20px;
+  padding: 0 25px;
+  /* 超出部分省略号 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 .box-bd ul li .price {
   font-size: 22px;
   color: #aa2113;
 }
+
 .box-bd ul li .price small {
   font-size: 18px;
 }
+
 /* 3.3人气推荐模块 */
 .hot .box-hd ul li {
   background-color: #fff;
 }
-.hot  {
+
+.hot {
   margin-bottom: 60px;
 }
-.hot  .box-bd ul li p {
+
+.hot .box-bd ul li p {
   color: #b9b0b0;
 }
+
 /* 3.4热门品牌模块 */
-.brand .abc ul  {
+.brand .abc ul {
   display: flex;
   justify-content: space-between;
 }
+
 /* 3.5服饰模块 */
 .head {
   display: flex;
@@ -110,25 +191,31 @@ white-space: nowrap;
   height: 102px;
   padding-top: 10px;
 }
+
 .head .head-right {
   display: flex;
 }
+
 .head h2 {
-font-size: 30px;
+  font-size: 30px;
 }
-.head .head-right .more  {
+
+.head .head-right .more {
   font-size: 16px;
   color: #a1a1a1;
   margin-left: 60px;
 }
+
 .head .head-right ul {
   display: flex;
   gap: 10px;
 }
+
 .head .head-right ul li a {
-padding: 3px 8px;
-border-radius: 5px;
+  padding: 3px 8px;
+  border-radius: 5px;
 }
+
 .head .head-right ul li a:hover {
   background-color: #00be9a;
   color: #fff;
@@ -138,67 +225,81 @@ border-radius: 5px;
   display: flex;
   justify-content: space-between;
 }
+
 .body .body-l {
   width: 248px;
   height: 610px;
   background-color: #eef9f4;
 }
+
 .body .body-r {
   width: 968px;
   height: 610px;
   background-color: #fff;
   display: flex;
   flex-wrap: wrap;
-  
+
 }
+
 .body .body-r li {
   width: 242px;
-  height: 305px; 
+  height: 305px;
   padding: 10px 21px 0;
 }
+
 .body .body-r li a {
   display: block;
   height: 100%;
   width: 100%;
   line-height: 19px;
 }
+
 .body .body-r li a img {
   width: 200px;
   height: 180px;
 }
+
 .body .body-r li a .title {
   margin-top: 10px;
   font-size: 16px;
 }
+
 .body .body-r li a .price {
   font-size: 22px;
   color: #af2f22;
   margin-top: 12px;
 }
+
 .body .body-r li a .price small {
   font-size: 18px;
 }
+
 /* 单行文本显示省略号 做一个类名 */
 .ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 /* 3.6新鲜好物模块 */
 .news {
   margin-bottom: 60px;
 }
+
 .news ul {
   display: flex;
   gap: 12px;
 }
+
 .news ul li {
   flex: 1;
-  height: 355px; 
+  height: 355px;
 }
+
 .news ul li img {
   width: 100%;
 }
+
 .news ul li .con {
   height: 67px;
   display: flex;
@@ -208,6 +309,7 @@ border-radius: 5px;
   font-size: 14px;
   color: #666;
 }
+
 .news ul li .con .like {
   margin-right: 20px;
 }

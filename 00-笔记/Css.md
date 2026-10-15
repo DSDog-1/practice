@@ -911,6 +911,8 @@ float：none； 不浮动
 
 ### flexbox 弹性布局
 
+> 单行
+>
 > 父盒子`容器`控制子盒子`项目`（样式写给父亲）
 >
 > 主轴默认水平方向，交叉轴（侧轴）默认垂直方向，可更改（决定子盒子如何排列）
@@ -1008,17 +1010,162 @@ float：none； 不浮动
 
 ### position 定位布局
 
-> 固定导航栏
+> 固定导航栏`固定定位`
 >
-> 吸顶效果
+> 吸顶效果`粘性定位`
 >
-> 弹出菜单/下拉框
+> 弹出菜单/下拉框 `绝对定位`
 >
-> 悬浮效果
+> 悬浮效果 `绝对定位`
+>
+> z-index**层叠性**，越大越在上，默认为0
+
+#### 默认定位 static
 
 #### 相对定位 relative
 
+> 距离自身原来位置
+>
+> 不脱离正常流，只保留元素原位置
+>
+> 优先级，同时设置时仅top和left生效
 
+~~~css
+      position: relative;
+      top: 100px;
+      left: 100px;
+~~~
+
+#### 绝对定位 absolute
+
+> 脱离正常流，不占据空间
+>
+> 相对于最近的已定位relative的祖先元素，若无则以视口来一定位
+>
+> 优先级
+
+~~~css
+      position: absolute;
+      top: 150px;
+      left: 150px;
+~~~
+
+~~~css
+  top: 50%;
+  margin-top: -30px;
+  /* 垂直居中 高度一半 */
+~~~
+
+#### 固定定位 fixed
+
+> 脱离正常流
+>
+> 相对于视口定位
+>
+> 优先级
+
+~~~css
+      position: fixed;
+      left: 50%;
+      margin-left: -300px;/* 居中 左移50%，抵消50%的宽度 */
+      bottom: 30px;
+      /* margin: 0 auto;对定位的盒子无效 */
+~~~
+
+#### 粘性定位 sticky
+
+> 元素滚动到指定位置前为相对定位，之后转为固定定位
+>
+> **父容器**的overflow为**visible**
+>
+> 需**指定方位之一**才生效
+
+~~~cs
+      position: sticky;
+      top: 0;/* 距离父盒子为0时，固定在顶部 */
+~~~
+
+### grid 网格布局
+
+> 多行多列
+>
+> 先创建网格后放入元素
+
+#### 网格轨道
+
+~~~css
+      display: grid;
+      grid-template-columns: 100px 100px 100px;/* 创建3列轨道 */
+      grid-template-rows: 100px 100px 100px;/* 创建3行轨道 */
+      justify-content: space-between;/* 列轨道两端对齐 */   
+      align-content: space-between;/* 行轨道两端对齐 */
+~~~
+
+~~~css
+      grid-template-columns: 1fr 1fr 1fr;/* 3列各占一份 */
+      grid-template-rows: 1fr 1fr 1fr;/* 3行各占一份 */
+      grid-template-columns: repeat(11, 1fr);/* repeat(次数，轨道尺寸) */
+      gap: 10px 20px;/* 网格行、列间距 */
+~~~
+
+#### 响应式
+
+~~~css
+	  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      /* repeat(自动填充轨道，minmax(最小轨道尺寸，最大轨道尺寸)) */
+	 /* auto-fit 拉伸盒子占满所有 */
+~~~
+
+#### 跨越多个网格单元
+
+~~~css
+      /* 加到子元素身上 */
+	  grid-column: 1 / 3;/* 从第1列线开始跨2列网格线 */
+      grid-row: 1 / 3;/* 从第1行线开始跨2行网格线 */
+
+      grid-column: 1 / span 2;/* 从第1列线开始跨2个单元格 */
+      grid-row: 1 / span 2;/* 从第1行线开始跨2个单元格 */
+~~~
+
+#### 网格填充方式
+
+~~~css
+      grid-auto-flow: column;/* 竖向 */
+      grid-auto-flow: row;/* 横向 */
+~~~
+
+#### 图片缩放
+
+~~~css
+      object-fit: fill;/* 默认值完全填充容器 */
+      object-fit: contain;/* 响应式适应 留白 */
+      object-fit: cover;/* 响应式缩放 不留白 */
+      object-position: center;/* 以中心位置显示图片 top left左上角 */
+~~~
+
+#### 项目对齐方式
+
+~~~css
+	 /* 加到父容器 */
+      justify-items: center;/* 水平居中对齐 */
+      align-items: center;/* 垂直居中对齐 */
+	  start/*左*/ end/*右*/ stretch/*默认拉伸*/
+~~~
+
+### 多列布局
+
+> 长文章分栏
+>
+> 图片瀑布流
+
+~~~css
+      column-count: 4;/* 列数 */
+      column-gap: 20px;/* 列间距 */
+      column-rule: 1px solid #000;/* 列边框 */
+
+      break-inside: avoid-column;/* 写在子盒子 不许被切割 */
+      -webkit-column-break-inside: avoid;/* 谷歌兼容 */
+~~~
 
 ## 7.弹性盒子实战
 
@@ -1069,3 +1216,26 @@ float：none； 不浮动
 > 口号模块、服务模块、版权模块
 
 8.页面主体部分
+
+## 8.鼠标样式
+
+~~~css
+    <li style="cursor: pointer;">指针</li>
+    <li style="cursor: text;">文本</li>
+    <li style="cursor: wait;">等待</li>
+    <li style="cursor: help;">帮助</li>
+    <li style="cursor: not-allowed;">不允许操作</li>
+    <li style="cursor: grab;">抓取</li>
+    <li style="cursor: grabbing;">抓取中</li>
+    <li style="cursor: zoom-in;">放大</li>
+    <li style="cursor: zoom-out;">缩小</li>
+    <li style="cursor: move;">移动</li>
+    <li style="cursor: crosshair;">十字</li>
+    <li style="cursor: default;">默认</li>
+    <li style="cursor: progress;">进度</li>
+    <li style="cursor: cell;">单元格</li>
+~~~
+
+## 9.书写顺序
+
+6-布局 5-盒模型 3-视觉 8-交互 其他

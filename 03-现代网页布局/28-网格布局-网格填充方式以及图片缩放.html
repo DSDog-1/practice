@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>网格布局-网格填充方式以及图片缩放</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .box {
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      /* 修改网格填充方式 */
+      grid-auto-flow: column;/* 竖向 */
+      min-width: 1760px;
+      height: 900px;
+      margin: 100px auto;
+      border-radius: 20px;
+      gap: 20px;
+    }
+    .box .item img {
+      display: block;/* 解决空白缝隙问题 */
+      width: 100%;
+      height: 100%;
+      /* object-fit: fill;默认值完全填充容器 */
+      /* object-fit: contain; 响应式压缩*/
+      /* object-fit: cover;响应式缩放 */
+      object-position: center;/* 以中心位置显示图片 */
+      
+    }
+    .box .item {
+      background-color: pink;
+    }
+    .box .item:first-child {
+      grid-row: 1/3;
+    }
+    .box .item:nth-child(3) {
+      grid-column: 2/4;
+      grid-row: 2/3;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="item">
+      <img src="./img/tree1.jpg" alt="">
+    </div>
+    <div class="item">
+      <img src="./img/tree2.jpg" alt="">
+    </div>
+    <div class="item">
+      <img src="./img/tree3.jpg" alt="">
+    </div>
+    <div class="item">
+      <img src="./img/tree4.jpg" alt="">
+    </div>
+  </div>
+</body>
+</html>

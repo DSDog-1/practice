@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>网格布局-仿B站导航条</title>
+  <style> 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    a {
+      text-decoration: none;
+      color: #000;
+    }
+    .nav {
+      display: grid;
+      grid-template-columns: repeat(11, 1fr);
+      /* repeat(次数，轨道尺寸) */
+      grid-template-rows: 1fr 1fr;
+      width: 935px;
+      height: 66px;
+      /* border: 1px solid #000; */
+      gap: 10px;
+      margin: 100px auto;
+    }
+    .nav a {
+      background-color: #f6f7f8;
+      border-radius: 6px;
+      border: 1px solid #f1f2f3;
+      text-align: center;
+      line-height: 28px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="#">首页</a>
+    <a href="#">视频</a>
+    <a href="#">直播</a>
+    <a href="#">关注</a>
+    <a href="#">我的</a>
+    <a href="#">登录</a>
+    <a href="#">注册</a>
+    <a href="#">更多</a>
+    <a href="#">设置</a>
+    <a href="#">更多</a>
+    <a href="#">设置</a>
+    <a href="#">更多</a>
+    <a href="#">设置</a>
+    <a href="#">更多</a>
+    <a href="#">设置</a>
+    <a href="#">更多</a>
+    <a href="#">设置</a>
+    <a href="#">更多</a>
+    <a href="#">设置</a>
+    <a href="#">更多</a>
+    <a href="#">设置</a>
+    <a href="#">更多</a>
+  </div>
+</body>
+</html>

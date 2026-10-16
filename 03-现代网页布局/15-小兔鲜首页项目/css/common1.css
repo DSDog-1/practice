@@ -15,6 +15,10 @@
   align-items: center;/* 垂直居中 */
   height: 52px;
 }
+.shortcut .phone:hover i {
+  transform: rotate(360deg);
+  transition: all .5s;
+}
 .shortcut li a {
   color: #fff;
 }
@@ -28,6 +32,7 @@
   margin: 0 15px;
 }
 .shortcut li i {
+  display: inline-block;
   font-size: 16px;
   margin-right: 4px;
 }

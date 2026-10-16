@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D变化-位移</title>
+  <style>
+    .box1{ 
+      width: 200px;
+      height: 200px;
+      background-color: pink;
+      /* transform: translate(100px, 100px);x y 位移 根据自己原来的坐标进行位移 */
+      /* transform: translateX(100px);x轴位移 */
+      /* transform: translateY(100px);y轴位移 */
+      transition: all .3s;/* 过渡 */
+    }
+    .box1:hover{
+      transform: translate(100px, 100px);
+
+    }
+    .box2{
+      width: 200px;
+      height: 200px;
+      background-color: skyblue;
+    }
+  </style>
+</head>
+<body>
+  <div class="box1"></div>
+  <div class="box2"></div>
+</body>
+</html>

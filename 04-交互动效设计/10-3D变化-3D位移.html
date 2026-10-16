@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D变化-3D位移</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .box {
+      position: relative;
+      width: 300px;
+      height: 450px;
+      border: 1px solid blue;
+      margin: 100px auto;
+      perspective: 1000px;
+    }
+    .box>div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: pink;
+      text-align: center;
+      font-size: 30px;
+      color: #fff;
+      line-height: 450px;
+      transition: all 6s;
+      backface-visibility: hidden;/* 隐藏背面 */
+      transform-style: preserve-3d;/* 父元素添加3D空间 */
+    }
+    .box .front h3 {
+      transform: translateZ(60px);
+      backface-visibility: hidden;/* 隐藏背面 */
+
+    }
+    .box .back {
+      background-color: skyblue;
+      transform: rotateY(180deg);
+    }
+    .box .back p {
+      transform: translate3d(0, 0, 60px);
+      backface-visibility: hidden;/* 隐藏背面 */
+
+    }
+    .box:hover .front {
+      transform: rotateY(-180deg);
+    }
+    .box:hover .back {
+      transform: rotateY(0deg);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="front">
+      <h3>前面</h3>
+    </div>
+    <div class="back">
+      <p>1231546</p>
+    </div>
+  </div>
+</body>
+</html>

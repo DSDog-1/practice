@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D变化-透视效果</title>
+  <style>
+    body{
+      perspective: 500px;
+    }
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 230px;
+      transition: all .5s;
+    }
+    .ldhx:hover{
+      transform: rotateX(30deg);
+    }
+    .ldhy:hover{
+      transform: rotateY(180deg);
+    }
+     .ldhz:hover{
+      transform: perspective(500px) rotateZ(30deg);
+    }
+  </style>
+</head>
+<body>
+  <img src="./img(1)/ldhx.png" alt="" class="ldhx">
+  <br>
+  <img src="./img(1)/ldhy.jpg" alt="" class="ldhy">
+  <br>
+  <img src="./img(1)/ldhz.webp" alt="" class="ldhz">
+</body>
+</html>

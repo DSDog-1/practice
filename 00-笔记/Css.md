@@ -1236,6 +1236,125 @@ float：none； 不浮动
     <li style="cursor: cell;">单元格</li>
 ~~~
 
-## 9.书写顺序
+## 9.变换
 
-6-布局 5-盒模型 3-视觉 8-交互 其他
+> transfrom且不破坏原有文档流布局 
+
+### 2D平移 translate
+
+- 元素居中
+- 悬停元素微调
+
+~~~css
+      transform: translate(100px, 100px);/* x y 位移 根据自己原来的坐标进行位移 */
+      transform: translateX(50%);/* x轴位移 自身盒子宽度的50% */
+      transform: translateY(50%);/* y轴位移 实现元素居中 */
+~~~
+
+### 2D旋转 rotate
+
+- 悬停旋转
+- 加载旋转
+
+> 不可给行内元素添加
+
+~~~css
+    img{
+      transform-origin: left top;/* 旋转中心在左上角 */
+    }
+    img:hover{
+      transform: rotate(360deg);/* 旋转360度 正顺时针 负逆时针 */
+      transition: all 1s;/* 过渡在hover不回去 */
+    }
+~~~
+
+### 2D缩放 scale
+
+- 悬停放大
+
+~~~css
+      transform: scale(1.5);/* 整体缩放1.5倍 */
+      transform: scale(1.2, 1.2);/* 水平方向放1.2倍 垂直方向放1.2倍 */
+~~~
+
+### 2D倾斜 skew
+
+~~~css
+      transform: skew(16deg, 16deg);
+	 transform: skewX(-16deg);/* 水平方向斜切20度 正向左 负向右 */
+      transform: skewY(16deg);/* 垂直方向斜切20度 正向下 负向上 */
+	
+	 transform-origin: left top;/* 旋转中心在左上角 */
+~~~
+
+### 过渡 transition
+
+> 速度曲线参数：
+>
+> ease 默认值自然过渡，慢快慢
+>
+> linear 匀速运动
+>
+> ease-in 慢快
+>
+> ease-out 快慢
+>
+> ease-in-out 对称性动画，慢快慢
+>
+> cubic-bezier（x1，y1，x2，y2） 贝塞尔曲线
+
+~~~css
+	/* 过渡属性 持续时间 速度曲线 延迟时间 */
+	transition: all 1s linear 1s;
+~~~
+
+### 复合写法
+
+~~~css
+	transform: A() B() C();
+	/* 从右到左执行 */
+~~~
+
+### 3D旋转 rotate
+
+~~~CSS
+      transform: rotateX(180deg);
+      transform: rotateY(180deg);
+      transform: rotateZ(180deg);
+~~~
+
+### 透视 perspective
+
+> 透视越**小**效果越**强**
+>
+> 父元素添加属性，子元素继承
+>
+> 子元素添加到transform属性的第一个函数
+
+~~~CSS
+     /* 父元素 */
+	 perspective: 500px;
+     /* 子元素 */
+     transform: perspective(500px) rotateZ(30deg);
+~~~
+
+### 3D位移 translate3d
+
+~~~css
+      transform-style: preserve-3d;/* 父元素添加3D空间 */
+      transform: translate3d(0, 0, 60px);/* 子元素 */
+~~~
+
+## 10.动画
+
+
+
+
+
+
+
+
+
+## 书写顺序
+
+6-布局 5-盒模型 3-视觉 8.9-交互 其他

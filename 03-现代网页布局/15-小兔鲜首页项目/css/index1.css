@@ -145,7 +145,15 @@ html {
   height: 404px;
   background-color: #eef9f4;
   text-align: center;
+  transition: all .3s;
 }
+.box-bd ul li:hover {
+  transform: translateY(-10px);
+  /* 阴影 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+}
+
+
 
 .box-bd ul li a {
   display: block;
@@ -254,11 +262,33 @@ html {
 }
 
 .body .body-r li {
+  overflow: hidden;
+  position: relative;
   width: 242px;
   height: 305px;
   padding: 10px 21px 0;
+  border: 2px solid transparent;/* 边框透明 */
+  text-align: center;
+  line-height: 83px;
+  color: #fff;
+}
+.body .body-r li:hover {
+  border: 2px solid #00be9a;
+}
+.body .body-r li .mask {
+  position: absolute;
+  bottom: -83px;/* 距离底部 */
+  left: 0;
+  width: 100%;
+  height: 83px;
+  background-color: #00be9a;
+  transition: all .3s;
 }
 
+/* 鼠标悬停li，但绿色盒子移动 */
+.body .body-r li:hover .mask {
+  transform: translateY(-83px);
+}
 .body .body-r li a {
   display: block;
   height: 100%;
@@ -302,10 +332,16 @@ html {
   display: flex;
   gap: 12px;
 }
-
+.news .img {
+  overflow: hidden;
+}
 .news ul li {
   flex: 1;
   height: 355px;
+}
+.news ul li:hover img {
+  transform: scale(1.2);
+  transition: all .3s;
 }
 
 .news ul li img {

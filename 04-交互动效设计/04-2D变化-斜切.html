@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D变化-斜切</title>
+  <style>
+    .box{
+      width: 200px;
+      height: 55px;
+      text-align: center;
+      line-height: 55px;
+      color: #fff;
+      background-color: pink;
+      transform: skewX(-16deg);/* 水平方向斜切20度 正向左 负向右 */
+      /* transform: skewY(16deg);垂直方向斜切20度 正向下 负向上上 */
+      /* transform: skew(16deg, 16deg); */
+    }
+
+    .card{
+      position: relative;
+      width: 240px;
+      height: 280px;
+      margin: 50px;
+    }
+    .card div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 280px;
+      border-radius: 0 30px 40px 40px;
+      transform-origin: left top;/* 旋转中心在左上角 */
+      transition: all .3s;
+    }
+    .card .front{
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.5);
+      /* 滤镜效果 */
+      backdrop-filter: blur(30px);
+    }
+    .card .back{
+      background-color: purple;
+      transform: skewY(8deg);
+    }
+    .card:hover .back{
+      transform: skewY(15deg);
+      width: 200px;
+    }
+    .card:hover .front{
+      transform: translateY(-3px);
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="box"> 英雄联盟 </div>
+
+
+  <div class="card">
+    <div class="front"></div>
+    <div class="back"></div>
+  </div>
+</body>
+</html>

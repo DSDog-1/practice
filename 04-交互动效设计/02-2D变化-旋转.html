@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D变化-旋转</title>
+  <style>
+    img{
+      width: 200px;
+      border-radius: 50%;
+      border: 1px solid #000;
+      margin: 130px;
+      transform-origin: left top;/* 旋转中心在左上角 */
+    }
+    img:hover{
+      transform: rotate(360deg);/* 旋转360度 正顺时针 负逆时针 */
+      transition: all 1s;/* 过渡在hover不回去 */
+    }
+  </style>
+</head>
+<body>
+  <img src="./img(1)/ldh.webp" alt="">
+</body>
+</html>

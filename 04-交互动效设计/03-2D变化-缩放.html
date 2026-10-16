@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D变化-缩放</title>
+  <style>
+    .box1{
+      width: 200px;
+      height: 200px;
+      background-color: pink;
+    }
+    .box1:hover{
+      /* transform: scale(1.5);整体缩放1.5倍 */
+      transform: scale(1.2, 1.2);/* 水平方向放1.2倍 垂直方向放1.2倍 */
+      transition: all 1s;
+    }
+    .box2{
+      width: 200px;
+      height: 200px;
+      background-color: skyblue;
+    }
+  </style>
+</head>
+<body>
+  <div class="box1"></div>
+  <div class="box2"></div>
+</body>
+</html>

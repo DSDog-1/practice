@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>运算符</title>
+</head>
+<body>
+  <script>  
+    // 1. 赋值运算符
+    let a = 10
+    a += 10// a = a + 10 自加10
+    console.log(a)
+    let b = 20
+    ++b// 前置自增1 先自增再赋值
+    b++// 后置自增1 先赋值再自增
+    console.log(b)
+    console.log(2 == '2')// 隐式转换 把字符串转换为数字后进行比较值 true
+    console.log(2 === '2')// 判断类型和值是否相等 false（常用）
+    console.log(2 !== '2')// 无隐式转换 true
+    console.log(NaN !== NaN)// NaN 不等于任何值，包括它自己 true
+    console.log(true && false)// 与运算 一假则假 false
+    console.log(true || false)// 或运算 一真则真 true
+    console.log(!true)// 非运算 取反 false
+
+</script>
+</body>
+</html>

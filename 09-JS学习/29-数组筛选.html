@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数组筛选</title>
+</head>
+<body>
+  <script>
+    // 数组筛选
+    // let arr = [2,0,6,1,77,0,52,0,23,7]
+    // let newArr = []
+    // for (let i = 0; i < arr.length; i++) {
+    //   if (arr[i] >= 10) {
+    //     newArr.push(arr[i])
+    //   }
+    // }
+    // document.write(newArr)
+
+    let arr = [2,0,6,1,77,0,52,0,23,7]
+    let newArr = []
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] !== 0) {
+        newArr.push(arr[i])
+      }
+    }
+    document.write(newArr)
+  </script>
+</body>
+</html>

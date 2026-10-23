@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>函数的使用</title>
+</head>
+
+<body>
+  <script>
+    // // 声明
+    // function 函数名() {
+    //   函数体
+    // }
+
+    // function sayHi() {
+    //   document.write('hello world')
+    // }
+
+    // // 调用函数
+    // sayHi()
+
+    // function getSum() {
+    //   let sum1 = +prompt('请输入第一个数字')
+    //   let sum2 = +prompt('请输入第二个数字')
+    //   let sum = sum1 + sum2
+    //   document.write(sum)
+    // }
+
+    // // 调用函数
+    // getSum()
+
+    // 1-100的和
+    // function getSum() {
+    //   let sum = 0
+    //   for (let i = 1; i <= 100; i++) {
+    //     sum += i
+    //   }
+    //   document.write(sum)
+    // }
+
+    // // 调用函数
+    // getSum()
+
+    // 传参
+    // function getSum(num1, num2) {
+    //   let sum = num1 + num2
+    //   document.write(sum)
+    // }
+    // // 调用
+    // getSum(10, 20)
+
+    // 数组求和函数
+    // function getSum(arr = [])  {
+    //   let sum = 0
+    //   for (let i = 0; i < arr.length; i++) {
+    //     sum += arr[i]
+    //   }
+    //   document.write(sum)
+    // }
+    // // 调用
+    // getSum([1,2,3,4,5])
+
+    // 返回值
+    // function fn() {
+    //   return 100 // fn() = 100
+    // }
+    // let re = fn()
+    // document.write(re)
+
+    // 求和函数
+    // function getTotalPriceI(x, y) {
+    //   return x + y
+    // }
+    // let re = getTotalPriceI(10, 20)
+    // document.write(re)
+
+    // let fn = function (x, y) {
+    //   document.write(x + y)
+    // }
+    // fn(10, 20)
+
+    // 立即执行函数
+    // (function () {
+    //   document.write('hello world')
+    // })();
+
+    // (function(){代码})();
+
+    // (function(){}());
+
+    // 逻辑中断
+    document.write(11 && 22) // 逻辑与都为真，返回最后一个值
+    document.write(false && 22) // 逻辑与左边为假就短路
+    document.write(11 || 22) // 逻辑或有一个为真，返回第一个值
+    document.write(true || 22) // 逻辑或左边为真就短路
+  </script>
+</body>
+
+</html>

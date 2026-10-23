@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>转换时间案例</title>
+</head>
+<body>
+  <script>
+    let second = +prompt('请输入时间（秒）:')
+    function changeTime(time = 0) {
+      let h = parseInt(time / 60 / 60 % 24)
+      let m = parseInt(time / 60 % 60)
+      let s = parseInt(time % 60)
+      h = h < 10 ? '0' + h : h
+      m = m < 10 ? '0' + m : m
+      s = s < 10 ? '0' + s : s
+      // document.write(`${h}时${m}分${s}秒`)
+      return `${h}时${m}分${s}秒`
+    }
+    let str = changeTime(second)
+    document.write(str)
+  </script>
+</body>
+</html>

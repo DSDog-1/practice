@@ -131,7 +131,7 @@
 
 ## 4.数据类型
 
-### 基本数据类型
+### 基本数据类型（值 ->栈 ）
 
 #### number 数字型
 
@@ -172,9 +172,13 @@
 
 > 赋值了但内容为空，尚未创建的**对象**
 
-### 引用数据类型
+### 引用数据类型（地址 -> 堆）
+
+两个对象用一个地址的话，修改其中一个对象的值，另一个因为共用地址所以值也会改变
 
 - object 对象
+- Array
+- Data
 
 ### 检测数据类型
 
@@ -433,5 +437,79 @@ return立即结束当前函数，后面的代码被跳过
     document.write(false && 22) // 逻辑与左边为假就中断
     document.write(11 || 22) // 逻辑或都为假，返回最后一个值
     document.write(true || 22) // 逻辑或左边为真就中断
+~~~
+
+## 9.对象
+
+数据类型，**无序**（无下标）的数据集合，详细描述某个事物
+
+### 声明
+
+属性n.+方法v.
+
+~~~js
+let 对象名 = {
+    属性名1：属性值1，// 多属性间用逗号隔开
+    属性名2：属性值2，
+    方法名：函数  // 匿名函数
+}
+let 对象名 = new Object（）
+let obj = null // 空对象
+~~~
+
+### 使用
+
+~~~js
+    对象名.新属性名 = 新属性值  		// 增   obj.sex = '男'
+	delete 对象名.属性名   		    // 删   delete obj.sex  （了解）
+    对象名.属性名 = 新属性值 		     // 改   obj.name = '李四'
+    console.log(对象名.属性名) 		// 查1  console.log(obj.name)
+    console.log(对象名['属性名'])   	// 查2   console.log(obj['name'])
+    对象名.方法名（）                 // 调用方法   obj.song()
+~~~
+
+### 遍历
+
+~~~js
+    for (let k in 对象名) {
+      console.log(k)   // 属性名 字符串
+      console.log(对象名[k])  // 查2
+    }
+
+    // 数组对象
+    let students = [
+      { uname: '张三', age: 18, sex: '男' },
+      { uname: '李四', age: 18, sex: '男' },
+      { uname: '王五', age: 18, sex: '男' }
+    ]
+    for (let i = 0; i < students.length; i++) {
+      console.log(students[i].uname)
+      for (let k in students[i]) {
+        console.log(students[i][k])
+      }
+    }
+~~~
+
+### 内置对象
+
+~~~js
+    // 内置对象-Math
+	console.log(Math.PI) // 圆周率
+    console.log(Math.round(3.14)) // 四舍五入一个数值 3
+    console.log(Math.round(-3.5)) // -3
+    console.log(Math.round(-3.51)) // -4
+    console.log(Math.floor(3.14)) // 向下取整 3
+    console.log(Math.ceil(3.14)) // 向上取整 4
+    console.log(Math.max(1,2,3,4,5)) // 找最大数 5
+    console.log(Math.min(1,2,3,4,5)) // 找最小数 1
+    console.log(Math.pow(2,3)) // 幂运算 二的三次方=8
+    console.log(Math.abs(-10)) // 绝对值 10
+    console.log(Math.random()) // 随机数 0-1之间的随机数[0,1)
+    console.log(Math.floor(Math.random() * 100)) // 0-99的随机整数[0,100)
+    console.log(Math.floor(Math.random() * (M - N + 1)) + N) // N - M之间的随机整数[N,M]
+	// 随机抽取数组元素
+    let arr = ['red','green','blue']
+    let random = Math.floor(Math.random() * arr.length)
+    console.log(arr[random])
 ~~~
 

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>猜数字游戏</title>
+</head>
+<body>
+  <script>
+    // 猜数字游戏
+    function getRandom(N,M) {
+      return Math.floor(Math.random() * (M - N + 1)) + N
+    }
+    let random = getRandom(1,10)
+    // console.log(random)
+    // while(true) {
+    // let num = +prompt('请输入1-10之间的数字')
+    // if (num > random) {
+    //   alert('你猜的数字太大了')
+    // } else if (num < random) {
+    //   alert('你猜的数字太小了')
+    // } else {
+    //   alert('恭喜你猜对了')
+    //   break
+    // }
+    // }
+
+    // 限制次数3次
+    let count = 0
+    while(count < 3) {
+      let num = +prompt('请输入1-10之间的数字')
+      if (num > random) {
+        alert('你猜的数字太大了')
+      } else if (num < random) {
+        alert('你猜的数字太小了')
+      } else {
+        alert('恭喜你使用' + (count + 1) + '次猜对了')
+        break
+      }
+      if (count == 2) {
+        alert('你猜错了3次，游戏结束')
+      }
+      count++
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>页面渲染案例</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    a {
+      text-decoration: none;
+    }
+    .clearfix {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .box-bd {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .box-bd li {
+      width: 25%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .box-bd li a {
+      display: block;
+    }
+    .box-bd li a img {
+      width: 100%;
+    }
+    .box-bd li a h4 {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .box-bd li a .info {
+      font-size: 14px;
+      color: #999;
+      margin-top: 10px;
+    }
+    .box-bd li a .info span {
+      color: #ff6600;
+    }
+    .box-bd li a .info span {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+   <div class="box w">
+    <div class="box-hd">
+      <h3>精品推荐</h3>
+      <a href="#">查看全部</a>
+    </div>
+    <div class="box-bd">
+      <ul class="clearfix">
+        <!-- <li>
+          <a href="#">
+            <img src="../03-现代网页布局/img/cat1.jpg" alt="">
+            <h4>商品名称</h4>
+            <div class="info">
+              <span>¥100</span>
+            </div>
+          </a>
+        </li> -->
+
+        <script>
+          let data = [
+            {
+              img: '../03-现代网页布局/img/cat1.jpg',
+              name: '商品名称',
+              price: 100
+            },
+            {
+              img: '../03-现代网页布局/img/cat2.jpg',
+              name: '商品名称',
+              price: 100
+            }
+            ,
+            {
+              img: '../03-现代网页布局/img/cat3.jpg',
+              name: '商品名称',
+              price: 100
+            }
+            ,
+            {
+              img: '../03-现代网页布局/img/cat4.jpg',
+              name: '商品名称',
+              price: 100
+            }
+            ,
+            {
+              img: '../03-现代网页布局/img/cat5.jpg',
+              name: '商品名称',
+              price: 100
+            }
+            ,
+            {
+              img: '../03-现代网页布局/img/cat6.jpg',
+              name: '商品名称',
+              price: 100
+            }
+          ]
+          for (let i = 0; i < data.length; i++) {
+            document.write(`
+            <li>
+              <a href="#">
+                <img src="${data[i].img}" alt="">
+                <h4>${data[i].name}</h4>
+                <div class="info">
+                  <span>¥${data[i].price}</span>
+                </div>
+              </a>
+            </li>`
+            )
+          }
+        </script>
+      </ul>
+    </div>
+   </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>遍历数组对象</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 10px;
+    }
+    table tr:nth-child(1) {
+      background-color: #ddd;
+    }
+    table tr:not(:first-child):hover {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <caption>学生信息</caption>
+    <tr>
+      <th>序号</th>
+      <th>姓名</th>
+      <th>年龄</th>
+      <th>性别</th>
+    </tr>
+    <script>
+      // 准备数据
+      let student = [
+        { uname: '张三', age: 18, sex: '男' },
+        { uname: '李四', age: 18, sex: '男' },
+        { uname: '王五', age: 18, sex: '男' }
+      ]
+      // 渲染页面
+      for (let i = 0;i < student.length;i++) {
+        document.write(`<tr>`)
+        document.write(`<td>${i+1}</td>`)
+        document.write(`<td>${student[i].uname}</td>`)
+        document.write(`<td>${student[i].age}</td>`)
+        document.write(`<td>${student[i].sex}</td>`)
+        document.write(`</tr>`)
+      }
+    </script>
+
+  </table>
+
+
+  <!-- <script>
+    let students = [
+      { uname: '张三', age: 18, sex: '男' },
+      { uname: '李四', age: 18, sex: '男' },
+      { uname: '王五', age: 18, sex: '男' }
+    ]
+    for (let i = 0; i < students.length; i++) {
+      console.log(students[i].uname)
+      for (let k in students[i]) {
+        console.log(students[i][k])
+      }
+    }
+
+
+  </script> -->
+</body>
+</html>

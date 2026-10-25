@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>修改对象内容</title>
+</head>
+<body>
+  <!-- <div class="box">内容</div>
+  <script>
+    const box = document.querySelector('.box')
+    console.log(box.innerText) // 获取元素内容
+    box.innerText = '新内容' // 修改元素内容
+    // 对象.innerText
+
+    // 对象.innerHTML
+    console.log(box.innerHTML) // 获取元素内容
+    box.innerHTML = '<H1>新内容</H1>' // 修改元素内容
+  </script> -->
+
+  <div class="wrapper">
+    <strong>年会抽奖</strong>
+    <h1>一等奖：<span id="one">???</span></h1>
+    <h2>二等奖：<span id="two">???</span></h2>
+    <h3>三等奖：<span id="three">???</span></h3>
+
+  </div>
+
+<script>
+  const personArr = ['张三','李四','王五','赵六','王二']
+  // 随机抽奖
+  const random1 = Math.floor(Math.random() * personArr.length)
+  // 一等奖
+  const one = document.querySelector('#one')
+  one.innerText = personArr[random1]
+  personArr.splice(random1, 1)
+  // 二等奖
+  const random2 = Math.floor(Math.random() * personArr.length)
+  const two = document.querySelector('#two')
+  two.innerText = personArr[random2]
+  personArr.splice(random2, 1)
+  // 三等奖
+  const random3 = Math.floor(Math.random() * personArr.length)
+  const three = document.querySelector('#three')
+  three.innerText = personArr[random3]
+  // const one = personArr[Math.floor(Math.random() * personArr.length)]
+  // const two = personArr[Math.floor(Math.random() * personArr.length)]
+  // const three = personArr[Math.floor(Math.random() * personArr.length)]
+  // document.getElementById('one').innerText = one
+  // document.getElementById('two').innerText = two
+  // document.getElementById('three').innerText = three
+</script>
+
+</body>
+</html>

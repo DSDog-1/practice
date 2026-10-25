@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>修改表单属性</title>
+</head>
+<body>
+  <input type="text" value="电脑" >
+  <input type="checkbox" name="" id="check">
+  <button disabled>提交</button>
+  <script>
+    const uname = document.querySelector('input')
+    // uname.value = '手机'
+    // 表单.属性
+    console.log(uname.value); // 获取表单属性值
+    // 表单.属性 = '新值'
+    uname.type = 'password' // 修改表单属性
+
+    const ipt = document.querySelector('#check')
+    ipt.checked = true
+
+    const btn = document.querySelector('button')
+    btn.disabled = false
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>定时器</title>
+</head>
+<body>
+
+  <button class="btn"  disabled>
+    同意5
+  </button>
+  <script>
+    // setInterval(function () {
+    //   console.log(111)
+    // }, 1000)
+
+
+    function fn() {
+      console.log(111)
+    }
+    // setInterval(fn, 1000)
+
+    // let n = setInterval(fn, 1000) // 获取定时器id
+    // clearInterval(n)        // 关闭定时器
+    
+    const btn = document.querySelector('.btn')
+    let i = 5
+    let n = setInterval(function () {
+      i--
+      btn.innerHTML = `同意${i}`
+      if (i === 0) {
+        clearInterval(n)
+        btn.disabled = false
+        btn.innerHTML = '同意'
+      }
+    }, 1000)
+
+  </script>
+</body>
+</html>

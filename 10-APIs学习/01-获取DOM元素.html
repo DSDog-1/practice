@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获取DOM元素</title>
+</head>
+<body>
+  <div class="box"></div>
+<ul>
+  <li>111</li>
+  <li>222</li>
+  <li>333</li>
+</ul>
+  <script>
+    // 获取匹配的第一个元素
+    const box1 = document.querySelector('div')
+    const box2 = document.querySelector('.box')
+    console.log(box1)
+    console.log(box2)
+    // 获取匹配的所有元素
+    const boxes = document.querySelectorAll('div')
+    console.log(boxes)
+
+    const lis = document.querySelectorAll('li')
+    console.log(lis)
+    for (let i = 0; i < lis.length; i++) {
+      console.log(lis[i])
+    }
+  </script>
+</body>
+</html>

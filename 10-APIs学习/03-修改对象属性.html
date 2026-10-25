@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>修改对象属性</title>
+  <style>
+    /* body {
+      background: url(../03-现代网页布局/img/cat1.jpg) no-repeat top center/cover;
+    } */
+    .box {
+      width: 300px;
+      height: 300px;
+      background-color: red;
+      margin: 100px auto;
+      border: 1px solid #000;
+      padding: 20px;
+    }
+    .active {
+      color: red;
+      background-color: blue;
+    }
+  </style>
+</head>
+<body>
+  <!-- <img src="../03-现代网页布局/img/tel1.png" alt=""> -->
+  <div >文字</div>
+  <script>
+    // // 随机修改图片
+    // function getRomdom(N,M) {
+    //   return Math.floor(Math.random() * (M - N + 1) + N)
+    // }
+    // const img  =  document.querySelector('img')
+    // const random = getRomdom(1,4)
+    // img.src = `../03-现代网页布局/img/tel${random}.png`
+
+
+
+    
+    // box.style.width = '200px'
+    // box.style.height = '200px'
+    // box.style.backgroundColor = 'red'
+
+    // const random1 = getRomdom(1,7)
+    // document.body.style.backgroundImage = `url(../03-现代网页布局/img/cat${random1}.jpg)` // body无需获取
+
+    const div = document.querySelector('div')
+	  // 对象.className = '类名'
+    div.className = 'box'  // 换类名 class = "box"
+    // 对象.classList.add('类名')
+    div.classList.add('active') // 追加类名 class = "box active"
+    // 对象.classList.remove('类名')
+    div.classList.remove('active') // 移除类名 class = "box"
+    // 对象.classList.toggle('类名')
+    div.classList.toggle('active') // 切换类名(有删无加) class = "box active"
+  </script>
+</body>
+</html>

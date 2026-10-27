@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>评论案例</title>
+  <style>
+    p {
+      opacity: 0.4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="comment-container">
+    <textarea name="comment" id="" placeholder="请输入评论内容"></textarea>
+    <p>0/200</p>
+  </div>
+  <div class="result"></div>
+
+  <script>
+    const tx = document.querySelector('textarea')
+    const p = document.querySelector('p')
+    const result = document.querySelector('.result')
+    tx.addEventListener('focus', function () {
+      // p.style.display = 'block'
+      p.style.opacity = '1'
+    })
+    tx.addEventListener('blur', function () {
+      // p.style.display = 'none'
+      p.style.opacity = '0.4'
+    })
+    tx.addEventListener('input', function () {
+      p.innerHTML = `${tx.value.length}/200`
+    })
+    tx.addEventListener('keyup', function (e) {
+      if (e.key === 'Enter') {
+        if (tx.value.trim() === '') { // 清除空格
+          alert('请输入评论内容')
+          return
+        } else {
+          result.innerHTML = tx.value
+        }
+        tx.value = ''
+      }
+    })
+  </script>
+</body>
+
+</html>

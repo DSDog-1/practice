@@ -118,7 +118,7 @@
 
 ### 常量
 
-变量永远**不会改变**时，使用**const**声明变量
+变量永远**不会改变**时，使用**const**声明变量（**数组、对象**不更改地址只追加、更改值，所以**可以使用**）
 
 > 不许更改
 >
@@ -511,5 +511,92 @@ let obj = null // 空对象
     let arr = ['red','green','blue']
     let random = Math.floor(Math.random() * arr.length)
     console.log(arr[random])
+~~~
+
+## 10.API（DOM+BOM）
+
+使用JS操作html和浏览器
+
+### DOM（文档对象模型）
+
+> 操作网页内容，开发网页内容特效和实现用户交互
+>
+> **DOM树**：将html文档以树状结构直观表现，直观体现标签间的关系
+>
+> **DOM对象（重点）**：浏览器根据html标签生成的JS对象，**把网页内容当做对象来处理（核心）**
+>
+> ​				  document是最大的**对象**，所有内容都在里面
+
+#### 获取DOM元素
+
+~~~js
+    // 1.获取匹配的第一个元素、一个对象，可直接修改
+    const box2 = document.querySelector('css选择器')
+    const box1 = document.querySelector('div')
+    const box2 = document.querySelector('.box')
+    // 2.获取匹配的所有元、一个对象集合伪数组（与元素个数无关），通过遍历for修改
+    const boxes = document.querySelectorAll('div')
+~~~
+
+#### 操作元素内容
+
+~~~js
+    //对象.innerText  不解析标签
+	console.log(box.innerText) // 获取
+    box.innerText = '新内容' // 修改
+
+    // 对象.innerHTML   解析标签
+    console.log(box.innerHTML) // 获取
+    box.innerHTML = '<H1>新内容</H1>' // 修改
+~~~
+
+#### 操作元素属性
+
+~~~js
+	// 对象.属性 = '值'
+	// 对象.style.样式属性 = '值'
+    box.style.height = '200px'
+    box.style.backgroundColor = 'red'  //小驼峰命名
+	// 对象.className = '类名'
+    div.className = 'box'  				// 换类名 class = "box"
+    // 对象.classList.add('类名')
+    div.classList.add('active') 		// 追加类名 class = "box active"
+    // 对象.classList.remove('类名')
+    div.classList.remove('active') 		// 移除类名 class = "box"
+    // 对象.classList.toggle('类名')
+    div.classList.toggle('active')		 // 切换类名(有删无加) class = "box active"
+    // 表单.属性
+    console.log(uname.value); 			// 获取表单内容
+    // 表单.属性 = '新值'
+    uname.type = 'password' 			// 修改表单属性
+	// 表单.属性（disabled/checked） = true
+	ipt.checked = true					// 选中复选框（执行属性）
+~~~
+
+#### 自定义属性
+
+~~~html
+  <div data-id="1" data-name="张三">1</div>
+~~~
+
+~~~js
+    console.log(one.dataset)// 对象：{id: '1', name: '张三'}
+    console.log(one.dataset.id)// 1
+~~~
+
+### 定时器
+
+每隔一段时间自行执行一段代码
+
+#### 间歇函数
+
+~~~js
+	// setInterval(函数名（不加小括号）, 间隔时间ms)
+    setInterval(function () {		// 开启定时器
+      console.log(111)
+    }, 1000)
+
+    let n = setInterval(fn, 1000) 	// 获取定时器id
+    clearInterval(n)       		    // 关闭定时器
 ~~~
 

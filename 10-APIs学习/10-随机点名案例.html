@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>随机点名案例</title>
+</head>
+<body>
+  <div>?</div>
+  <button class="start">开始</button>
+  <button class="stop" disabled>停止</button>
+
+  <script>
+    let timer = 0
+    let random = 0
+    const arr = ['1', '2', '3', '4', '5', '6', '7']
+    const div = document.querySelector('div')
+    const start = document.querySelector('.start')
+    start.addEventListener('click', function () {
+      // 禁用开始按钮，防止重复点击
+      start.disabled = true
+      stop.disabled = false
+      // 开始随机点名
+      timer = setInterval(function () {
+        // 随机数
+        const random = parseInt(Math.random() * arr.length)
+        div.innerHTML = arr[random]
+      }, 100)
+      if (arr.length === 1) {
+        start.disabled = stop.disabled = true
+      }
+       })
+    const stop = document.querySelector('.stop')
+    stop.addEventListener('click', function () {
+      // 停止随机点名
+      clearInterval(timer)
+      // 删除数组中的随机数
+      arr.splice(random, 1)
+      // 启用开始按钮
+      start.disabled = false
+      stop.disabled = true
+    })
+  </script>
+</body>
+</html>

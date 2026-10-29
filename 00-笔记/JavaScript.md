@@ -600,3 +600,86 @@ let obj = null // 空对象
     clearInterval(n)       		    // 关闭定时器
 ~~~
 
+### 事件监听
+
+检测是否有事件发生，随后调用一个函数作出相应。
+
+> 事件源：被触发的元素
+>
+> 事件类型：用什么方式触发
+>
+> 事件调用的函数：要做什么
+
+~~~js
+	元素对象.addEventListener('事件类型'，要执行的函数)
+    btn.addEventListener('click', function () {
+      console.log('点击了按钮')
+    })
+~~~
+
+#### 事件类型
+
+~~~js
+    // 鼠标事件
+	btn.addEventListener('click', function () { 		// 点击事件
+    div.addEventListener('mouseenter', function () { 	//  鼠标经过
+    div.addEventListener('mouseleave', function () { 	//  鼠标离开		无冒泡效果
+    // 焦点事件
+    input.addEventListener('focus', function () {   	// 获得焦点事件
+    input.addEventListener('blur', function () {   		// 失去焦点事件
+	// 键盘事件
+    input.addEventListener('keydown', function () { 	// 键盘按下事件
+    input.addEventListener('keyup', function () { 		// 键盘松开事件
+	// 文本事件
+    input.addEventListener('input', function () { 		// 键盘输入事件
+    // 其他事件
+    window.addEventListener('load', function () { 					// 页面加载事件1
+    document.addEventListener('DOMContentLoaded', function () {		 // 页面加载事件2,无需完全加载
+    window.addEventListener('scroll', function () {					// 页面滚动事件 scrollTop属性：被卷去的头部
+    	document.documentElement.scrollTop     // scrollTop属性数字型不带单位：被卷去的头部
+    window.addEventListener('resize', function () {		// 页面尺寸事件  
+        // offsetWidth = 内容 + padding + border		clientWidth = 内容
+        // offsetLeft 以带有定位的父级为准 获取可视宽高
+
+~~~
+
+#### 事件对象
+
+~~~js
+    btn.addEventListener('click', function ( e ) { 		// e 事件对象
+    // type 获取事件类型
+    // clientX/clientY 获取光标相对于浏览器可见窗口左上角的位置
+    // offsetX/offsetY 获取光标相对于事件目标元素左上角的位置
+    // key 获取键盘按下的键
+~~~
+
+#### 环境对象（this）
+
+> 函数内部特殊的变量**this**，代表当前函数运行所处的环境
+>
+> **谁调用，this就是谁**
+
+#### 回调函数
+
+> 函数A(fn)当做**参数**来传递给函数B(setInterval)的时候，**函数A为回调函数**
+>
+> 不是手动调用，而是函数B自动调用函数A
+
+~~~js
+setInterval(fn,1000)
+~~~
+
+#### 事件流
+
+事件完整执行过程中的**流动路径**（捕获true -> 冒泡false）
+
+> 事件冒泡：一个元素的事件被触发时，**同样的事件**将会在该元素的所有祖先元素中一次被触发。
+>
+> 事件委托：利用**事件冒泡**减少次数提高性能：给父元素注册事件
+
+~~~js
+	 事件对象.stopPropagation()		// 阻止流动传播
+	 事件对象.preventDefault()		// 阻止默认行为（链接跳转）
+      if (e.target.tagName === 'LI') {    // 真正的触发元素
+      e.target.style.color = 'red'    // target 指向点击的元素
+~~~

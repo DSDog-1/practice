@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>节点操作</title>
+</head>
+<body>
+  <div class="dad">
+    <div class="son"></div>
+  </div>
+  <ul>
+    <li>111</li>
+    <li>222</li>
+    <li>333</li>
+  </ul>
+  <script>
+    const son = document.querySelector('.son')
+    console.log(son.parentNode) // 返回父节点
+    const ul = document.querySelector('ul')
+    console.log(ul.children) // 返回子节点，亲儿子伪数组
+    console.log(ul.children[0]) // 返回子节点的第1个
+    const li2 = document.querySelector('li:nth-child(2)')
+    console.log(li2.previousElementSibling) // 上一个兄弟
+    console.log(li2.nextElementSibling) // 下一个兄弟
+
+    const div = document.createElement('div') // 创建节点
+    document.body.appendChild(div) // 添加到body节点 父元素.appendChild(子元素)
+    ul.insertBefore(li,ul.children[0]) // 在子元素前添加节点 父元素.insertBefore(要插入的元素，放到哪个元素前)
+
+
+    const liClone = ul.children[0].cloneNode(true)    // 克隆节点
+
+    ul.removeChild(liClone)    // 删除节点 父元素.removeChild(要删除的元素)
+
+  </script>
+</body>
+</html>

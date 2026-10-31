@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>日期对象</title>
+
+</head>
+<body>
+  <script>
+    // // 实例化   new
+    // const date = new Date()
+    // console.log(date)
+    // // 指定时间
+    // const date2 = new Date('2023-11-01')
+    // console.log(date2)
+    // console.log(date2.getFullYear())  // 获取年份
+    // console.log(date2.getMonth() + 1)  // 获取月份
+    // console.log(date2.getDate())  // 获取日期
+    // console.log(date2.getHours())  // 获取小时
+    // console.log(date2.getMinutes())  // 获取分钟
+    // console.log(date2.getSeconds())  // 获取秒
+    // // 获得星期几
+    // console.log(date2.getDay())  // 获取星期几 0-6 0表示星期日 1-星期六
+
+    // function getTime() {
+    //   const data = new Date()
+    //   // 补0
+    //   const year = data.getFullYear().toString().padStart(4, '0')
+    //   const month = (data.getMonth() + 1).toString().padStart(2, '0')
+    //   const day = data.getDate().toString().padStart(2, '0')
+    //   const hour = data.getHours().toString().padStart(2, '0')
+    //   const minute = data.getMinutes().toString().padStart(2, '0')
+    //   const second = data.getSeconds().toString().padStart(2, '0')
+      
+    //   return `今天是${year}-${month}-${day}`
+    //   + ` ${hour}:${minute}:${second}`
+    // }
+    // console.log(getTime())
+
+
+    // setInterval(function () {
+    //   console.log(getTime())
+    // }, 1000)
+
+
+    // // 方法2
+    // const time = document.toLocaleString()  // 2026-01-01 00:00:00
+    // const time1 = document.toLocaleDateString()  // 2026-01-01
+    // const time2 = document.toLocaleTimeString()  // 00:00:00
+    
+    // console.log(time)
+
+    // // 时间戳倒计时（毫秒）
+    // const time3 = Date.now() 
+    // console.log(time3)
+
+    // 获取时间戳方法1 
+    console.log(Date.now()) // 当前时间
+    // 获取时间戳方法2
+    const date = new Date()
+    console.log(date.getTime())
+    // 获取时间戳方法3
+    console.log(+new Date())
+
+
+  </script>
+</body>
+</html>

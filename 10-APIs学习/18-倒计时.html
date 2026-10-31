@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>倒计时</title>
+</head>
+<body>
+  <div>
+    <p class="time">今天是22年2月22日</p>
+    <p class="clock">
+      <span id="hour">00</span>
+      <i>:</i>
+      <span id="minute">00</span>
+      <i>:</i> 
+      <span id="second">00</span>
+    </p>
+  </div>
+
+  <script>
+    function getTime() {
+    const now = +new Date()
+    const last = +new Date('2026-11-01')
+    const count =( last - now ) / 1000
+    // let d = parseInt(count / 60 / 60 / 24)
+    let h = parseInt(count / 60 / 60 % 24)
+    h = h < 10 ? '0' + h : h
+    let m = parseInt(count / 60 % 60)
+    m = m < 10 ? '0' + m : m
+    let s = parseInt(count % 60)
+    s = s < 10 ? '0' + s : s
+
+    const hour = document.getElementById('hour')
+    hour.innerHTML = h
+    const minute = document.getElementById('minute')
+    minute.innerHTML = m
+    const second = document.getElementById('second')
+    second.innerHTML = s
+    }
+    // const time = document.querySelector('.time')
+    // time.innerHTML = `今天是${year}-${month}-${day}`
+    getTime()
+    setInterval(getTime, 1000)
+
+
+  </script>
+</body>
+</html>

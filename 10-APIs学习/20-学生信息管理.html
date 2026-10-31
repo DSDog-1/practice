@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学生信息管理</title>
+</head>
+
+<body>
+  <h1>新增学生</h1>
+  <form class="info" autocapitalize="off">
+    <label for="name">姓名：</label>
+    <input type="text" class="name" name="uname">
+    <label for="age">年龄：</label>
+    <input type="number" class="age" name="age">
+    <label for="gender">性别：</label>
+    <select class="gender" name="gender">
+      <option value="男">男</option>
+      <option value="女">女</option>
+    </select>
+    <input type="submit" value="提交">
+    <h1>学生列表</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>姓名</th>
+          <th>年龄</th>
+          <th>性别</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </form>
+
+  <script>
+    const arr = []
+    // 获取元素
+    const uname = document.querySelector('.name')
+    const age = document.querySelector('.age')
+    const gender = document.querySelector('.gender')
+    const tbody = document.querySelector('tbody')
+    // const items = document.querySelectorAll('[name]')
+    // 提交表单
+    const info = document.querySelector('.info')
+    info.addEventListener('submit', function (e) {
+      e.preventDefault()
+      // 非空校验
+      if (!uname.value || !age.value || !gender.value) {
+        alert('请填写完整信息')
+        return
+      }
+      // 创建新对象
+      const obj = {
+        stuId: arr.length + 1,
+        uname: uname.value,
+        age: age.value,
+        gender: gender.value
+      }
+      // 新增到数组
+      arr.push(obj)
+      // 渲空表单
+      info.reset()
+      // 渲染表格
+      render()
+    })
+
+    // 渲染表格
+    function render() {
+      // 清空表格
+      document.querySelector('tbody').innerHTML = ''
+      for (let i = 0; i < arr.length; i++) {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+        <td>${arr[i].stuId}</td>
+        <td>${arr[i].uname}</td>
+        <td>${arr[i].age}</td>
+        <td>${arr[i].gender}</td>
+        <td>
+          <a href="#" data-id="${i}">删除</a>
+        </td>
+        `
+        document.querySelector('tbody').appendChild(tr)
+      }
+    }
+
+    // 删除学生
+    tbody.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') {
+        // 获取删除按钮的索引
+        const id = e.target.dataset.id
+        // 点击删除按钮
+        // 从数组中删除
+        arr.splice(id, 1)
+        // 渲染表格
+        render()
+      }
+    })
+  </script>
+
+</body>
+
+</html>

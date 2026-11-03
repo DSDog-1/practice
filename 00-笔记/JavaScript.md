@@ -116,6 +116,24 @@
     arr.splice(2,1)
 ~~~
 
+#### map方法
+
+处理数据，字符串拼接，返回数据
+
+~~~js
+    arr.map(function (ele, index) {  // ele: 数组元素, index: 数组元素索引
+      return ele + '颜色'
+    })
+~~~
+
+#### join方法
+
+把数组转换为字符串
+
+~~~js
+    const str = arr.join('')  // 小括号为空默认逗号分隔，''表示无分隔符
+~~~
+
 ### 常量
 
 变量永远**不会改变**时，使用**const**声明变量（**数组、对象**不更改地址只追加、更改值，所以**可以使用**）
@@ -586,9 +604,9 @@ let obj = null // 空对象
 
 ### 定时器
 
-每隔一段时间自行执行一段代码
-
 #### 间歇函数
+
+每隔一段时间自行执行一段代码
 
 ~~~js
 	// setInterval(函数名（不加小括号）, 间隔时间ms)
@@ -598,6 +616,16 @@ let obj = null // 空对象
 
     let n = setInterval(fn, 1000) 	// 获取定时器id
     clearInterval(n)       		    // 关闭定时器
+~~~
+
+#### 延时函数
+
+只执行一次，将代码延迟执行
+
+~~~js
+	// setTimeout(回调函数，等待的毫秒数）
+    let n = setTimeout(fn, 1000) 	// 获取定时器id
+    clearTimeout(n)       		    // 清除定时器
 ~~~
 
 ### 事件监听
@@ -641,6 +669,7 @@ let obj = null // 空对象
         // offsetWidth = 内容 + padding + border		clientWidth = 内容
         // offsetLeft 以带有定位的父级为准 获取可视宽高
 
+        // M端事件：touchstart触摸/touchmove滑动/touchend移开
 ~~~
 
 #### 事件对象
@@ -683,3 +712,137 @@ setInterval(fn,1000)
       if (e.target.tagName === 'LI') {    // 真正的触发元素
       e.target.style.color = 'red'    // target 指向点击的元素
 ~~~
+
+### 日期对象
+
+~~~js
+    const date = new Date()		// 实例化 new Data() 当前时间
+    const date2 = new Date('2023-11-01')
+    
+    console.log(date2.getFullYear()) 	 	// 获取年份
+    console.log(date2.getMonth() + 1)  		// 获取月份0~11
+    console.log(date2.getDate())  			// 获取日期
+    console.log(date2.getDay())  			// 获取星期几 0-6 0表示星期日
+    console.log(date2.getHours())  			// 获取小时
+    console.log(date2.getMinutes())  		// 获取分钟
+    console.log(date2.getSeconds())  		// 获取秒
+
+    const time = document.toLocaleString()  		// 2026-01-01 00:00:00
+    const time1 = document.toLocaleDateString()  	// 2026-01-01
+    const time2 = document.toLocaleTimeString()  	// 00:00:00
+    
+   	// 获取时间戳方法1 
+    console.log(Date.now()) // 当前时间
+    // 获取时间戳方法2
+    const date = new Date()
+    console.log(date.getTime())
+    // 获取时间戳方法3
+    console.log(+new Date())
+~~~
+
+### 节点操作
+
+DOM节点：元素节点、属性节点、文本节点
+
+#### 查找节点
+
+~~~js
+    console.log(son.parentNode) 		// 返回父节点
+    console.log(ul.children) 			// 返回子节点，亲儿子伪数组
+    console.log(ul.children[0]) 		// 返回子节点的第1个
+    console.log(li2.previousElementSibling) // 上一个兄弟
+    console.log(li2.nextElementSibling) // 下一个兄弟
+~~~
+
+#### 增加节点
+
+~~~js
+    const div = document.createElement('div')	 // 创建节点
+    document.body.appendChild(div) 				// 追加到body节点后面 父元素.appendChild(子元素)
+    ul.insertBefore(li,ul.children[0]) 			// 在子元素前添加节点 父元素.insertBefore(要插入的元素，放到哪个元素前)
+    ul.children[0].cloneNode(true)    			// 深克隆节点（浅克隆不加true 只克隆标签）
+~~~
+
+#### 删除节点
+
+~~~js
+    ul.removeChild(liClone)    // 删除节点 父元素.removeChild(要删除的元素)
+~~~
+
+### BOM（浏览器对象模型）
+
+window 全局对象
+
+#### JS执行机制（单线程）
+
+> 同步：只按**执行栈**执行不耗时的任务（有先后顺序）
+>
+> 异步：执行栈中任务全部执行完后再去**任务队列**执行**耗时**的任务（先后不确定）
+>
+> **事件循环**：同步 -> 异步 -> 同步 -> ......   
+
+#### location对象
+
+对象，拆分保存了URL地址的各个组成部分
+
+~~~js
+    location.href = 'https://www.baidu.com'		// 跳转链接
+    location.search   		// 获取地址中?后面的内容（用户名、密码）
+    location.hash  			// 获取地址中#后面的内容
+    location.reload()  	 	// 刷新当前页面
+    location.reload(true)   // 强制刷新当前页面
+~~~
+
+#### navigator对象
+
+~~~js
+    navigator.userAgent   //获取浏览器的用户代理
+    navigator.language   //获取浏览器的语言
+
+     // 跳转手机端
+     !(function () {
+      const userAgent = navigator.userAgent
+      // 验证是否为安卓或ios
+      const Android = userAgent.match(/(Android);?[\s\/]+([\d.]+)?/)
+      const iOS = userAgent.match(/(iPhone\sOS)\s([\d_]+)/)
+      if (Android || iOS) {
+        location.href = 'https://www.baidu.com'
+      }
+     })();
+~~~
+
+#### history对象
+
+~~~js
+    history.back()   //返回上一页
+    history.forward()   //返回下一页
+    history.go(-1)   //返回上一页
+    history.go(1)   //返回下一页
+    history.go(0)   //刷新当前页面
+~~~
+
+### 本地存储
+
+数据存储在用户浏览器中，**刷新不丢失**，容量大5M，Application查看
+
+#### localStorage
+
+> 永久存储，多窗口共享，键值对形式存储使用，只能存储**字符串**
+
+~~~js
+    localStorage.setItem('name', '张三')  // 存储/修改数据 localStorage.setItem('key', 'value')
+	localStorage.getItem('name')  // 获取数据 localStorage.getItem('key')		
+    localStorage.removeItem('name')  // 删除数据localStorage.removeItem('key')
+~~~
+
+#### sessionStorage
+
+> 关闭浏览器窗口消失，同窗口共享，键值对形式存储使用，只能存储**字符串**，用法同上
+
+#### JSON.stringify（复杂数据类型）
+
+~~~js
+    localStorage.setItem('obj', JSON.stringify(obj))  // 存储复杂数据 JSON字符串存储
+    console.log(JSON.parse(localStorage.getItem('obj')))  // 获取复杂数据 JSON字符串转换为对象
+~~~
+

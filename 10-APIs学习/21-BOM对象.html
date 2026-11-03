@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOM对象</title>
+  <style>
+    span {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <a href="https://www.baidu.com"><span>5</span>秒后跳转至百度</a>
+
+  <form action="">
+    <input type="text" name="username">
+    <input type="password" name="password">
+    <input type="submit" value="提交">
+  </form>
+
+  <button>后退</button>
+  <button>前进</button>
+
+  <script>
+    const a = document.querySelector('a')
+    let num = 5
+    let timer = setInterval(function () {
+      num--
+      a.innerHTML = `<span>${num}</span>秒后跳转至百度`
+      if (num === 0) {
+        clearInterval(timer)
+        location.href = a.href
+      }
+    }, 1000)
+
+    location.search   //获取地址中?后面的内容
+    location.hash   //获取地址中#后面的内容
+    location.reload()   //刷新当前页面
+    location.reload(true)   //强制刷新当前页面
+
+    navigator.userAgent   //获取浏览器的用户代理
+    navigator.language   //获取浏览器的语言
+
+    // 跳转手机端
+    !(function () {
+      const userAgent = navigator.userAgent
+      // 验证是否为安卓或ios
+      const Android = userAgent.match(/(Android);?[\s\/]+([\d.]+)?/)
+      const iOS = userAgent.match(/(iPhone\sOS)\s([\d_]+)/)
+      if (Android || iOS) {
+        location.href = 'https://www.baidu.com'
+      }
+    })();
+
+    history.back()   //返回上一页
+    history.forward()   //返回下一页
+    history.go(-1)   //返回上一页
+    history.go(1)   //返回下一页
+    history.go(0)   //刷新当前页面
+
+
+    const back = document.querySelector('button:first-child')
+    const forward = back.nextElementSibling
+
+    back.addEventListener('click', function () {
+      history.back()
+    })
+    forward.addEventListener('click', function () {
+      history.forward()
+    })
+  </script>
+</body>
+</html>

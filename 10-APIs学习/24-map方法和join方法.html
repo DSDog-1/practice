@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>map方法和join方法</title> 
+</head>
+<body>
+  <script>
+    // map方法
+    const arr = ['red', 'green', 'blue', 'yellow', 'orange']
+    arr.map(function (ele, index) {  // ele: 数组元素, index: 数组元素索引
+      return ele + '颜色'
+    })
+
+    // join方法
+    const str = arr.join('')  // 小括号为空默认逗号分隔，''表示无分隔符
+    console.log(str)
+  </script>
+</body>
+</html>

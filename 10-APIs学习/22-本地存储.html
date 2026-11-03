@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>本地存储</title>
+</head>
+<body>
+  <script>
+    // 本地存储
+    localStorage.setItem('name', '张三')  // 存储数据localStorage.setItem('key', 'value')
+    console.log(localStorage.getItem('name'))  // 获取数据localStorage.getItem('key')
+    localStorage.removeItem('name')  // 删除数据localStorage.removeItem('key')
+    // 复杂数据
+    const obj = {
+      name: '张三',
+      age: 18
+    }
+    localStorage.setItem('obj', JSON.stringify(obj))  // 存储复杂数据 JSON字符串存储
+    console.log(JSON.parse(localStorage.getItem('obj')))  // 获取复杂数据 JSON字符串转换为对象
+  </script>
+</body>
+</html>

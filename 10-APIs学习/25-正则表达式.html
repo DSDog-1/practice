@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>正则表达式</title>
+</head>
+<body>
+  <div>
+    <input type="text">
+    <span></span>
+  </div>
+  <script>
+    const reg = /^[a-zA-Z0-9-_]{6,16}$/
+    const input = document.querySelector('input')
+    const span = document.querySelector('span')
+    input.addEventListener('blur', function () {
+      if (reg.test(input.value)) {
+        span.innerHTML = '输入正确'
+      } else {
+        span.innerHTML = '输入错误'
+      }
+    })
+  </script>
+  <script>
+    // 元字符
+    // 1.边界符
+    // ^...    以...开头
+    // ...$    以...结尾
+    // ^...$   精确匹配...字符串(一模一样)
+    // 2.量词
+    // *    >=0
+    // +    >=1
+    // ?    0个或1个
+    // {n}  n个
+    // {n,} >=n个
+    // {n,m} n到m个
+    // 3.字符类
+    // . 除换行符以外的任意字符
+    // [ ] 范围，出现任一字符即可
+    // ^[]$  精确匹配只能选一个，可加量词
+    // [^ ]  非范围字符,除范围内的其他字符
+    // [a-z]  小写字母
+    // [a-zA-Z0-9_]  字母或数字或下划线
+    // 4.预定义类
+    // \d 数字
+    // \D 非数字
+    // \w 字母数字下划线
+    // \W 非字母数字下划线
+    // \s 空格
+    // \S 非空格
+
+    // 修饰符 / /后面添加
+    // i 忽略大小写
+    // g 全局匹配
+
+    str.replace(reg, '')  // 替换匹配项
+    str.replace(/hello/g, '')  // 替换所有匹配项
+
+     </script>
+</body>
+</html>

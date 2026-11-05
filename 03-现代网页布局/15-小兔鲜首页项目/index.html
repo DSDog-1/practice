@@ -510,6 +510,41 @@
       </div>
     </div>
   </footer>
+
+
+<script>
+  // 获取第一个li
+  const firstLi = document.querySelector('.shortcut ul li:first-child')
+  const secondLi = firstLi.nextElementSibling
+  function render() {
+    // 从本地存储中获取用户名
+    const username = localStorage.getItem('username')
+    // console.log(username)
+    // 如果用户名存在，就设置到第一个li的p标签中
+    if (username) {
+      firstLi.innerHTML = `
+        <p>${username}</p>
+      `
+      secondLi.innerHTML = `
+        <p>退出登录</p>
+      `
+    } else {
+      firstLi.innerHTML = `
+        <a href="../10-APIs学习/26-注册页面.html">请先登录</a>
+      `
+      secondLi.innerHTML = `
+        <a href="../10-APIs学习/26-注册页面.html">免费注册</a>
+      `
+    }
+  }
+  render()
+
+  // 退出登录
+  secondLi.addEventListener('click', function () {
+    localStorage.removeItem('username')
+    render()
+  })
+</script>
 </body>
 
 </html>

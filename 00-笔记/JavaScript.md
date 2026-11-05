@@ -660,6 +660,7 @@ let obj = null // 空对象
     input.addEventListener('keyup', function () { 		// 键盘松开事件
 	// 文本事件
     input.addEventListener('input', function () { 		// 键盘输入事件
+    input.addEventListener('change', function () { 		// 键盘修改事件
     // 其他事件
     window.addEventListener('load', function () { 					// 页面加载事件1
     document.addEventListener('DOMContentLoaded', function () {		 // 页面加载事件2,无需完全加载
@@ -844,5 +845,65 @@ window 全局对象
 ~~~js
     localStorage.setItem('obj', JSON.stringify(obj))  // 存储复杂数据 JSON字符串存储
     console.log(JSON.parse(localStorage.getItem('obj')))  // 获取复杂数据 JSON字符串转换为对象
+~~~
+
+### 正则表达式
+
+**匹配字符串**中字符组合的**模式**、对象，匹配替换提取支持正则表达式的文本、**验证表单、过滤敏感词、截取特定部分**
+
+#### 语法
+
+~~~js
+    const reg = /需要查找的关键字/ 		// 定义
+    reg.test(被检查的字符串)		// 判断 返回布尔值
+    reg.exec(被检查的字符串)		// 检索 返回数组，否则为null
+~~~
+
+#### 元字符（特殊字符）
+
+~~~js
+    // 1.边界符
+    // ^...    以...开头
+    // ...$    以...结尾
+    // ^...$   精确匹配...字符串(一模一样)
+~~~
+
+~~~js
+    // 2.量词
+    // *    	>=0
+    // +    	>=1
+    // ?    	0个或1个
+    // {n}  	n个
+    // {n,} 	>=n个
+    // {n,m} 	n到m个
+~~~
+
+~~~js
+    // 3.字符类
+    // . 			除换行符以外的任意字符
+    // [ ] 			范围，出现任一字符即可
+    // ^[]$  		精确匹配只能选一个，可加量词
+    // [^ ]  		非范围字符,除范围内的其他字符
+    // [a-z]  		小写字母
+    // [a-zA-Z0-9_]  字母或数字或下划线
+~~~
+
+~~~js
+    // 4.预定义类
+    // \d 		数字
+    // \D 		非数字
+    // \w 		字母数字下划线
+    // \W 		非字母数字下划线
+    // \s 		空格
+    // \S 		非空格
+~~~
+
+#### 修饰符
+
+/  / 后面添加
+
+~~~js
+    // i 忽略大小写
+    // g 全局匹配
 ~~~
 

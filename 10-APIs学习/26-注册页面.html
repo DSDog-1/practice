@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册页面</title>
+  <style>
+    span {
+      color: red;
+      font-size: 12px;
+    }
+
+    /* tab 切换样式 */
+    .tab-nav {
+      display: flex;
+      gap: 20px;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .tab-nav a {
+      text-decoration: none;
+      color: #666;
+      padding: 10px 0;
+    }
+
+    .tab-nav a.active {
+      color: #333;
+      font-weight: bold;
+      border-bottom: 2px solid #333;
+    }
+
+    .tab1,
+    .tab2 {
+      display: none;
+    }
+
+    .tab1.active,
+    .tab2.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="tab-nav">
+    <a href="" class="title1 active">注册</a>
+    <a href="" class="title2">登录</a>
+  </div>
+  <div class="tab1 active">
+    <form action="" autocomplete="off">
+      <label for="username">用户名：</label>
+      <input type="text" id="username" name="username">
+      <span id="usernameSpan"></span>
+      <br>
+      <label for="phone">手机号：</label>
+      <input type="text" id="phone" name="phone">
+      <span id="phoneSpan"></span>
+      <br>
+      <label for="verifyCode">验证码：</label>
+      <input type="text" id="verifyCode" name="verifyCode">
+      <button type="button" class="code">发送验证码</button>
+      <span id="verifyCodeSpan"></span>
+      <br>
+      <label for="password">密码：</label>
+      <input type="password" id="password" name="password">
+      <span id="passwordSpan"></span>
+      <br>
+      <label for="confirmPassword">再次输入密码：</label>
+      <input type="password" id="confirmPassword" name="confirmPassword">
+      <span id="confirmPasswordSpan"></span>
+      <br>
+      <input type="checkbox" id="checkbox">
+      <label for="checkbox">
+        已同意<a href="">《注册协议》</a>和<a href="">《隐私政策》</a>
+      </label>
+      <br>
+      <input type="submit" value="注册" id="submitBtn">
+    </form>
+  </div>
+  <div class="tab2">
+    <form action="" autocomplete="off">
+      <label for="username">用户名：</label>
+      <input type="text" id="username" name="username">
+      <span id="usernameSpan"></span>
+      <br>
+      <label for="password">密码：</label>
+      <input type="password" id="password" name="password">
+      <span id="passwordSpan"></span>
+      <br>
+      <input type="submit" value="登录" id="submitBtn">
+    </form>
+  </div>
+
+  <script>
+    // ===== 公共：发送验证码按钮（只在 tab1 注册表单里）=====
+    const codeBtn = document.querySelector('.tab1 .code')
+    let flag = true
+    codeBtn.addEventListener('click', function () {
+      if (flag) {
+        flag = false
+        let i = 5
+        codeBtn.innerHTML = i + '秒后重新发送'
+        let timer = setInterval(function () {
+          i--
+          codeBtn.innerHTML = i + '秒后重新发送'
+          if (i === 0) {
+            clearInterval(timer)
+            codeBtn.innerHTML = '重新发送'
+            flag = true
+          }
+        }, 1000)
+      }
+    })
+
+    // ===== Tab 切换 =====
+    const nav = document.querySelector('.tab-nav')
+    const tab1 = document.querySelector('.tab1')
+    const tab2 = document.querySelector('.tab2')
+    const title1 = document.querySelector('.title1')
+    const title2 = document.querySelector('.title2')
+
+    nav.addEventListener('click', function (e) {
+      if (e.target.tagName !== 'A') return
+      e.preventDefault()
+      // 切换激活的标题
+      title1.classList.toggle('active', e.target === title1)
+      title2.classList.toggle('active', e.target === title2)
+      // 切换激活的面板
+      tab1.classList.toggle('active', e.target === title1)
+      tab2.classList.toggle('active', e.target === title2)
+    })
+
+    // ===== 注册表单校验（全部限定在 tab1 内）=====
+    const rName = tab1.querySelector('#username')
+    const rNameSpan = tab1.querySelector('#usernameSpan')
+    const rPhone = tab1.querySelector('#phone')
+    const rPhoneSpan = tab1.querySelector('#phoneSpan')
+    const rCode = tab1.querySelector('#verifyCode')
+    const rCodeSpan = tab1.querySelector('#verifyCodeSpan')
+    const rPwd = tab1.querySelector('#password')
+    const rPwdSpan = tab1.querySelector('#passwordSpan')
+    const rPwd2 = tab1.querySelector('#confirmPassword')
+    const rPwd2Span = tab1.querySelector('#confirmPasswordSpan')
+    const rCheckbox = tab1.querySelector('#checkbox')
+
+    function verifyName() {
+      const reg = /^[a-zA-Z0-9-_]{6,10}$/
+      if (!reg.test(rName.value)) {
+        rNameSpan.innerHTML = '请输入6-10位字母、数字或下划线'; return false
+      }
+      rNameSpan.innerHTML = ''; return true
+    }
+    function verifyPhone() {
+      const reg = /^1[3456789]\d{9}$/
+      if (!reg.test(rPhone.value)) {
+        rPhoneSpan.innerHTML = '请输入正确的11位手机号'; return false
+      }
+      rPhoneSpan.innerHTML = ''; return true
+    }
+    function verifyCode() {
+      const reg = /^\d{6}$/
+      if (!reg.test(rCode.value)) {
+        rCodeSpan.innerHTML = '请输入6位验证码'; return false
+      }
+      rCodeSpan.innerHTML = ''; return true
+    }
+    function verifyPwd() {
+      const reg = /^[a-zA-Z0-9-_]{6,16}$/
+      if (!reg.test(rPwd.value)) {
+        rPwdSpan.innerHTML = '请输入6-16位字母、数字或下划线'; return false
+      }
+      rPwdSpan.innerHTML = ''; return true
+    }
+    function verifyPwd2() {
+      if (rPwd2.value !== rPwd.value) {
+        rPwd2Span.innerHTML = '两次输入密码不一致'; return false
+      }
+      rPwd2Span.innerHTML = ''; return true
+    }
+    function verifyCheckbox() {
+      return rCheckbox.checked
+    }
+
+    rName.addEventListener('change', verifyName)
+    rPhone.addEventListener('change', verifyPhone)
+    rCode.addEventListener('change', verifyCode)
+    rPwd.addEventListener('change', verifyPwd)
+    rPwd2.addEventListener('change', verifyPwd2)
+
+    tab1.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault()
+      if (!verifyCheckbox()) return alert('请同意注册协议和隐私政策')
+      const ok = [verifyName(), verifyPhone(), verifyCode(), verifyPwd(), verifyPwd2()].every(Boolean)
+      if (!ok) return alert('请检查红色错误提示')
+      // 校验通过后，把用户名存到本地存储
+      localStorage.setItem('username', rName.value)
+      location.href = './index.html'
+    })
+
+
+    // ===== 登录表单校验（限定在 tab2 内）=====
+    const lName = tab2.querySelector('#username')
+    const lNameSpan = tab2.querySelector('#usernameSpan')
+    const lPwd = tab2.querySelector('#password')
+    const lPwdSpan = tab2.querySelector('#passwordSpan')
+
+    function verifyLoginName() {
+      const reg = /^[a-zA-Z0-9-_]{6,10}$/
+      if (!reg.test(lName.value)) {
+        lNameSpan.innerHTML = '请输入6-10位字母、数字或下划线'; return false
+      }
+      lNameSpan.innerHTML = ''; return true
+    }
+    function verifyLoginPwd() {
+      const reg = /^[a-zA-Z0-9-_]{6,16}$/
+      if (!reg.test(lPwd.value)) {
+        lPwdSpan.innerHTML = '请输入6-16位字母、数字或下划线'; return false
+      }
+      lPwdSpan.innerHTML = ''; return true
+    }
+
+    lName.addEventListener('change', verifyLoginName)
+    lPwd.addEventListener('change', verifyLoginPwd)
+
+    tab2.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault()
+      const ok = [verifyLoginName(), verifyLoginPwd()].every(Boolean)
+      if (!ok) return alert('请检查红色错误提示')
+      // 校验通过后，把用户名存到本地存储
+      localStorage.setItem('username', lName.value)
+      location.href = './index.html'
+    })
+  </script>
+
+
+</body>
+
+</html>

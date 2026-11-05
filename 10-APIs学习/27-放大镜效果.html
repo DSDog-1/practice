@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>放大镜效果</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .box {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 50px auto;
+      width: fit-content;
+    }
+
+    .middle {
+      position: relative;
+      overflow: hidden;
+      width: 300px;
+      height: 300px;
+    }
+
+    .middle img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .small {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100px;
+    }
+
+    .small img {
+      width: 100px;
+      height: 72px;
+      cursor: pointer;
+    }
+
+    .small img:hover {
+      border: 2px solid #5EB69C;
+      box-sizing: border-box;
+    }
+
+    .big {
+      display: none;
+      position: absolute;
+      left: 956px;
+      width: 300px;
+      height: 300px;
+      /* background-color: #5EB69C; */
+    }
+
+    .mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 100px;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <div class="middle">
+      <div class="mask"></div>
+      <img src="./img/c2-1.webp" alt="">
+    </div>
+    <div class="small">
+      <img src="./img/c2-1.webp" alt="">
+      <img src="./img/c2-2.webp" alt="">
+      <img src="./img/c2-3.webp" alt="">
+      <img src="./img/c2-4.webp" alt="">
+    </div>
+    <div class="big"></div>
+  </div>
+</body>
+
+<script>
+  // 1. 获取元素
+  const middle = document.querySelector('.middle')
+  const small = document.querySelector('.small')
+  const big = document.querySelector('.big')
+  // 2. 给定事件
+  small.addEventListener('mouseover', function (e) {
+    if (e.target.tagName === 'IMG') {
+      middle.querySelector('img').src = e.target.src
+      big.style.backgroundImage = `url(${e.target.src})`
+    }
+  })
+
+  // 3. 给定事件
+  middle.addEventListener('mouseenter', show)
+  middle.addEventListener('mouseleave', hide)
+  let timer = 0
+  function show() {
+    clearTimeout(timer)
+    big.style.display = 'block'
+  }
+  function hide() {
+    timer = setTimeout(function () {
+      big.style.display = 'none'
+    }, 200)
+  }
+  big.addEventListener('mouseenter', show)
+  big.addEventListener('mouseleave', hide)
+
+  const mask = document.querySelector('.mask')
+  middle.addEventListener('mouseenter', function () {
+    mask.style.display = 'block'
+  })
+  middle.addEventListener('mouseleave', function () {
+    mask.style.display = 'none'
+  })
+  middle.addEventListener('mousemove', function (e) {
+    let x = e.pageX - middle.getBoundingClientRect().left
+    let y = e.pageY - middle.getBoundingClientRect().top - document.documentElement.scrollTop
+    // console.log(x,y)
+    mask.style.left = `${x}px`
+    mask.style.top = `${y}px`
+    if (x >= 0 && x <= 300 && y >= 0 && y <= 300) {
+      let mx = 0, my = 0
+      if (x <= 50) mx = 0
+      if (x >= 50 && x <= 250) mx = x - 50
+      if (x >= 250) mx = 200
+      if (y <= 50) my = 0
+      if (y >= 50 && y <= 250) my = y - 50
+      if (y >= 250) my = 200
+      mask.style.left = `${mx}px`
+      mask.style.top = `${my}px`
+      // 大盒子的背景图片位置
+      big.style.backgroundPositionX = -3 * mx + 'px'
+      big.style.backgroundPositionY = -3 * my + 'px'
+    }
+  })
+</script>
+
+
+</html>

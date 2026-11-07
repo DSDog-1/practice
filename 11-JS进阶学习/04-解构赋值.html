@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>解构赋值</title>
+</head>
+<body>
+  <script>
+    // 解构赋值
+    // let [a, b] = [1, 2]
+    // console.log(a, b)
+    
+    // 交换变量值
+    // let a = 10
+    // let b = 20
+    // ;[a, b] = [b, a]    // 数组开头加分号
+    // console.log(a, b)
+
+    // const [a,b, ,d,...e] = [1,2,3,4,5,6]
+    // a = 1, b = 2, d = 4, e = [5,6]
+
+    // const [a,b,[c,d]] = [1,2,[3,4]]
+    // // a = 1, b = 2, c = 3, d = 4
+
+    // const {name, age} = { name: '张三', age: 18 }
+    // 改名
+    // const {name: uname, age } = { name: '张三', age: 18 }
+    // console.log(uname, uage)
+
+    const a = {
+      name: '张三',
+      family: {
+        mother: '李四',
+        age: 18
+      }
+    }
+const {name, family : {mother , age}} = a
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>箭头函数</title>
+</head>
+<body>
+  <script>
+    function getSum(a, b) {
+      return a + b
+    }
+    console.log(getSum(1, 2))
+
+    // 箭头函数
+    let getSum2 = (a, b) => {
+      return a + b
+    }
+    console.log(getSum2(1, 2))
+
+    const fn = () => {
+      console.log('hello world')
+    }
+    fn()
+
+
+    // 直接返回对象
+    const fn1 = (uname) => ({name: uname, age: 18})
+    console.log(fn1('张三'))
+
+    // 求和
+    const sum = (a, b) => a + b
+    console.log(sum(1, 2))
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数组方法</title>
+</head>
+<body>
+  <script>
+    const str = [{
+      name: '张三',
+      age: 18,
+      salary: 10000
+    },{
+      name: '李四',
+      age: 20,
+      salary: 15000
+    },{
+      name: '王五',
+      age: 22,
+      salary: 20000
+    }]
+    const totalSalary = str.reduce((pre, cur) => pre + cur.salary, 0)
+    console.log(totalSalary)
+
+    const arr = [
+      {
+        id: 123,
+        name: '商品1',
+        price: 1456
+      },
+      {
+        id: 456,
+        name: '商品2',
+        price: 2345
+      }
+    ]
+    arr.find(item => item.id === 456)
+
+    const arr1 = [1, 2, 3, 4, 5]
+    const isAll = arr1.every(item => item > 0)  // 每一个是否都符合条件
+    const isAny = arr1.some(item => item > 0)  // 有一个符合条件就符合条件
+    console.log(isAll)
+    console.log(isAny)
+
+
+
+  </script>
+
+  <ul>
+    <li>商品1</li>
+    <li>商品2</li>
+    <li>商品3</li>
+    <li>商品4</li>
+    <li>商品5</li>
+  </ul>
+
+  <script>
+    const lis = document.querySelectorAll('ul li')
+    const liss = Array.from(lis)
+  </script>
+</body>
+</html>

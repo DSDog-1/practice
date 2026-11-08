@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String方法</title>
+</head>
+<body>
+   <script>
+    const str = 'hello,world'
+    const arr = str.split(',')
+    console.log(arr)
+    str.substring(0, 5) // (开始的索引, 结束的索引)
+
+    str.startsWith('hello') // true 以hello开头
+    str.startsWith('l', 2) // true 第3个字符以l开头空格、标点也算
+    str.includes('hello') // true 包含hello 区分大小写
+    str.endsWith('world') // true 以world结尾
+
+   </script>
+</body>
+</html>

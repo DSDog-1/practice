@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>案例</title>
+</head>
+<body>
+  <div class="list">
+  </div>
+  <div class="total"></div>
+
+  <script>
+    const goodlist = [
+      {
+        id: 123,
+        name: '商品1',
+        price: 1456,
+        num: 2,
+        spec: { size: 'M' ,color: 'red' }
+      },
+      {
+        id: 456,
+        name: '商品2',
+        price: 2345,
+        num: 1,
+        spec: { size: 'L' },
+        gift: '3,4'
+      }
+    ]
+    document.querySelector('.list').innerHTML = goodlist.map( item => {
+      const { name, price, num, spec, gift } = item
+      const text = Object.values(spec).join('/')
+      const giftText = gift ? gift.split(',').map(item => `<span>赠品：${item}</span><br>`).join('') : ''
+      return `<div class="item">
+        <p>${name}<span>${text}</span></p>
+        <p>单价：${price.toFixed(2)}</p>
+        <p>数量：${num}</p>
+        <p>金额：${(num * price * 100 / 100).toFixed(2)}</p>  
+        <p>${giftText}</p>
+      </div>`
+    }).join('')
+    const total = goodlist.reduce((pre, cur) => pre + (cur.price * cur.num * 100 / 100), 0)
+    document.querySelector('.total').innerHTML = `总金额：${total.toFixed(2)}`
+  </script>
+</body>
+</html>

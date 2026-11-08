@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>构造函数</title>
+</head>
+<body>
+  <script>
+    // function Person(name, age) {
+    //   this.name = name
+    //   this.age = age
+    // }
+    // const p1 = new Person('张三', 18)
+    // console.log(p1)
+
+    // function Goods(id, name, price) {
+    //   this.id = id
+    //   this.name = name
+    //   this.price = price
+    // }
+
+    // 获取所有属性
+    // function Goods(id, name, price) {
+    //   this.id = id
+    //   this.name = name
+    //   this.price = price
+    // }
+    // const g1 = new Goods(123, '商品1', 1456)
+    // console.log(Object.keys(g1)) // ['id', 'name', 'price']
+    // console.log(Object.values(g1)) // [123, '商品1', 1456]
+    
+    // const g2 = {}
+    // Goods.call(g2, 456, '商品2', 2345)
+    // Object.assign(g2, g1)     // 拷贝g1的属性到g2
+
+    const arr = [1, 2, 3, 4, 5]
+
+    const sum = arr.reduce(function(pre, cur) {
+      return pre + cur
+    },10)
+
+    // const sum = arr.reduce((pre, cur) => pre + cur, 10)
+
+    
+
+  </script>
+</body>
+</html>

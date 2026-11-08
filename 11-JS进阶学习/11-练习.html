@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>案例</title>
+</head>
+<body>
+  <div>
+
+  </div>
+  <script>
+    const spec = { size: 'M' ,color: 'red' }
+    const gift = '商品1,商品2,商品3'
+    const giftArr = gift.split(',').map(function(item){
+      return `<span>${item}</span> <br>`
+    }).join('')
+    document.querySelector('div').innerHTML = giftArr
+</script>
+</body>
+</html>

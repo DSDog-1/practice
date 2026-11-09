@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数组扩展方法</title>
+</head>
+<body>
+  <script>
+    Array.prototype.max = function() {
+      return Math.max(...this) // 原型函数this指向实例对象
+    }
+    Array.prototype.min = function() {
+      return Math.min(...this)
+    }
+    Array.prototype.sum = function() {
+      return this.reduce((pre, cur) => pre + cur, 0)
+    }
+    
+    const arr = [1, 2, 3, 4, 5]
+    console.log(arr.max())
+    
+  </script>
+</body>
+</html>

@@ -153,6 +153,44 @@
     const newArr = arr.filter(item => item > 5)		// 简写
 ~~~
 
+#### reduce方法
+
+返回累计处理的结果，常用于求和
+
+对象数组起始值必须为0，属性累加
+
+~~~js
+	arr.reduce(function(pre, cur) {		// （上一次的值=第一个元素值/初始值，当前值=第二个元素值/第一个元素值）
+      return pre + cur
+    },10)	// 初始值
+	const sum = arr.reduce((pre, cur) => pre + cur, 10)
+~~~
+
+#### find方法
+
+返回第一个符合条件的数组元素
+
+~~~js
+    arr.find(item => item.id === 456)
+~~~
+
+#### every与some方法
+
+测试数组元素，返回布尔值
+
+~~~js
+    const isAll = arr1.every(item => item > 0)  // 每一个是否都符合条件
+    const isAny = arr1.some(item => item > 0)  // 有一个符合条件就符合条件
+~~~
+
+#### from方法
+
+伪数组转化为真数组
+
+~~~js
+    const liss = Array.from(lis)
+~~~
+
 #### 展开运算符...
 
 不会修改原数组
@@ -185,9 +223,13 @@
 
 > 弱数据类型 
 >
->  算术运算符：+加 -减 *乘 /除 %取余 **有优先级**
+> 算术运算符：+加 -减 *乘 /除 %取余 **有优先级**
 >
 > NaN 计算错误、粘性
+>
+> ~~~js
+>     console.log(num.toFixed(n)) // 四舍五入保留n位小数
+> ~~~
 
 #### string 字符串型
 
@@ -196,10 +238,19 @@
 > 单引内双引，双引内单引
 >
 > ~~~js
->     let str1 = ''// 空字符串
->     let age = 18
->     document.write('我今年' + age + '岁')// 输出字符串拼接后的结果
->     document.write(`我今年${age}岁`)// 模板字符串 反引号，支持换行
+>  let str1 = ''// 空字符串
+>  let age = 18
+>  document.write('我今年' + age + '岁')// 输出字符串拼接后的结果
+>  document.write(`我今年${age}岁`)// 模板字符串 反引号，支持换行
+> ~~~
+>
+> ~~~js
+> 	const arr = str.split(',')		// 通过括号内的字符分隔，将字符串转换为数组
+>     str.substring(0, 5) 	// 截取(开始的索引, 结束的索引（左闭右开，可省略，默认取到最后）)
+>     str.startsWith('hello') // true 以hello开头
+>     str.startsWith('l', 2) // true 第3个字符以l开头空格、标点也算
+>     str.includes('hello') // true 包含hello 区分大小写
+>     str.endsWith('world') // true 以world结尾
 > ~~~
 
 #### boolean 布尔型
@@ -223,6 +274,8 @@
 ### 引用数据类型（地址 -> 堆）
 
 两个对象用一个地址的话，修改其中一个对象的值，另一个因为共用地址所以值也会改变
+
+包装类型：JS底层通过构造函数把简单数据类型包装成引用数据类型以使用方法
 
 - object 对象
 - Array
@@ -517,6 +570,41 @@ return立即结束当前函数，后面的代码被跳过
     console.log(fn1('张三'))
 ~~~
 
+#### 构造函数
+
+特殊的函数，用来初始化对象，**快速创建多个类似的对象**
+
+> 命名以大写字母开头
+>
+> 只能由“new”操作符来执行（实例化）
+>
+> 无需写return，返回值即为新创建的对象
+
+~~~js
+    function Person(name, age) {
+      this.name = name
+      this.age = age
+    }
+    const p1 = new Person('张三', 18)
+    // 实例化四步：
+    // 1.创建新的空对象
+    // 2.构造函数this指向新对象
+    // 3.执行构造函数代码，修改this，添加新属性
+    // 4.返回新对象
+~~~
+
+### 内置构造函数
+
+#### 引用类型
+
+~~~js
+    console.log(Object.keys(g1)) // ['id', 'name', 'price']
+    console.log(Object.values(g1)) // [123, '商品1', 1456]
+    Object.assign(g2, g1)     // 拷贝g1的属性到g2
+~~~
+
+#### 包装类型
+
 ## 9.对象
 
 数据类型，**无序**（无下标）的数据集合，详细描述某个事物
@@ -526,7 +614,7 @@ return立即结束当前函数，后面的代码被跳过
 属性n.+方法v.
 
 ~~~js
-let 对象名 = {
+	let 对象名 = {
     属性名1：属性值1，// 多属性间用逗号隔开
     属性名2：属性值2，
     方法名：函数  // 匿名函数
@@ -590,6 +678,12 @@ let obj = null // 空对象
     let random = Math.floor(Math.random() * arr.length)
     console.log(arr[random])
 ~~~
+
+### 实例成员&静态成员
+
+构造函数创建的**实例对象的属性和方法**称为实例属性与实例方法（实例成员：相互独立，互不影响）
+
+**构造函数的属性与方法**称为静态属性与静态方法（静态成员）
 
 ## 10.API（DOM+BOM）
 
@@ -1061,6 +1155,31 @@ window 全局对象
     const {name, age} = { name: '张三', age: 18 }		// 变量名与属性名需一致
     const {name: uname, age } = { name: '张三', age: 18 }	// 改名 旧名：新名
 	const {name, family : {mother , age}} = a	// 多级对象
+~~~
 
+## 13.面向对象oop
+
+### 编程思想
+
+面向过程：按照分析好的步骤解决问题
+
+> 性能高，适合硬件联系紧密的东西
+
+面向对象：以对象的功能划分问题，而不是步骤
+
+> 封装性（构造函数 -> 浪费内存）、继承性、多态性
+>
+> 易维护、易复用、易扩展
+
+### 原型
+
+**构造函数的  prototype 属性**指向另一个**原型对象**，实例化不会多次创建原型上函数以**节约内存**，且**this指向实例化对象**
+
+构造函数通过原型分配的函数是所有对象**共享**的，把不变的方法直接定义在prototype对象上，使所有对象的实例共享这些方法
+
+~~~js
+    Person.prototype.sayName = function() {
+	// 构造函数名.prototype.方法名 = function() {} 
+	p1.sayName()  
 ~~~
 

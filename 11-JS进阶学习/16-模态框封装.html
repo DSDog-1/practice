@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模态框封装</title>
+  <style>
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 200px;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .body {
+      font-size: 16px;
+      color: #666;
+    }
+
+    .header i {
+      cursor: pointer;
+    }
+
+    .header i:hover {
+      color: #007bff;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="btn">登录</button>
+  <button id="close">删除</button>
+  <!-- <div class="modal">
+      <div class="header">温馨提示<i>X</i>
+    </div>
+    <div class="body">
+      确认删除吗？
+    </div>
+  </div> -->
+  <script>
+    function Modal(title = '', content = '') {
+      // 1. 是“创建”新 div，不是从页面里查找（页面里本来就没有）
+      this.modalbox = document.createElement('div')
+      this.modalbox.className = 'modal'
+      this.modalbox.innerHTML = `
+        <div class="header">${title}<i>X</i></div>
+        <div class="body">${content}</div>
+      `
+    }
+
+    Modal.prototype.open = function () {
+      // 2. 先移除页面中已存在的旧模态框，保证同时只有一个
+      document.querySelector('.modal')?.remove()
+      document.body.append(this.modalbox)
+      // 3. 用箭头函数，让 this 指向 Modal 实例；普通函数里 this 是被点击的 <i>
+      this.modalbox.querySelector('.header i').addEventListener('click', () => {
+        this.close()
+      })
+    }
+
+    // 4. 补上缺失的 close 方法
+    Modal.prototype.close = function () {
+      this.modalbox.remove()
+    }
+
+    document.getElementById('close').addEventListener('click', function () {
+      const modal = new Modal('温馨提示', '确认删除吗？')
+      modal.open()
+    })
+    document.getElementById('btn').addEventListener('click', function () {
+      const modal = new Modal('温馨提示', '确认登录吗？')
+      modal.open()
+    })
+  </script>
+</body>
+
+</html>

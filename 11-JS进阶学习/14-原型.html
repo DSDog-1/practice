@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>原型</title>
+</head>
+<body>
+  <script>
+    function Person(name, age) {
+      this.name = name
+      this.age = age
+    }
+    Person.prototype.sayName = function() {
+      console.log(this.name)
+    }
+    const p1 = new Person('张三', 18)
+    p1.sayName()  
+
+    Person.prototype.constructor = Person
+
+    Person.prototype = {
+      constructor: Person,  // 重写构造函数，需要手动添加
+      sayName: function() {
+        console.log(this.name)
+      }
+    }
+    p1.__proto__.constructor = Person
+    p1.__proto__ = Person.prototype
+    Person.prototype.__proto__ = Object.prototype
+    Object.prototype.__proto__ = null
+    console.log(Person instanceof Object) // instanceof 检查是否属于
+
+    function common() {
+      this.eyes = 2
+      this.legs = 2
+    }
+    // const common = {
+    //   eyes: 2,
+    //   legs: 2
+    // }
+    function Woman() {
+      this.name = '女'
+    }
+    Woman.prototype.baby = function() {
+      console.log('我是女的')
+    }
+    // 原型继承公共属性
+    Woman.prototype = {
+      constructor: Woman,
+      ...common.prototype
+    }
+    function Man() {
+      this.name = '男'
+    }
+
+    Man.prototype = new common()    // 原型继承公共属性
+    Man.prototype.constructor = Man   // 指回构造函数
+    const red = new Woman()
+    const blue = new Man()
+
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>异常处理</title>
+</head>
+<body>
+  <script>
+    function fn(x,y) {
+      if (!x || !y) {
+        throw new Error('参数不能为空') // 抛中文异常信息
+      }
+      return x + y
+    }
+    console.log(fn(1,2))
+    console.log(fn(1,))
+    console.log(fn('',2))
+    console.log(fn(1,2))
+    
+  </script>
+
+  <p>132</p>
+  <script>
+    function fn() {
+      try {
+        // 可能会抛出异常的代码
+        const p = document.querySelector('p')
+        p.style.color = 'red'
+      } catch (error) {
+        // 拦截错误，不中断程序执行
+        console.log(error.message)
+        // 加一个return/throw，中断程序11
+        return
+      }
+      finally {
+        // 无论是否抛出异常，都会执行的代码，不管return/throw
+        console.log('finally')
+      }
+      console.log('11') // 不会执行
+    }
+    fn()
+  </script>
+</body>
+</html>

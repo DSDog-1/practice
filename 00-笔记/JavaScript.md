@@ -1171,7 +1171,7 @@ window 全局对象
 >
 > 易维护、易复用、易扩展
 
-### 原型
+### 原型对象  prototype
 
 **构造函数的  prototype 属性**指向另一个**原型对象**，实例化不会多次创建原型上函数以**节约内存**，且**this指向实例化对象**
 
@@ -1181,5 +1181,55 @@ window 全局对象
     Person.prototype.sayName = function() {
 	// 构造函数名.prototype.方法名 = function() {} 
 	p1.sayName()  
+~~~
+
+### constructor属性
+
+**只要是原型对象prototype就有constructor属性**，指向该原型函数的构造函数，追加没影响，赋值直接覆盖
+
+~~~js
+    Person.prototype.constructor = Person
+~~~
+
+~~~js
+    Person.prototype = {
+      constructor: Person,  // 重写构造函数，需要手动添加
+      sayName: function() {
+        console.log(this.name)
+      }
+    }
+~~~
+
+### 对象原型    [[prototype]]
+
+JS非标准属性，**只要是对象就有属性**__ _proto_ __指向原型对象prototype，只读不可赋值
+
+~~~js
+    p1.__proto__ = Person.prototype		// 实例对象.对象原型 = 函数名.原型对象
+    p1.__proto__.constructor = Person
+~~~
+
+### 原型继承
+
+~~~js
+    function common() {		// 需要继承的公共属性封装成构造函数
+      this.eyes = 2			// 结构相同对象不同
+      this.legs = 2
+    }
+	Man.prototype = new common()    // 原型继承公共属性
+    Man.prototype.constructor = Man   // 指回构造函数
+~~~
+
+### 原型链
+
+基于原型对象的继承使得不同构造函数的原型对象关联在一起形成链状结构，为对象成员查找机制提供一条路线
+
+**查找规则**：访问一个对象属性/方法时，先查找对象自身有无，没有就查原型，再查原型对象的原型一直找到null
+
+~~~js
+    p1.__proto__ = Person.prototype
+    Person.prototype.__proto__ = Object.prototype
+    Object.prototype.__proto__ = null
+    console.log(Person instanceof Object) // A instanceof B   检查A是否属于B
 ~~~
 

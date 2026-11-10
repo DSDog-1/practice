@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>节流</title>
+  <style>
+    div {
+      width: 200px;
+      height: 200px;
+      background-color: pink;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <span></span>
+  </div>
+  <script src="lodash.js"></script>
+  <script>
+    const box = document.querySelector('div')
+    const span = document.querySelector('span')
+    let i = 1
+    function mouseMove() {
+      span.innerHTML = i++
+    }
+    // 1.lodash库 _.throttle(函数, 时间)   时间间隔内只执行首次函数
+    // box.addEventListener('mousemove', _.throttle(mouseMove, 1000))
+    // 2. 手写节流函数
+    // 声明定时器变量
+    // 每次事件触发时，判断定时器是否存在
+    // 如果存在，不开启新定时器
+    // 如果不存在，设置定时器，存入定时器变量，延迟执行函数
+    function throttle(fn, t) {
+      let timer = null
+      return function() {
+        if(!timer) {
+        timer = setTimeout(() => {
+          fn()
+          timer = null // 重置定时器，等待下一次事件触发，还在运作不能使用clearTimeout
+          }, t)
+        }
+      }
+    }
+    box.addEventListener('mousemove', throttle(mouseMove, 1000))
+  </script>
+</body>
+</html>

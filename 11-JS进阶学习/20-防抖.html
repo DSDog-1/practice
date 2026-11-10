@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>防抖</title>
+  <style>
+    div {
+      width: 200px;
+      height: 200px;
+      background-color: pink;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <span></span>
+  </div>
+  <!-- <script src="lodash.js"></script> -->
+  <script>
+    const box = document.querySelector('div')
+    const span = document.querySelector('span')
+    let i = 1
+    function mouseMove() {
+      span.innerHTML = i++
+    }
+    // box.addEventListener('mousemove', mouseMove)
+    // box.addEventListener('mousemove', _.debounce(mouseMove, 1000))  //lodash库 _.debounce(函数, 时间)
+
+    // 2. 手写防抖函数
+    // 声明定时器变量
+    // 每次事件触发时，判断定时器是否存在
+    // 如果存在，清除定时器
+    // 如果不存在，设置定时器，存入定时器变量，延迟执行函数
+    function debounce(fn, t) {
+      let timer = null
+      return function() {   // 事件发生就执行一次
+        if(timer) {
+          clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+          fn()
+        }, t)
+      }
+    }
+    box.addEventListener('mousemove', debounce(mouseMove, 100))
+
+
+
+  </script>
+</body>
+</html>

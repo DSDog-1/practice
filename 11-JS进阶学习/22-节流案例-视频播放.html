@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>节流案例-视频播放</title>
+</head>
+<body>
+  <video id="video" src="../02-CSS学习/img/video.mp4" controls></video>
+  <script>
+    const video = document.querySelector('#video')
+    video.ontimeupdate = _.throttle(() => { // 节流，每秒只执行一次函数
+      localStorage.setItem('time', video.currentTime)   // 本地存储当前播放时间
+    }, 1000)
+    // 页面刷新时，从本地存储中获取播放时间
+    video.onloadedmetadata = () => {
+      video.currentTime = localStorage.getItem('time') || 0
+    }
+  </script>
+</body>
+</html>

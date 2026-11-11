@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户登录案例</title>
+  <style>
+    .message{
+      opacity: 0;
+    }
+    .message.show{
+      background-color: red;
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h3>用户登录</h3>
+    <p class="message"></p>
+  </div>
+  <div class = "form">
+    <form action="">
+    <label for="username">用户名：</label>
+    <input type="text" id="username" name="username">
+    <label for="password">密码：</label>
+    <input type="password" id="password" name="password">
+    <button id="loginBtn">登录</button>
+  </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/serialize-form/dist/serialize-form.min.js"></script>
+  <script>
+    const message = document.querySelector('.message')
+    function alertFn(msg,isSuccess){
+      if(isSuccess){
+        message.classList.remove('show')
+        return
+      }
+      message.classList.add('show')
+      message.innerHTML = msg
+    }
+    setInterval(()=>{
+      message.classList.remove('show')
+    },2000)
+    const form = document.querySelector('form')
+    document.querySelector('#loginBtn').addEventListener('click',()=>{
+      // let username = document.querySelector('#username').value
+      // let password = document.querySelector('#password').value
+      const data = serialize(form,{hash:true,empty:true}) 
+      // console.log(data)
+      const {username,password} = data  // 解构赋值
+      // console.log(username,password)
+      if (username.length < 8){
+        alertFn('用户名长度不能小于8位',false)
+        return
+      }
+      if (password.length < 6){
+        alertFn('密码长度不能小于6位',false)
+        return
+      }
+      axios({
+        url:'https://ajax-api.itheima.net/api/login',
+        method:'POST',
+        data:{
+          username,
+          password
+        }
+      }).then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{
+        console.log(err)
+        console.log(err.response.data.message)
+        message.classList.add('show')
+        message.innerHTML = err.response.data.message
+        document.querySelector('#username').value = ''
+        document.querySelector('#password').value = ''
+      })
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地区查询案例</title>
+</head>
+<body>
+  <P id="pname" >省份名字</P>
+  <input type="text" id="pnameInput">
+  <P id="cname" >城市名字</P>
+  <input type="text" id="cnameInput">
+  <button id="queryBtn">查询</button>
+  <p>地区列表</p>
+  <ul>
+  <li id="areaList"></li>
+  </ul>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.querySelector('#queryBtn').addEventListener('click',()=>{
+      let pname = document.querySelector('#pnameInput').value
+      let cname = document.querySelector('#cnameInput').value
+      axios({
+        url:'https://ajax-api.itheima.net/api/area',
+        params:{
+          pname,  // 同名可省略
+          cname:cname 
+        }
+      }).then(res=>{
+        console.log(res)
+        let list = res.data.data
+        let theli = list.map(areaName => `<li>${areaName}</li>`).join('')
+        document.querySelector('#areaList').innerHTML = theli
+      })
+    })
+  </script>
+</body>
+</html>

@@ -593,6 +593,10 @@ return立即结束当前函数，后面的代码被跳过
     // 4.返回新对象
 ~~~
 
+#### 递归函数
+
+函数内部调用自身，类似循环，但容易发生“栈溢出”，必须加退出条件return
+
 ### 内置构造函数
 
 #### 引用类型
@@ -1233,3 +1237,181 @@ JS非标准属性，**只要是对象就有属性**__ _proto_ __指向原型对�
     console.log(Person instanceof Object) // A instanceof B   检查A是否属于B
 ~~~
 
+## 14.深浅拷贝
+
+### 浅拷贝（地址）
+
+拷贝最外层，里层仍被修改 
+
+~~~js
+    // 1. 扩展运算符
+    const obj2 = {...obj}
+    // 2. Object.assign()
+    const obj3 = {}
+    Object.assign(obj3, obj)
+~~~
+
+### 深拷贝（对象）
+
+新对象不会影响旧对象，用到函数递归，遇到数组与对象再次调入递归
+
+~~~js
+    // 1.函数递归
+	const obj4 = {}
+    function deepCopy(newObj, oldObj) {
+      for (let key in oldObj) {
+        if(oldObj[key] instanceof Array) {
+          newObj[key] = []    // 先写数组
+          deepCopy(newObj[key], oldObj[key])
+        } else if (oldObj[key] instanceof Object) {
+          newObj[key] = {}    // 后写对象
+          deepCopy(newObj[key], oldObj[key])
+        } else {
+          newObj[key] = oldObj[key]
+        }
+      }
+    }
+    deepCopy(obj4, obj)
+    // 2.lodash 引用js库
+    <script src="lodash.min.js"></script>
+    const obj5 = _.cloneDeep(obj)
+    // 3. JSON.stringify()转换成简单数据类型字符串 + JSON.parse()
+    const obj6 = JSON.parse(JSON.stringify(obj))
+~~~
+
+## 15.异常处理
+
+**预估**代码执行过程中可能发生的错误，**最大程度避免错误发生**导致的程序无法运行
+
+### throw异常
+
+~~~js
+      function fn(x,y) {
+      if (!x || !y) {
+        throw new Error('参数不能为空') // 抛中文异常信息，终止程序
+      }
+      return x + y
+    }
+~~~
+
+### try/catch/finally异常
+
+~~~js
+    function fn() {
+      try {
+        // 可能会抛出异常的代码
+        const p = document.querySelector('p')
+        p.style.color = 'red'
+      } catch (error) {
+        // 拦截错误，不中断程序执行
+        console.log(error.message)
+        // 加一个return/throw，中断程序11
+        return
+      }
+      finally {
+        // 无论是否抛出异常，都会执行的代码，不管return/throw
+        console.log('finally')
+      }
+      console.log('11') // 不会执行
+    }
+    fn()
+~~~
+
+### debugger
+
+打断点，调试bug
+
+## 16.处理this
+
+### 普通函数this
+
+谁调用就指向谁，无调用者就是window，严格模式无调用者是undefined
+
+### 箭头函数this
+
+函数内不存在，**沿用上一级**作用域中的this值
+
+构造函数、DOM对象、基于原型法面向对象不推荐箭头函数
+
+### 改变this
+
+#### call（）
+
+~~~js
+    fn.call(obj,1,2) // this指向obj,后续参数作为函数参数
+~~~
+
+#### apply（）
+
+~~~js
+    fn.apply(obj,[1,2]) // this指向obj,后续参数作为数组传递
+    // 使用场景：求数组的最大值、最小值、平均值等
+    console.log(Math.max.apply(null,arr)) 
+~~~
+
+#### bind（）不会调用函数
+
+~~~js
+    fn.bind(obj) // this指向obj,返回值是一个this值改过的fn函数
+~~~
+
+## 17.性能优化
+
+### 防抖
+
+单位还见内频繁触发事件，**只执行最后一次**
+
+- 搜索框搜索输入
+- 手机号、邮箱验证输入检测
+
+~~~js
+	//1.lodash库 _.debounce(函数, 时间)   时间到了执行函数	
+	box.addEventListener('mousemove', _.debounce(mouseMove, 1000))  
+    // 2. 手写防抖函数
+    // 声明定时器变量
+    // 每次事件触发时，判断定时器是否存在
+    // 如果存在，清除定时器
+    // 如果不存在，设置定时器，存入定时器变量，延迟执行函数
+    function debounce(fn, t) {
+      let timer = null
+      return function() {   // 事件发生就执行一次
+        if(timer) {
+          clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+          fn()
+        }, t)
+      }
+    }
+    box.addEventListener('mousemove', debounce(mouseMove, 100))
+~~~
+
+### 节流
+
+单位时间内频繁触发事件，**只执行首次**
+
+- 鼠标移动
+- 页面尺寸缩放
+- 滚动条滚动
+
+~~~js
+    // 1.lodash库 _.throttle(函数, 时间)   时间间隔内只执行首次函数
+    box.addEventListener('mousemove', _.throttle(mouseMove, 1000))
+   // 2. 手写节流函数
+    // 声明定时器变量
+    // 每次事件触发时，判断定时器是否存在
+    // 如果存在，不开启新定时器
+    // 如果不存在，设置定时器，存入定时器变量，延迟执行函数
+    function throttle(fn, t) {
+      let timer = null
+      return function() {
+        if(!timer) {
+        timer = setTimeout(() => {
+          fn()
+          timer = null // 重置定时器，等待下一次事件触发，还在运作不能使用clearTimeout
+          }, t)
+        }
+      }
+    }
+    box.addEventListener('mousemove', throttle(mouseMove, 1000))
+~~~

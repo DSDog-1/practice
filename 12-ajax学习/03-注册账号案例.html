@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册账号案例</title>
+</head>
+<body>
+  <button id="registerBtn">注册</button>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
+  <script>
+    document.querySelector('#registerBtn').addEventListener('click',()=>{
+      axios({
+        url:'https://jsonplaceholder.typicode.com/posts',
+        method:'POST',    // 请求方法
+        data:{    // 提交数据
+          username:'admin',
+          password:'123456'
+        }
+      }).then(res=>{
+        console.log(res)
+      })
+      .catch(err=>{   // 放在then方法后面
+        console.log(err)
+        console.log(err.response.data.message)  // 捕获错误信息中的message字段
+        alert(err.response.data.message)
+      })
+    })
+  </script>
+</body>
+</html>

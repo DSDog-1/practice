@@ -104,3 +104,14 @@ url:'https://ajax-api.itheima.net/api/province'
 描述**接口**的文章（后端）
 
 >  接口：使用AJAX和服务器通讯时，使用的**URL，请求方法，以及参数**
+
+### form-serialize插件
+
+~~~js
+// 先引入JS文件
+serialize(表单,{ hash:true,empty:true})	
+// 表单name名会作为对象的属性名（直接写接口文档中的参数名）
+// hash 设置获取对象数据结构————true：JS对象（推荐）一般请求体里提交给服务器   false：查询字符串
+// empty 设置是否获取空值————true：获取空值（推荐）   false：不获取
+~~~
+

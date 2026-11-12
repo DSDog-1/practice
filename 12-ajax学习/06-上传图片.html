@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>上传图片</title>
+</head>
+<body>
+  <h1>上传图片</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" class="upload" name="file">
+    <img src="" alt="" class="preview">
+    <button type="submit">上传</button>
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  document.querySelector('.upload').addEventListener('change', function(e) {
+    const file = e.target.files[0]
+    const fd = new FormData()
+    fd.append('img', file)
+    axios({
+      url: 'https://hmajax.itheima.net/api/uploadimg',
+      method: 'POST',
+      data: fd
+    }).then(res => {
+      console.log(res)
+      const imgUrl = res.data.data.url
+      document.querySelector('.preview').src = imgUrl
+
+      // localStorage.setItem('imgUrl', imgUrl)
+    })
+  })
+    // const imgUrl = localStorage.getItem('imgUrl')
+    // if (!imgUrl) {
+    //   alert('请先上传图片')
+    //   return
+    // }
+
+    
+</script>
+  
+</body>
+</html>

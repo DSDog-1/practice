@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图书管理案例</title>
+  <style>
+    .add-modal {
+      display: none;
+    }
+
+    .add-modal.show {
+      display: block;
+    }
+
+    .edit-modal {
+      display: none;
+    }
+
+    .edit-modal.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="top">
+      <h3>图书管理</h3>
+      <button id="openAddBtn">添加图书</button>
+    </div>
+    <table id="bookTable">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>图书名称</th>
+          <th>图书作者</th>
+          <th>出版社</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="bookList">
+
+      </tbody>
+    </table>
+  </div>
+  <div class="add-modal">
+    <h3>添加图书</h3>
+    <form class="add-form" action="">
+      <label for="bookname">图书名称：</label>
+      <input type="text" id="bookname" name="bookname">
+      <label for="author">图书作者：</label>
+      <input type="text" id="author" name="author">
+      <label for="publisher">出版社：</label>
+      <input type="text" id="publisher" name="publisher">
+      <button type="button" id="addBtn">添加</button>
+    </form>
+  </div>
+  <div class="edit-modal">
+    <h3>编辑图书</h3>
+    <form class="edit-form" action="">
+      <label for="bookname">图书名称：</label>
+      <input type="text" id="bookname" name="bookname">
+      <label for="author">图书作者：</label>
+      <input type="text" id="author" name="author">
+      <label for="publisher">出版社：</label>
+      <input type="text" id="publisher" name="publisher">
+      <button type="button" id="editBtn">编辑</button>
+      <button type="button" id="closeBtn">关闭</button>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    const creator = "admin三号"
+    // 缓存列表数据，编辑时按 id 找出对应图书
+    let bookListCache = []
+    function getBookList() {
+      axios({
+        url: 'https://ajax-api.itheima.net/api/books',
+        params: {
+          creator
+        }
+      }).then(res => {
+        console.log('请求成功：', res.data)
+        const bookList = res.data.data
+        bookListCache = bookList
+        const htmlStr = bookList.map((item, index) => {
+          return `<tr data-id="${item.id}">
+          <td>${index + 1}</td>
+          <td>${item.bookname}</td>
+          <td>${item.author}</td>
+          <td>${item.publisher}</td>
+          <td>
+            <button class="row-edit-btn">编辑</button>
+            <button id="deleteBtn">删除</button>
+          </td>
+        </tr>
+          `
+        }).join('')
+        document.querySelector('#bookList').innerHTML = htmlStr
+      }).catch(err => {
+        console.error('请求失败：', err)
+        console.error('错误详情：', err.response?.status, err.response?.data)
+      })
+    }
+    getBookList()
+
+    const addModal = document.querySelector('.add-modal')
+
+    // 自己实现 serialize：把表单里有 name 的控件收集成对象
+    function serialize(form, options = {}) {
+      const formData = new FormData(form)
+      const obj = {}
+      for (const [key, value] of formData) {
+        if (!options.empty && !value) continue
+        obj[key] = value
+      }
+      return obj
+    }
+
+    // 阻止表单默认提交：按回车时不再刷新页面、不再把数据拼到地址栏
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', e => e.preventDefault())
+    })
+
+    // 顶部"添加图书"按钮：只负责打开弹窗
+    document.querySelector('#openAddBtn').addEventListener('click', () => {
+      addModal.classList.add('show')
+    })
+
+    // 弹窗里"添加"按钮：收集表单 → 打印 → 发请求
+    document.querySelector('#addBtn').addEventListener('click', () => {
+      const addForm = document.querySelector('.add-form')
+      const bookObj = serialize(addForm, { hash: true, empty: true })
+      console.log('收集到的表单数据：', bookObj)
+
+      // 先做非空校验，避免把空字段发给接口
+      if (!bookObj.bookname || !bookObj.author || !bookObj.publisher) {
+        return alert('图书名称、作者、出版社都要填写')
+      }
+
+      axios({
+        url: 'https://ajax-api.itheima.net/api/books',
+        method: 'POST',
+        data: {
+          ...bookObj,
+          creator
+        }
+      }).then(res => {
+        console.log('添加成功：', res.data)
+        getBookList()
+        addModal.classList.remove('show')
+        addForm.reset()
+      }).catch(err => {
+        console.error('添加失败，服务器返回：', err.response?.data)
+        console.error('具体校验项：', JSON.stringify(err.response?.data?.detail, null, 2))
+      })
+    })
+
+    // 删除：事件委托到 tbody，点"删除"按钮才触发
+    document.querySelector('#bookList').addEventListener('click', e => {
+      if (e.target.id === 'deleteBtn') {
+        const theId = e.target.closest('tr').dataset.id
+        axios({
+          url: `https://ajax-api.itheima.net/api/books/${theId}`,
+          method: 'DELETE',
+        }).then(() => {
+          getBookList()
+        }).catch(err => {
+          console.error('删除失败：', err.response?.data || err)
+        })
+      }
+    })
+
+    // ===== 编辑 =====
+    const editDom = document.querySelector('.edit-modal')
+    const editForm = editDom.querySelector('.edit-form')
+    let editingId = null   // 当前正在编辑的图书 id
+
+    // 点表格里的"编辑"：把该行数据回填到编辑弹窗
+    document.querySelector('#bookList').addEventListener('click', e => {
+      if (!e.target.classList.contains('row-edit-btn')) return
+      const theId = Number(e.target.closest('tr').dataset.id)
+      const book = bookListCache.find(item => item.id === theId)
+      if (!book) return
+
+      editingId = theId
+      // 用 form.elements 按 name 取值，避免和添加表单的同名 id 冲突
+      editForm.elements.bookname.value = book.bookname
+      editForm.elements.author.value = book.author
+      editForm.elements.publisher.value = book.publisher
+      editDom.classList.add('show')
+    })
+
+    // 编辑弹窗里"编辑"按钮：收集表单 → PUT 更新
+    editDom.querySelector('button#editBtn').addEventListener('click', () => {
+      const bookObj = serialize(editForm, { hash: true, empty: true })
+      console.log('修改后的表单数据：', bookObj)
+
+      if (!bookObj.bookname || !bookObj.author || !bookObj.publisher) {
+        return alert('图书名称、作者、出版社都要填写')
+      }
+
+      axios({
+        url: `https://ajax-api.itheima.net/api/books/${editingId}`,
+        method: 'PUT',
+        data: {
+          ...bookObj,
+          creator
+        }
+      }).then(res => {
+        console.log('修改成功：', res.data)
+        getBookList()
+        editDom.classList.remove('show')
+      }).catch(err => {
+        console.error('修改失败，服务器返回：', err.response?.data)
+        console.error('具体校验项：', JSON.stringify(err.response?.data?.detail, null, 2))
+      })
+    })
+
+    // 关闭编辑弹窗
+    editDom.querySelector('#closeBtn').addEventListener('click', () => {
+      editDom.classList.remove('show')
+    })
+  </script>
+
+</body>
+
+</html>

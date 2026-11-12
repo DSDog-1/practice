@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人信息设置案例</title>
+  <style>
+    img {
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>个人信息设置</h1>
+    <form class="user-form" action="">
+      <input type="file" class="upload">
+      <img class="prew" src="" alt="">
+      邮箱：<input type="text" class="email">
+      昵称：<input type="text" class="nickname">
+      性别 <input type="checkbox" class="gender" value="男" checked>
+      女
+      <input type="checkbox" class="gender" value="女">
+      男
+      个人简介：<textarea class="desc"></textarea>
+      <button type="submit" class="submit">提交</button>
+    </form>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    const creator = 'admin'
+    // 获取个人信息渲染到页面
+    axios({
+      url: 'https://hmajax.itheima.net/api/settings',
+      params: {
+        creator
+      }
+    }).then(res => {
+      const userObj = res.data.data
+      Object.keys(userObj).forEach(key => {
+        if (key === 'avatar') {
+          document.querySelector(`.prew`).src = userObj[key]
+        } else if (key === 'gender') {
+          const gender = document.querySelectorAll(`.gender`)
+          const gNum = userObj[key]
+          gender[gNum].checked = true
+        } else {
+          document.querySelector(`.${key}`).value = userObj[key]
+        }
+      })
+    })
+
+    document.querySelector(`.upload`).addEventListener(`change`, e => {
+      const fd = new FormData()
+      fd.append(`avatar`, e.target.files[0])
+      fd.append(`creator`, creator)
+      axios({
+        url: 'https://hmajax.itheima.net/api/avatar',
+        method: 'PUT',
+        data: fd
+      }).then(res => {
+        const imgUrl = res.data.data.avatar
+        document.querySelector(`.prew`).src = imgUrl
+      })
+    })
+
+
+    // 自己实现 serialize：把表单里有 name 的控件收集成对象
+    function serialize(form, options = {}) {
+      const formData = new FormData(form)
+      const obj = {}
+      for (const [key, value] of formData) {
+        if (!options.empty && !value) continue
+        obj[key] = value
+      }
+      return obj
+    }
+    document.querySelector(`.submit`).addEventListener(`click`, e => {
+      e.preventDefault()
+      const userForm = document.querySelector(`.user-form`)
+      const userObj = serialize(userForm, { hash: true, empty: true })
+      userObj.creator = creator
+      // 性别转换为数字
+      userObj.gender = +userObj.gender
+      console.log(userObj)
+      axios({
+        url: 'https://hmajax.itheima.net/api/settings',
+        method: 'PUT',
+        data: userObj
+      })
+    })
+
+
+
+  </script>
+</body>
+
+</html>

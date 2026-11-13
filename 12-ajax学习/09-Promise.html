@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise案例</title>
+</head>
+<body>
+  <script>
+    const p = new Promise((resolve, reject) => {  // 创建Promise实例
+      // 异步操作
+      resolve('成功')
+      // reject(new Error('失败'))
+    })
+    p.then(res => { // 接受结果
+      console.log(res)
+    })
+    p.catch(err => { // 接受错误
+      console.log(err)
+    })
+    console.log(p)
+    
+    </script>
+</body>
+</html>

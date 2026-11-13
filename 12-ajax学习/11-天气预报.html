@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>天气预报</title>
+</head>
+
+<body>
+  <div class="container">
+    <h2>天气预报：</h2>
+    <span class="date"></span>
+    <span class="week"></span>
+  </div>
+  <input type="text" class="search-city" placeholder="搜索城市">
+  <div class="search-list">
+    <p></p>
+  </div>
+  <script>
+    function myAxios(config) {    // 设置接收对象
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        if (config.params) {  // 有参数转换为查询字符串
+          config.url = config.url + '?' + new URLSearchParams(config.params).toString()
+        }
+        xhr.open(config.method || 'GET', config.url)  // 默认GET
+        xhr.addEventListener('loadend', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {    // 成功状态码
+            resolve(JSON.parse(xhr.response))
+          } else {
+            reject(new Error(xhr.response))
+          }
+        })
+        if (config.data) {  // 有数据时，设置请求头
+          xhr.setRequestHeader('Content-Type', 'application/json')
+          xhr.send(JSON.stringify(config.data))
+        } else {
+          xhr.send()
+        }
+      })
+    }
+
+    function getAWeather(cityCode) {
+      myAxios({
+        url: 'https://hmajax.itheima.net/api/weather',
+        params: {
+          city: cityCode
+        }
+      }).then(res => {
+        console.log(res)
+        const wObj = res.data
+        const dateStr = `<span>${wObj.date}</span>
+      <span>${wObj.week}</span>`
+      })
+    }
+    getAWeather('110100')
+
+    document.querySelector('.search-city').addEventListener('input', (e) => {
+      myAxios({
+        url: 'https://hmajax.itheima.net/api/weather/city',
+        params: {
+          city: e.target.value
+        }
+      }).then(res => {
+        console.log(res)
+        // 接口返回：{ code, message, data: [{ code, name }] }，data 本身就是数组
+        const htmlStr = res.data.map(item => {
+          return `<p>${item.name}</p>`
+        }).join('')
+        document.querySelector('.search-list').innerHTML = htmlStr
+      }).catch(err => {
+        console.error('搜索失败：', err)
+      })
+    })
+
+  </script>
+</body>
+
+</html>

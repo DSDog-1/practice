@@ -115,3 +115,116 @@ serialize(表单,{ hash:true,empty:true})
 // empty 设置是否获取空值————true：获取空值（推荐）   false：不获取
 ~~~
 
+### 图片上传
+
+~~~js
+  document.querySelector('.upload').addEventListener('change', function(e) {
+    const file = e.target.files[0]
+    const fd = new FormData()
+    fd.append('img', file)
+    axios({
+      url: 'https://ajax-api.itheima.net/api/uploadimg',
+      method: 'POST',
+      data: fd
+    }).then(res => {
+      console.log(res)
+      const imgUrl = res.data.data.url
+      document.querySelector('.preview').src = imgUrl
+    })
+  })
+~~~
+
+## 2.增删改查
+
+### 渲染数据
+
+~~~js
+// 获取      
+axios({...}).then(res => {
+    const bookList = res.data.data
+// 渲染
+    const htmlStr = bookList.map((item, index) => {
+	     return `<tr data-id="${item.id}">
+         <td>${index + 1}</td>
+         <td>${item.bookname}</td>
+         <td>${item.author}</td>
+         <td>${item.publisher}</td>
+         <td>
+           <button class="row-edit-btn">编辑</button>
+           <button id="deleteBtn">删除</button>
+         </td>
+      </tr>
+          `
+      }).join('')
+      document.querySelector('#bookList').innerHTML = htmlStr
+      })
+~~~
+
+### 新增数据
+
+~~~js
+// 创建弹窗对象
+const addModal = document.querySelector('.add-modal')
+// 自己实现 serialize：把表单里有 name 的控件收集成对象
+    function serialize(form, options = {}) {
+      const formData = new FormData(form)
+      const obj = {}
+      for (const [key, value] of formData) {
+        if (!options.empty && !value) continue
+        obj[key] = value
+      }
+      return obj
+    }
+    document.querySelector('#addBtn').addEventListener('click', () => {
+// 收集表单数据提交到服务器保存
+      const addForm = document.querySelector('.add-form')
+      const bookObj = serialize(addForm, { hash: true, empty: true })
+      axios({...}).then(res => {
+// 渲染
+        getBookList()
+        addForm.reset()
+        addModal.hide()
+      })
+    })
+~~~
+
+### 删除数据
+
+~~~js
+// 删除：事件委托到 tbody，点"删除"按钮才触发
+    document.querySelector('#bookList').addEventListener('click', e => {
+      if (e.target.id === 'deleteBtn') {
+        // 获取图书id（自定义属性id）
+        const theId = e.target.closest('tr').dataset.id
+        // 调用删除接口 
+        axios({...}).then(() => {
+         // 刷新图书列表
+          getBookList()
+        })
+      }
+    })
+~~~
+
+### 编辑数据
+
+~~~js
+// 编辑弹窗
+const editDom = document.querySelector('.edit-modal')
+    const editForm = editDom.querySelector('.edit-form')
+    document.querySelector('#bookList').addEventListener('click', e => {
+      if (!e.target.classList.contains('row-edit-btn')) return
+      // 获取编辑的图书的数据送入编辑表单
+      const theId = Number(e.target.closest('tr').dataset.id)
+	  axios({...}).then(res => {
+             const bookObj = result.data.data
+             // 遍历数据对象，使用属性去获取对应的标签快速赋值
+        	const keys = Object.keys(bookObj)
+        	keys.forEach(key => {
+                doucment.querySelector(`.edit-form .${key}`).value = bookObj[key]
+            })
+    })
+	editModal.show()
+}
+})
+~~~
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promise.all</title>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const bjPromise = axios({url: 'https://hmajax.itheima.net/api/weather',params: {city: '110100'}})
+    console.log(bjPromise)
+    const shPromise = axios({url: 'https://hmajax.itheima.net/api/weather',params: {city: '310100'}})
+    console.log(shPromise)
+    const gzPromise = axios({url: 'https://hmajax.itheima.net/api/weather',params: {city: '440100'}})
+    console.log(gzPromise)
+    const szPromise = axios({url: 'https://hmajax.itheima.net/api/weather',params: {city: '440300'}})
+    console.log(szPromise)
+    const p = Promise.all([bjPromise,shPromise,gzPromise,szPromise])
+    p.then(res => {
+      // 结果是一个数组,数组中每个元素都是一个Promise对象成功的结果且顺序和Promise.all中参数的顺序一致
+      console.log(res)
+      console.log(res[0].data)
+      console.log(res[1].data)
+      console.log(res[2].data)
+      console.log(res[3].data)
+    }).catch(err => {
+      console.dir(err)
+    })
+  </script>
+</body>
+</html>

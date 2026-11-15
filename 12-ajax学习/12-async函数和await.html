@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>async函数和await</title>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    async function getData() {  // 定义async函数
+      try { // try包裹可能产生异常的代码,某一行代码可能产生异常,剩余代码不会执行
+        // await等待Promise对象成功的结果
+        const pObj = await axios({url: 'https://hmajax.itheima.net/api/province' })
+        const cObj = await axios({url: 'https://hmajax.itheima.net/api/city', params: {pname: pObj.data.list[0].name}})
+        const aObj = await axios({url: 'https://hmajax.itheima.net/api/area', params: {pname: pObj.data.list[0].name, cname: cObj.data.list[0].name}})
+        console.log(aObj.data.list)
+      } catch (error) { // 捕获异常
+        console.dir(error)
+      }
+    }
+  </script>
+</body>
+</html>

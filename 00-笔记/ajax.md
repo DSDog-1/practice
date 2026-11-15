@@ -228,3 +228,226 @@ const editDom = document.querySelector('.edit-modal')
 })
 ~~~
 
+## 3.XMLHttpRequest
+
+AJAX原理：axios内部采用XHR对象与服务器交互，缩小代码体积
+
+### 使用
+
+~~~js
+    const xhr = new XMLHttpRequest()  // 创建XHR实例对象
+    xhr.open('GET', 'https://hmajax.itheima.net/api/province')  // 配置请求方法和地址
+    xhr.addEventListener('loadend', () => {  // 监听请求完成事件
+      console.log(xhr.response)
+    })
+    xhr.send()  // 发送请求
+~~~
+
+### 查询参数
+
+~~~js
+    xhr.open('GET', 'https://hmajax.itheima.net/api/city?panme=辽宁省')
+	// 查询字符串API
+	const qStr = new URLSearchParams(qObj).toString()
+    xhr.open('GET', 'https://hmajax.itheima.net/api/city?${qstr}')    
+~~~
+
+### 请求体参数 
+
+~~~js
+    // 设置请求头
+    xhr1.setRequestHeader('Content-Type', 'application/json')
+    // 准备数据
+    const userObj= {
+      username:'admin',
+      password:'123456'
+    }
+    // 发送请求
+    xhr1.send(JSON.stringify(userObj))
+~~~
+
+## 4.Promise
+
+表示（管理）一个**异步操作的最终完成结果及其结果值**
+
+- 逻辑更清晰
+- 了解axios函数的内部运作机制
+- 解决回调函数地狱问题
+
+~~~js
+    const p = new Promise((resolve, reject) => {  // 创建Promise实例 pending待定状态，立即执行代码
+      // 异步操作（状态敲定后无法转换）
+      resolve('成功')		// fulfilled已兑现状态
+	  reject(new Error('失败'))	// rejected已拒绝状态
+    })
+    p.then(res => { // 接收成功
+      console.log(res)
+    })
+    p.catch(err => { // 接收错误
+      console.log(err)
+    })
+~~~
+
+#### 链式调用
+
+~~~JS
+    const p = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('北京市')
+      }, 2000)
+    })
+    const p2 = p.then(res => {  // 新的Promise实例
+      console.log(res)  // 北京市
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(res + '天气晴朗')
+        }, 2000)
+      })
+    })
+    p2.then(res => {
+      console.log(res)  // 北京市天气晴朗
+    })
+~~~
+
+#### Promise.all 静态方法
+
+~~~js
+    const p = Promise.all([bjPromise,shPromise,gzPromise,szPromise])	// 数组
+    p.then(res => {
+      // 结果是一个数组,数组中每个元素都是一个Promise对象成功的结果且顺序和Promise.all中参数的顺序一致
+      console.log(res)
+    }).catch(err => {
+      console.dir(err)
+    })
+~~~
+
+
+
+合并多个Promise对象，.then（回调函数）等待所有**同时成功完成（或某一个失败）**，做后续逻辑
+
+## 5.封装axios（Promise+XHR）
+
+~~~js
+    function myAxios(config) {    // 设置接收对象
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        if (config.params) {  // 有参数转换为查询字符串
+          config.url = config.url + '?' + new URLSearchParams(config.params).toString()
+        }
+        xhr.open(config.method || 'GET', config.url)  // 默认GET
+        xhr.addEventListener('loadend', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {    // 成功状态码
+            resolve(JSON.parse(xhr.response))
+          } else {
+            reject(new Error(xhr.response))
+          }
+        })
+        if (config.data) {  // 有数据时，设置请求头
+          xhr.setRequestHeader('Content-Type', 'application/json')
+          xhr.send(JSON.stringify(config.data))
+        } else {
+          xhr.send()
+        }
+      })
+    }
+~~~
+
+## 6.同步和异步
+
+### 同步代码
+
+逐行执行，需**原地等待结果**后才向下执行
+
+### 异步代码
+
+调用后**耗时**，不阻塞代码继续运行，将来完成后触发一个**回调函数**接收结果
+
+#### 宏任务
+
+由**浏览器**环境执行的异步代码
+
+- JS脚本执行事件（script）
+- setTimeout / setInterval
+- 用户交互事件
+- AJAX请求完成事件
+
+#### 微任务
+
+由**JS引擎**环境执行的异步代码
+
+- Promise对象.then()的回调
+
+### 回调函数地狱
+
+回调函数中多次**嵌套回调函数**，可读性差，异常无法捕获，耦合性严重
+
+#### Promise链式调用方法
+
+~~~js
+	axios({}).then(res => {
+    	return axios({})
+     }).then(res => {
+    	return axios({})
+	}).then(res => {
+    	console.log(res)
+	})
+~~~
+
+#### async函数和await函数
+
+~~~js
+    async function getData() {  // 定义async函数
+      try { // try包裹可能产生异常的代码,某一行代码可能产生异常,剩余代码不会执行
+        // await等待Promise对象成功的结果
+        const pObj = await axios({url: 'https://hmajax.itheima.net/api/province' })
+        const cObj = await axios({url: 'https://hmajax.itheima.net/api/city', params: {pname: pObj.data.list[0].name}})
+        const aObj = await axios({url: 'https://hmajax.itheima.net/api/area', params: {pname: pObj.data.list[0].name, cname: cObj.data.list[0].name}})
+        console.log(aObj.data.list)
+      } catch (error) { // 捕获异常
+        console.dir(error)
+      }
+    }
+~~~
+
+### 事件循环
+
+事件循环的**模型**负责执行代码、收集和处理事件以及执行队列中的子任务，为了不阻塞JS引擎
+
+> 同步代码交给**调用栈**
+>
+> 异步代码交给**宿主环境（浏览器）**倒计时完成将回调函数送入宏任务队列排队
+>
+> 调用栈空闲时检查**任务队列**，优先执行微任务中的回调函数，随后执行宏任务
+>
+> - Promise对象是同步代码，回调是异步微任务
+
+## 7.项目
+
+### axios基地址公共配置
+
+提取公共前缀地址，配置后axios请求时会baseURL + url
+
+~~~JS
+axios.defaults.baseURL = 'http://geek,itheima,net'
+axios({ url:'/v1_0/authorizations' })
+~~~
+
+### 验证码登录
+
+短信验证码接口：为此手机号生成验证码记录生成时间并存在服务器
+
+验证码登录接口：对比判断验证码是否正确，是否在有效期内并返回结果
+
+### token
+
+访问权限的令牌，本质上是一串字符串，正确登录后由后端签发并返回，**判断是否有登录状态控制访问权限**
+
+> **前端**只能判断**有无**token，**后端**能判断**有效性**
+
+~~~js
+const token = localStorage.getItem('token')
+if(!token){		// 判断有无token
+    location.herf = '../login/index.html'	// 未有效登录转到登录界面
+}
+~~~
+

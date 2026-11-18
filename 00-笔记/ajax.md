@@ -451,3 +451,41 @@ if(!token){		// 判断有无token
 }
 ~~~
 
+### 身份验证
+
+#### axios请求拦截器
+
+发起请求之前触发的配置函数，对**请求参数**进行额外公共配置
+
+~~~JS
+    axios.interceptors.request.use(function(config) {
+      // 请求头中添加token字段
+      const token = localStorage.getItem('token')
+      token && (config.headers.Authorization = `Bearer ${token}`)
+      // 发送请求前做些什么
+      return config 
+    }, function(error) {
+      // 对请求错误做些什么
+      return Promise.reject(error)
+    })
+~~~
+
+#### axios响应拦截器
+
+响应回到then / catch 之前触发的拦截函数，对**响应结果统一处理**
+
+~~~js
+    axios.interceptors.response.use(function(response) {
+      // 对响应数据做点什么，2xx触发成功回调
+      const res = response.data   // 响应结果优化，直接返回响应结果对象
+      return res
+    }, function(error) {
+      // 对响应错误做点什么
+      if (error?.response?.status === 401) {   // 401状态码,说明token过期了,需要重新登录
+        localStorage.removeItem('token')  // 清除token
+        location.href = '/login.html'  // 重新跳转到登录页
+      }
+      return Promise.reject(error)
+    })
+~~~
+

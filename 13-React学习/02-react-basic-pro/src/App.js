@@ -1,8 +1,15 @@
 import './App.scss'
 import { useState } from 'react'
 import avatar from './images/bozai.png'
-import _ from 'lodash'
+import _, { set } from 'lodash'
 import classNames from 'classnames'
+import { v4 as uuidv4 } from 'uuid'
+import dayjs from 'dayjs'
+import { useRef } from 'react'
+import axios from 'axios'
+import { useEffect } from 'react'
+
+
 
 /**
  * 评论列表的渲染和操作
@@ -76,9 +83,72 @@ const tabs = [
   { type: 'time', text: '最新' },
 ]
 
+// 封装
+function useGetList(){
+  // 获取接口数据
+  const [commentList, setCommentList] = useState([])
+  // 评论列表数据获取
+  useEffect(() => {
+    async function getCommentList() {
+      // 发送请求获取评论列表
+      const res = await axios.get('http://localhost:3004/List')
+        setCommentList(res.data)
+    }
+    getCommentList()
+  }, [])
+
+  return {
+    commentList,
+    setCommentList,
+  }
+}
+// 封装评论项组件
+function Item({item, onDel}){
+         return(
+          <div key={item.rpid} className="reply-item">
+            {/* 头像 */}
+            <div className="root-reply-avatar">
+              <div className="bili-avatar">
+                <img
+                  className="bili-avatar-img"
+                  alt={item.user.uname}
+                  src={item.user.avatar}
+                />
+              </div>
+            </div>
+
+            <div className="content-wrap">
+              {/* 用户名 */}
+              <div className="user-info">
+                <div className="user-name">{item.user.uname}</div>
+              </div>
+              {/* 评论内容 */}
+              <div className="root-reply">
+                <span className="reply-content">{item.content}</span>
+                <div className="reply-info">
+                  {/* 评论时间 */}
+                  <span className="reply-time">{item.ctime}</span>
+                  {/* 评论数量 */}
+                  <span className="reply-time">点赞数:{item.like}</span> 
+                  {/*  只有自己的评论才能删除 */}
+                  { user.uid === item.user.uid && 
+                  <span className="delete-btn" onClick={() => onDel(item.rpid)}>
+                    删除
+                  </span>}
+
+                </div>
+              </div>
+            </div>
+          </div>
+          )}
+
 const App = () => {
   // 评论列表状态，默认按喜欢数量降序
-  const [commentList, setCommentList] = useState(_.orderBy(defaultList, 'like', 'desc'))
+  // const [commentList, setCommentList] = useState(_.orderBy(defaultList, 'like', 'desc'))
+  const { commentList, setCommentList } = useGetList()
+
+
+
   // 删除评论
   const handleDel = (id) => {
     setCommentList(commentList.filter(item => item.rpid !== id))
@@ -91,6 +161,29 @@ const App = () => {
   // 评论列表排序：派生数据，渲染时算，不要放进 state
   // 最热 => 喜欢数量降序；最新 => 创建时间降序
   const sortedList = _.orderBy(commentList, type === 'hot' ? 'like' : 'ctime', 'desc')
+
+  const [content, setContent] = useState('')
+  const inputRef = useRef(null)
+  const handlePublish = () => {
+    setCommentList([
+      ...commentList, 
+      {
+    rpid: uuidv4(),  // 随机id
+    user: {
+      uid: user.uid,
+      avatar: user.avatar,
+      uname: user.uname,
+    },
+    content,
+    ctime: dayjs(new Date()).format('MM-DD HH:mm'),   // 格式化 月-日 时:分
+    like: 88,
+    }])
+    // 清空评论框
+    setContent('')
+    // 重新聚焦
+    inputRef.current.focus()
+    }
+  
 
   return (
     <div className="app">
@@ -130,54 +223,20 @@ const App = () => {
             <textarea
               className="reply-box-textarea"
               placeholder="发一条友善的评论"
+              ref={inputRef}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             />
             {/* 发布按钮 */}
             <div className="reply-box-send">
-              <div className="send-text">发布</div>
+              <div className="send-text" onClick={handlePublish}>发布</div>
             </div>
           </div>
         </div>
         {/* 评论列表 */}
         <div className="reply-list">
           {/* 评论项 */}
-          {sortedList.map(item => (
-          <div key={item.rpid} className="reply-item">
-            {/* 头像 */}
-            <div className="root-reply-avatar">
-              <div className="bili-avatar">
-                <img
-                  className="bili-avatar-img"
-                  alt={item.user.uname}
-                  src={item.user.avatar}
-                />
-              </div>
-            </div>
-
-            <div className="content-wrap">
-              {/* 用户名 */}
-              <div className="user-info">
-                <div className="user-name">{item.user.uname}</div>
-              </div>
-              {/* 评论内容 */}
-              <div className="root-reply">
-                <span className="reply-content">{item.content}</span>
-                <div className="reply-info">
-                  {/* 评论时间 */}
-                  <span className="reply-time">{item.ctime}</span>
-                  {/* 评论数量 */}
-                  <span className="reply-time">点赞数:{item.like}</span> 
-                  {/*  只有自己的评论才能删除 */}
-                  { user.uid === item.user.uid && 
-                  <span className="delete-btn" onClick={() => handleDel(item.rpid)
-                  }>
-                    删除
-                  </span>}
-
-                </div>
-              </div>
-            </div>
-          </div>
-          ))}
+            {commentList.map(item => <Item key={item.rpid} item={item} onDel={handleDel}/>)}
         </div>
       </div>
     </div>

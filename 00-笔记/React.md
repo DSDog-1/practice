@@ -109,13 +109,144 @@ const Button = () => {
 	  <span className='foo'>span</span>
 ~~~
 
+### 组件通信
 
+组件之间的数据传递
 
-## 4.useState
+#### 父子通信
+
+父传子：父组件的数据传给子组件使用
+
+**props**可传递**任意**的数据：数字、字符串、布尔值、数组、对象、函数、JSX，**只读**不可修改
+
+~~~jsx
+function Son(props){    // props是一个对象，包含了父组件传递过来的所有数据
+  return (
+    <div> {props.name} </div>	{/* 从props中获取name属性 */}
+	<h1>{props.children}</h1>  {/* 从props中获取children属性 */}
+  )
+}
+function App() {
+  const name = '张三'
+  return (
+    <div>
+      <Son name={name} />     {/* 传递数据 */}
+          <Son><div>child</div> </Son>		 {/* 传递子组件 */}
+    </div>
+  )
+}
+~~~
+
+子传父：在子组件中调用父组件中的函数并传递参数
+
+~~~jsx
+function Son({ onGetMsg }){   // 子组件接收父组件传递过来的函数onGetMsg
+  const sonMsg = 'son msg'  // 子组件的消息
+  return (
+    <div>
+      this is Son
+      <button onClick={() => onGetMsg(sonMsg)}>sendMsg</button>   {/* 使用函数 */}
+    </div>
+  )
+}
+function App() {
+  const [msg, setMsg] = useState('')   // 父组件的状态变量msg
+  const getMsg = (msg) => {   // 定义一个函数，用于接收子组件传递过来的消息msg
+    console.log(msg)
+    setMsg(msg)   // 将子组件的消息赋值给状态变量msg
+  }
+  return (
+    <div>
+      this is App,{msg}     {/* 父组件内显示msg*/}
+      <Son onGetMsg={getMsg} />   {/* 给子组件传递函数getMsg */}
+    </div>
+  )
+}
+~~~
+
+#### 兄弟通信
+
+借助**状态提升**通过父组件进行兄弟组件之间的数据传递
+
+~~~jsx
+import { useState } from 'react'
+
+function A({ onGetAName }) {   // 接收父组件传过来的函数
+  const name = 'this is A name'
+  return (
+    <div>
+      this is A component
+      <button onClick={() => onGetAName(name)}>send</button>
+    </div>
+  )
+}
+
+function B({ name }) {   // 组件B接收name属性
+  return (
+    <div>
+      this is B component,{name}   {/* 显示name属性 */}
+    </div>
+  )
+}
+
+function App() {
+  const [name, setName] = useState('')   // 父组件的状态变量name
+  const gatAName = (name) => {  // 定义一个函数，用于获取A组件的name
+    console.log(name)
+    setName(name)   // 将A组件的name赋值给状态变量name
+  }
+  return (
+    <div>
+      this is App
+      <A onGetAName={gatAName} />   {/* 传递函数 */}
+      <B name={name} />   {/* 传递状态变量name */}
+    </div>
+  )
+}
+
+export default App
+
+~~~
+
+#### 跨层通信
+
+Context机制：顶层主件通过**Ctx.Provider**提供数据，底层组件通过**useContext钩子函数**获取消费数据
+
+~~~jsx
+const MsgContext = createContext()  // 创建一个上下文对象MsgContext
+
+function B() {   
+  const msg = useContext(MsgContext)  // 从上下文对象MsgContext中获取消息msg
+  return (
+    <div>
+      this is B component,{msg} {/* 渲染消息msg */}
+    </div>
+  )
+}
+function App() {
+  const msg = 'this is App msg'
+  return (
+    <div>
+      <MsgContext.Provider value={msg}> 
+        {/* 提供上下文对象MsgContext value为要传递的消息msg */}
+        this is App
+        <A />
+      </MsgContext.Provider>
+    </div>
+  )
+}
+~~~
+
+## 4.Hook函数
+
+- 只能在组件中或其他自定义Hook函数中使用
+- 只能在组件顶层调用，不能嵌套在if、for、其他函数中
+
+### useState
 
 React Hook函数，向组件添加了一个**状态变量**，**本质：数据驱动视图**
 
-### 使用
+#### 使用
 
 ~~~jsx
   import { useState } from 'react'
@@ -129,7 +260,7 @@ React Hook函数，向组件添加了一个**状态变量**，**本质：数据�
         <button onClick={handleClick}>{count}</button>
 ~~~
 
-### 规则
+#### 规则
 
 状态不可变，**替换它**而不是修改它，不能引发视图更新
 
@@ -146,6 +277,135 @@ const changeForm = () => {
     ...form,
     name: '李四'
   })
+}
+~~~
+
+#### 受控表单绑定
+
+~~~jsx
+function App() {
+  const [value, setValue] = useState('')  // 1.声明一个状态变量value
+  return (
+    <div>
+      <input    // 2.输入框的值绑定到状态变量value
+       type="text"  
+       value={value}
+       onChange={(e) => setValue(e.target.value)} />
+    </div>
+  )
+}
+~~~
+
+### useEffect
+
+#### 使用 
+
+创建不是由事件引起而是**由渲染本身引起的操作**（AJAX请求，更改DOM）
+
+~~~JSX
+useEffect(() => { },[])
+//  参数一：副作用函数，放要执行的操作
+//	参数二：可选参，放依赖项数组，空数组副作用函数，组件初始渲染后执行一次
+//				没有依赖项，组件初始渲染+组件更新时执行
+//				添加特定依赖项，组件初始渲染+特定依赖项变化时执行
+function App() {
+  // 1.没有依赖项
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    console.log('没有依赖项的useEffect');
+  })
+  2.空依赖项数组
+  useEffect(() => {
+    console.log('空依赖项数组的useEffect');
+  }, [])
+  3.有依赖项的数组
+  useEffect(() => {
+    console.log('有依赖项的数组的useEffect');
+  }, [count])
+  return (
+    <div>
+      this is App
+      <button onClick={() => setCount(count + 1)}>+{count}</button>
+    </div>
+  )
+}
+~~~
+
+#### 清除副作用
+
+~~~jsx
+useEffect(() => {
+    // 实现副作用操作逻辑
+    return () => {
+        // 清除副作用逻辑
+    }
+},[])
+function Son () {
+  // 渲染时开启一个定时器
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('Son render')
+    }, 1000)
+    // 卸载时清除定时器
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+  return (
+    <div>
+      this is Son
+    </div>
+  )
+}
+function App() {
+  const [show, setShow] = useState(true)
+  return (
+    <div>
+      {show && <Son />}
+      <button onClick={() => setShow(false)}>卸载</button>
+    </div>
+  )
+}
+~~~
+
+### useRef
+
+获取DOM
+
+~~~jsx
+  const inputRef = useRef(null)  // 声明一个ref变量inputRef
+    const showDown = () => {
+    console.log(inputRef.current.value)  // 获取输入框的值
+  } 
+      <input ref={inputRef} />	// 将ref变量绑定到输入框上
+      <button onClick={showDown}>获取</button>
+~~~
+
+### 自定义Hook函数
+
+以use大头的函数，实现逻辑的封装和复用
+
+~~~jsx
+function useToggle(){   //  定义一个hooks函数useToggle
+  // 可复用的逻辑代码
+  const [value, setValue] = useState(true)
+  const toggle = () => {
+    setValue(!value)
+  }
+    // 哪些状态和回调函数需要在其他组件中使用
+    return {
+      value,
+      toggle
+    }
+  }
+function App() {
+  const { value, toggle } = useToggle()
+  return (
+    <div>
+      {value && <div>this is div</div>}
+      <button onClick={toggle}>toggle</button>
+    </div>
+  )
 }
 ~~~
 
@@ -207,6 +467,89 @@ const changeForm = () => {
   const [commentList, setCommentList] = useState(_.orderBy(defaultList, 'like', 'desc'))
     // 最热 => 喜欢数量降序；最新 => 创建时间降序
   const sortedList = _.orderBy(commentList, type === 'hot' ? 'like' : 'ctime', 'desc')
+~~~
+
+### 发表评论
+
+- 获取评论内容
+- 点击按钮发布
+
+~~~jsx
+  const [content, setContent] = useState('')
+            {/* 评论框 */}
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+
+  const handlePublish = () => {
+    setCommentList([
+                    {/* 发布按钮 */}
+            <div className="reply-box-send">
+              <div className="send-text" onClick={handlePublish}>发布</div>
+~~~
+
+- id处理 **uuid插件**
+- 时间处理  **dayjs库**
+
+~~~jsx
+import { v4 as uuidv4 } from 'uuid'
+    rpid: uuidv4(),  // 随机id
+import dayjs from 'dayjs'
+    ctime: dayjs(new Date()).format('MM-DD HH:mm'),   // 格式化 月-日 时:分
+~~~
+
+- 清空内容，**value设置为空串**
+- 重新聚焦，拿到dom元素**调用foucs方法**
+
+~~~jsx
+    setContent('')
+    inputRef.current.focus()
+~~~
+
+### 优化
+
+- 使用接口请求的方式获取列表渲染：使用**json-server工具模拟接口服务**，用过**axios发送接口请求**，使用**useEffect调用接口获取数据**
+
+~~~jsx
+    "server": "json-server db.json --port 3004"  // 引入接口数据
+
+  const [commentList, setCommentList] = useState([])
+  // 评论列表数据获取
+  useEffect(() => {
+    async function getCommentList() {
+      // 发送请求获取评论列表
+      const res = await axios.get('http://localhost:3004/List')
+        setCommentList(res.data)
+    }
+    getCommentList()
+  }, [])
+~~~
+
+- 使用自定义Hook函数封装数据请求的逻辑
+
+~~~jsx
+// 封装
+function useGetList(){
+  // 获取接口数据
+
+  return {
+    commentList,
+    setCommentList,
+  }
+}
+  const { commentList, setCommentList } = useGetList()
+~~~
+
+- 把评论中的每一项抽象成一个独立的组件实现渲染：**智能组件**负责数据的获取，**UI组件**负责数据的渲染
+
+~~~jsx
+// 封装评论项组件
+function Item({item, onDel}){
+         return(
+          )}
+    {/* 评论项 */}
+    {commentList.map(item => <Item key={item.rpid} item={item} onDel={handleDel}/>)}
 ~~~
 
 ## 6.JS库

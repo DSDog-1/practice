@@ -565,3 +565,56 @@ className={classNames('nav-item', {
 })}>
 ~~~
 
+## 7.Redux
+
+**集中状态管理工具**，可独立于框架运行
+
+### 独立运行
+
+- state：一个对象，存放着管理数据的状态
+- action：一个对象，用来描述怎么改数据
+- reducer：一个函数，根据action的描述生成一个新的state
+
+~~~jsx
+  <script src="https://unpkg.com/redux@4.1.2/dist/redux.min.js"></script>
+  <script>
+    // 1.定义reducer函数,state是当前状态
+    function reducer(state = { count: 0 }, action) {
+      // 处理action,数据不可变,基于原始状态生成一个新的状态
+      if (action.type === 'increment') {
+        return { count: state.count + 1 };
+      }
+      if (action.type === 'decrement') {
+        return { count: state.count - 1 };
+      }
+      return state;
+    }
+    // 2.使用函数生成store实例
+    const store = Redux.createStore(reducer);
+    // 3.订阅store实例,监听状态变化
+    store.subscribe(() => {
+      // 状态变化时,更新视图
+      console.log('状态变化', store.getState());
+      document.getElementById('count').textContent = store.getState().count;
+    });
+    // 4.通过dispatch方法触发action,更新状态
+    const inBtn  = document.getElementById('increment');
+    inBtn.addEventListener('click', () => {
+      // 点击+号按钮,触发increment action
+      store.dispatch({ type: 'increment' });
+    });
+
+    const deBtn  = document.getElementById('decrement');
+    deBtn.addEventListener('click', () => {
+      // 点击-号按钮,触发decrement action
+      store.dispatch({ type: 'decrement' });
+    });
+  </script>
+~~~
+
+### 依赖react
+
+npm i @reduxjs/toolkit  react-redux
+
+![image-20261123172352288](D:\desktop\代码\00-笔记\React\image-20261123172352288.png)
+

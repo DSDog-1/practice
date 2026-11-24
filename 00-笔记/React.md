@@ -618,3 +618,767 @@ npm i @reduxjs/toolkit  react-redux
 
 ![image-20261123172352288](D:\desktop\代码\00-笔记\React\image-20261123172352288.png)
 
+~~~jsx
+// counterStore.js
+import { createSlice } from '@reduxjs/toolkit'
+
+const counterStore = createSlice({
+  name: 'counter',
+  // 初始状态
+  initialState: {
+    count: 0,
+  },
+  // 修改状态的方法 同步操作 支持直接修改
+  reducers: {
+    increment(state) {
+      state.count++
+    },
+    decrement(state) {
+      state.count--
+    },
+    addToNum(state, action) {
+      state.count = action.payload
+    }
+  },
+})
+
+// 解构出actionCreater函数
+const { increment, decrement, addToNum } = counterStore.actions
+// 获取reducer函数
+const reducer = counterStore.reducer
+// 按需导出actionCreater函数
+export { increment, decrement, addToNum }
+// 默认导出reducer函数
+export default reducer
+~~~
+
+~~~jsx
+// channelStore.js
+import { createSlice } from '@reduxjs/toolkit'
+
+const channelStore = createSlice({
+  name: 'channel',
+  initialState: {
+    channelList: [],
+  },
+  reducers: {
+    setChannelList(state, action) {
+      state.channelList = action.payload
+    }
+  }
+})
+// 异步请求
+const { setChannelList } = channelStore.actions
+const fetchChannelList = ()=> {
+  return async(dispatch) =>{
+    const res = await axios.get('http://geek.itheima.net/v1_0/channel')
+    dispatch(setChannelList(res.data.data.channels))
+  }
+}
+export { fetchChannelList }
+export default channelStore.reducer
+~~~
+
+~~~jsx
+// index.js
+import { configureStore } from '@reduxjs/toolkit'
+// 引入counter模块的reducer函数
+import counterReducer from './modules/counterStore'
+import channelReducer from './modules/channelStore'
+
+const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+    channel: channelReducer,
+    // 其他模块的reducer函数
+  },
+})
+
+export default store // 导出store对象
+~~~
+
+~~~jsx
+// main.jsx
+// 引入store对象
+import store from './store'
+// 引入Provider组件
+import { Provider } from 'react-redux'
+
+
+createRoot(document.getElementById('root')).render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+)
+~~~
+
+~~~jsx
+// App.jsx
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+// 引入action对象
+import { increment, decrement, addToNum } from './store/modules/counterStore'
+import { fetchChannelList } from './store/modules/channelStore'
+function App() {
+  const {count} = useSelector(state => state.counter)
+  const {channelList} = useSelector(state => state.channel)
+  const dispatch = useDispatch()
+  // 使用useEffect钩子，组件挂载时发送异步请求获取频道列表
+  useEffect(() => {
+    dispatch(fetchChannelList())
+  }, [dispatch])
+  return (
+    <div>
+      <button onClick={() => dispatch(decrement())}>-</button>
+      {count}
+      <button onClick={() => dispatch(increment())}>+</button>
+      <button onClick={() => dispatch(addToNum(10))}>add To 10</button>
+      <button onClick={() => dispatch(addToNum(20))}>add To 20</button>
+      <ul>
+        {channelList.map(item => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export default App
+
+~~~
+
+## 8.外卖案例
+
+### 分类和商品列表渲染
+
+- 启动项目
+- 使用 RTX编写store
+
+~~~jsx
+import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+
+const foodsStore = createSlice({
+  name: 'foods',
+  initialState: {
+    // 商品列表
+    foodList: [],
+  },
+  reducers: {
+    setFoodList(state, action) {
+      state.foodList = action.payload
+    }
+  }
+})
+// 异步请求
+const { setFoodList } = foodsStore.actions
+const fetchFoodList = ()=> {
+  return async(dispatch) =>{
+    const res = await axios.get('http://localhost:3004/takeaway')
+    dispatch(setFoodList(res.data))
+  }
+}
+export { fetchFoodList }
+export default foodsStore.reducer
+~~~
+
+~~~jsx
+import { configureStore } from '@reduxjs/toolkit'
+import foodsReducer from './modules/takeway'
+
+const store = configureStore({
+  reducer: {
+    foods: foodsReducer,
+  }
+})
+export default store
+~~~
+
+~~~jsx
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+
+import App from './App'
+import store from './store'
+import { Provider } from 'react-redux'
+
+
+const root = createRoot(document.getElementById('root'))
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+~~~
+
+~~~jsx
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchFoodList } from './store/modules/takeaway'
+
+const App = () => {
+const dispatch = useDispatch()
+// 触发异步请求
+  useEffect(() => {
+    dispatch(fetchFoodList())
+  }, [dispatch])
+~~~
+
+- 组件触发action并渲染
+
+~~~jsx
+// 从store中获取商品列表
+  const { foodList } = useSelector(state => state.foods)
+              <div className="goods-list">
+              {/* 外卖商品列表 */}
+              {foodList.map(item => {
+                return (
+                  <FoodsCategory
+                    key={item.tag}
+                    // 列表标题
+                    name={item.name}
+                    // 列表商品
+                    foods={item.foods}
+                  />
+                )
+              })}
+~~~
+
+### 点击分类激活交互实现
+
+- 使用RTK编写管理activeindex
+- 组件中点击时触发action更改activeindex
+- 动态控制激活类名显示
+
+~~~jsx
+const foodsStore = createSlice({
+  name: 'foods',
+  initialState: {
+    // 菜单激活下标值
+    activeIndex: 0,
+  },
+  reducers: {
+    // 菜单激活下标值
+    setActiveIndex(state, action) {
+      state.activeIndex = action.payload
+    }
+  }
+})
+~~~
+
+~~~jsx
+import { useDispatch, useSelector } from 'react-redux'
+import { setActiveIndex } from '../../store/modules/takeaway'
+
+const Menu = () => {
+  const dispatch = useDispatch()
+  // 从 store 取分类列表和当前激活的下标
+  const { foodList, activeIndex } = useSelector(state => state.foods)
+  const menus = foodList.map(item => ({ tag: item.tag, name: item.name }))
+  return (
+    <nav className="list-menu">
+      {/* 添加active类名会变成激活状态 */}
+      {menus.map((item, index) => {
+        return (
+          <div
+            onClick={() => dispatch(setActiveIndex(index))}
+            key={item.tag}
+            className={classNames(
+              'list-menu-item',
+              { active: activeIndex === index }
+            )}
+          >
+            {item.name}
+          </div>
+~~~
+
+### 商品列表切换显示
+
+- 条件渲染
+
+~~~jsx
+  const { foodList, activeIndex } = useSelector(state => state.foods)
+  return (  activeIndex === index && <FoodsCategory
+~~~
+
+### 添加购物车
+
+- 使用RTX管理新状态cartList
+- 组件点击时收集数据提交action添加购物车
+
+~~~jsx
+const foodsStore = createSlice({
+  name: 'foods',
+  initialState: {
+    // 购物车商品列表
+    cartList: [],
+  },
+  reducers: {
+    // 购物车商品列表
+    setCartList(state, action) {
+      // 是否存在该商品
+      const item = state.cartList.find(item => item.id === action.payload.id)
+      if(item) {
+        item.count++
+      } else {
+        state.cartList.push(action.payload)
+      }
+~~~
+
+~~~jsx
+            <span className="plus" onClick={() => dispatch(setCartList({
+              id,
+~~~
+
+### 统计区域功能
+
+- 基于store中的cartList的length渲染数量
+- 基于store中的cartList累加
+- cartList的length不为0则高亮
+
+~~~jsx
+const Cart = () => {
+  const { cartList } = useSelector(state => state.foods)
+  // 计算购物车价格
+  const totalPrice = cartList.reduce((pre, cur) => pre + cur.price * cur.count, 0)
+~~~
+
+### 购物车列表
+
+- 使用cartList遍历渲染列表
+
+~~~jsx
+ {/* 添加visible类名 div会显示出来 */}
+      <div className={classNames('cartPanel', { 'visible': cartList.length > 0 })}>
+        </div>
+        {/* 购物车列表 */}
+        <div className="scrollArea">
+          {cartList.map(item => {
+~~~
+
+- RTK中增加增减reducer，组件中提交active
+
+~~~jsx
+    // count增
+    increCount (state, action) {
+      const item = state.cartList.find(item => item.id === action.payload.id)
+      if(item) {
+        item.count++
+      }
+    },
+    // count减
+    decreCount (state, action) {
+      const item = state.cartList.find(item => item.id === action.payload.id)
+      if(item) {
+        item.count--
+      }
+~~~
+
+- RTK中增加清除购物车reducer，组件中提交active
+
+~~~jsx
+    // 清空商品
+    clearCartList(state) {
+      state.cartList = []
+    }
+~~~
+
+### 购物车显示和隐藏
+
+- 使用useState声明控制显隐状态
+- 点击统计区域设置为true，蒙层false
+
+~~~jsx
+  // 控制购物车打开关闭
+  const [visible, setVisible] = useState(false)
+~~~
+
+##   9.ReactRouter
+
+前端路由：一个路径path对应一个组件component
+
+~~~jsx
+import { createBrowserRouter,RouterProvider } from 'react-router-dom'
+// 创建路由
+const router = createBrowserRouter([
+    {
+        path:'/login',
+        element:<div>登录页</div>
+    },
+    {
+        path:'/acticle',
+        element:<div>文章页</div>
+    }
+])
+createRoot(document.getElementById('root')).render(
+    <RouterProvider router={router} />
+)
+~~~
+
+### 抽象路由模块
+
+![image-20261124220616790](D:\desktop\代码\00-笔记\React\image-20261124220616790.png)
+
+~~~jsx
+const Article = () => {
+  return (
+    <div>
+      <h1>Article</h1>
+    </div>
+  )
+}
+export default Article
+
+import Login from '../page/Login'
+import Article from '../page/Article'
+import { createBrowserRouter } from 'react-router-dom'
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Login />,
+  },
+  {
+    path: '/article',
+    element: <Article />,
+  },
+])
+export default router
+// 导入路由
+import router from './router'
+~~~
+
+### 路由导航
+
+多个路由需要进行**路由跳转**，并在跳转的同时有可能需要**传递参数进行通信**
+
+#### 声明式导航
+
+~~~jsx
+import { Link } from 'react-router-dom'
+const Login = () => {
+  return (
+    <div>
+      <Link to="/article">文章页</Link>
+~~~
+
+#### 编程式导航
+
+~~~jsx
+import { useNavigate } from 'react-router-dom'
+const Login = () => {
+  const navigate = useNavigate()
+  return (
+    <div>
+      <button onClick={()=>navigate('/article')}>跳转到文章</button>
+~~~
+
+### 导航传参
+
+#### searchParams传参
+
+~~~jsx
+      <button onClick={()=>navigate('/article?id=123&name=张三')}>传参</button>
+
+import { useSearchParams } from "react-router-dom"
+const Article = () => {
+  const [params] = useSearchParams()
+  const id = params.get('id')
+  const name = params.get('name')
+  return (
+    <div>
+      <h1>Article</h1>
+      <p>id:{id}</p>
+      <p>name:{name}</p>
+    </div>
+  )
+~~~
+
+#### params传参
+
+~~~jsx
+      <button onClick={()=>navigate('/article/123/张三')}>传参</button>
+
+ {
+    path: '/article/:id/:name',
+    element: <Article />,
+  },
+      
+import { useParams } from "react-router-dom"
+const Article = () => {
+  const params = useParams()
+   const id = params.id
+   const name = params.name
+  return (
+    <div>
+      <h1>Article</h1>
+      <p>id:{id}</p>
+      <p>name:{name}</p>
+    </div>
+  )
+}
+~~~
+
+### 嵌套路由配置
+
+#### 基础配置
+
+~~~jsx
+    path: '/Layout',
+    element: <Layout />,
+    children: [
+      {
+        path: 'board',
+        element: <Board />,
+      },
+      {
+        path: 'about',
+        element: <About />,
+      }
+    ]
+
+import { Link, Outlet } from 'react-router-dom'
+const Layout = () => {
+  return (
+    <div>
+      <h1>一级路由Layout</h1>
+        <Link to="/Layout/board">Board</Link>
+        <Link to="/Layout/about">About</Link>
+      {/* 配置二级路由出口 */}
+      <Outlet />
+    </div>
+  )
+~~~
+
+#### 默认二级路由设置
+
+访问一级路由时，默认的二级路由也可以渲染
+
+~~~jsx
+      // 默认二级路由
+      {
+        index: true,
+        element: <Board />,
+      },
+<Link to="/Layout">Board</Link>
+~~~
+
+### 404路由配置
+
+当url路径找不到对应的path时，使用404渲染
+
+~~~jsx
+  // 兜底末尾组件
+  {
+    path: '*',
+    element: <NotFound />,
+  }
+~~~
+
+### 路由模式
+
+#### history模式
+
+> url/login
+>
+> **需要**后端支持
+>
+> const router = createBrowserRouter([
+
+#### hash模式
+
+> url/#/login
+>
+> **无需**后端支持
+>
+> const router = createHashRouter([
+
+## 10.记账本案例
+
+### 配置别名路径@
+
+- 路径解析配置
+
+~~~jsx
+// vite.config.js
+
+import react from '@vitejs/plugin-react'
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite'
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+})
+
+~~~
+
+- 路径联想配置
+
+~~~jsx
+// jsconfig.json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src"]
+}
+~~~
+
+###  数据Mock
+
+前端在没有实际后端接口的支持下先进行接口数据的模拟
+
+- 前端直接写假数据
+- 自研Mock平台
+- json-server等工具（✅）
+
+~~~jsx
+    "server": "json-server --watch ./server/data.json"
+~~~
+
+### 整体路由设计
+
+~~~jsx
+import { createBrowserRouter } from 'react-router-dom'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '/month',
+        element: <Month />,
+      },
+
+      {
+        path: '/year',
+        element: <Year />,
+      },
+    ],
+  },
+  {
+    path: '/new',
+    element: <New />,
+  },
+])
+export default router
+~~~
+
+### antD-mobile主题定制
+
+~~~jsx
+const Layout = () => {
+  return (
+    <div>
+      <Outlet />
+      layout
+      <Button color="primary">测试全局</Button>
+      <div className="my-button">
+        <Button color="primary">测试局部</Button>
+      </div>
+      </div>
+  )
+}
+~~~
+
+#### 全局生效
+
+~~~css
+:root:root{
+  --adm-color-primary: #007bff;
+}
+~~~
+
+#### 局部生效
+
+~~~css
+.my-button{ /* 类名 */
+  --adm-color-primary: #a06200;
+}
+~~~
+
+### Redux管理账目列表
+
+~~~jsx
+import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+
+const billSlice = createSlice({
+  name: 'bill',
+  // 初始状态
+  initialState: {
+    billList: []
+  },
+  reducers: {
+    // 同步修改设置账单列表
+    setBillList(state, action) {
+      state.billList = action.payload
+    }
+  }
+})
+// 解构出action
+const { setBillList } = billSlice.actions
+// 编写异步action
+const getBillList = () => {
+  return async (dispatch) => {
+    // 发送异步请求
+    const res = await axios.get('http://localhost:3000/ka')
+    // 触发同步reducer
+    dispatch(setBillList(res.data))
+  }
+}
+export { getBillList }
+
+// 导出reducer
+export default billSlice.reducer
+~~~
+
+~~~jsx
+import { configureStore } from '@reduxjs/toolkit'
+import billReducer from './modules/billStore'
+
+const store = configureStore({
+  reducer: {
+    bill: billReducer
+  }
+})
+export default store
+~~~
+
+~~~jsx
+import { getBillList } from '@/store/modules/billStore.js'
+import { useDispatch } from 'react-redux'
+
+const Layout = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getBillList())
+  }, [dispatch])
+~~~
+
+### TabBar功能
+
+TabBar**标签栏组件**进行布局以及路由切换（看文档-找相似Demo-复制代码跑通-定制化修改）
+
+环境：npm i -D sass
+
+![image-20261125003536174](D:\desktop\代码\00-笔记\React\image-20261125003536174.png)
+
+~~~jsx
+  const navigate = useNavigate()
+  const switchRoute = (path) => {
+    navigate(path)
+  }
+  return (
+      <div className="footer">
+        <TabBar onChange={switchRoute}>
+~~~
+

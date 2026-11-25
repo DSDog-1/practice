@@ -1382,3 +1382,239 @@ TabBar**标签栏组件**进行布局以及路由切换（看文档-找相似Dem
         <TabBar onChange={switchRoute}>
 ~~~
 
+### 统计区域
+
+- 点击切换选择框
+
+~~~jsx
+import { useState } from 'react'
+import classNames from 'classnames'
+const Month = () => {
+  // 控制弹窗打开和关闭
+  const [dataVisible, setDataVisible] = useState(false)
+  // 确认选择时间
+  const onConfirm = () => {
+    setDataVisible(false)
+  }
+  return (
+          {/* 时间切换区域 */}
+          <div className="date" onClick={() => setDataVisible(!dataVisible)}>
+            <span className="text">
+              2023 | 3月账单
+            </span>
+            {/* 时间切换箭头:根据弹窗打开状态控制类名是否存在 */}
+            <span className={classNames('arrow',dataVisible && 'expand')}></span>
+          </div>
+
+          {/* 时间选择器 */}
+          <DatePicker
+            visible={dataVisible}
+            onCancel={() => setDataVisible(false)}
+            onConfirm={onConfirm}
+            onClose={() => setDataVisible(false)}
+~~~
+
+- 点击确定切换时间显示
+
+~~~jsx
+  // 选择的时间
+  const [currentDate, setCurrentDate] = useState(() => dayjs(new Date()))
+  // 确认选择时间
+  const onConfirm = (date) => {
+    setDataVisible(false)
+    setCurrentDate(dayjs(date))
+  }
+              <span className="text">
+              {currentDate.format('YYYY')} | {currentDate.format('M')}月账单
+            </span>
+~~~
+
+- 账单数据按月分组
+
+~~~jsx
+import { useSelector } from 'react-redux'
+import { useMemo } from 'react'
+import _ from 'lodash'
+
+const Month = () => {
+  // 按月做数据分组
+  const billList = useSelector(state => state.bill.billList)
+  const monthGroup = useMemo(() => {
+    // return计算的结果
+    return _.groupBy(billList, (item) => dayjs(item.date).format('YYYY-MM'))
+  }, [billList])
+~~~
+
+- 计算统计数据
+
+~~~jsx
+  // 计算当前月的总金额
+  const monthResult = useMemo(() => {
+    const pay = currentMonthList.filter(item => item.type === 'pay').reduce((pre, cur) => pre + cur.money, 0)
+    const income = currentMonthList.filter(item => item.type === 'income').reduce((pre, cur) => pre + cur.money, 0)
+    return {
+      pay,
+      income,
+      total: income + pay
+     }
+  }, [currentMonthList])
+  // 确认回调
+  const onConfirm = (date) => {
+    setDataVisible(false)
+    setCurrentDate(dayjs(date))
+    const formatDate = dayjs(date).format('YYYY-MM')
+    console.log(formatDate);
+    setMonthList(monthGroup[formatDate] || [])
+  }
+~~~
+
+- 初始化时渲染统计数据
+
+~~~jsx
+// 初始化当前月的账单列表
+  useEffect(() => {
+    const nowDate = dayjs().format('YYYY-MM')
+    // 边界值处理
+    if (monthGroup[nowDate]) {
+      setMonthList(monthGroup[nowDate])
+    }
+  }, [monthGroup])
+~~~
+
+- 单日统计列表
+
+~~~jsx
+  // 日账单区域
+  const dayGroup = useMemo(() => {
+    const groupData = _.groupBy(currentMonthList, (item) => dayjs(item.date).format('YYYY-MM-DD'))
+    const keys = Object.keys(groupData)
+    return {
+      groupData,
+      keys
+    }
+  }, [currentMonthList])
+  
+	   {/* 日账单区域 */}
+        {
+          dayGroup.keys.map((key) => {
+            return <DailyBill key={key} date={key} billList={dayGroup.groupData[key]} />
+          })
+        }
+~~~
+
+### 列表区域
+
+- 单日账单列表展示
+
+~~~JSX
+export const billTypeToName = Object.keys(billListData).reduce((prev, key) => {
+  billListData[key].forEach(bill => {
+    bill.list.forEach(item => {
+      prev[item.type] = item.name
+    })
+  })
+  return prev
+}, {})
+
+                <div className="billType">{billTypeToName[item.useFor]}</div>
+~~~
+
+- 点击切换列表显示
+
+~~~jsx
+  // 控制展开收起
+  const [isShow, setIsShow] = useState(false)
+	{/* 展开收起图标 */}
+          <span className={classNames('arrow', isShow && 'expand')} onClick={() => setIsShow(!isShow)}></span>
+        </div>
+
+      <div className="billList" style={{ display: isShow ? 'block' : 'none' }}>
+~~~
+
+- 账单类型图标组件封装
+
+~~~jsx
+const Icon = ({type}) => {
+  return (
+    <img
+      src={`https://yjy-teach-oss.oss-cn-beijing.aliyuncs.com/reactbase/ka/${type}.svg`}
+      alt={`icon-${type}`}
+	
+	const Icon = billTypeToIcon[item.useFor]
+          return (
+            <div className="bill" key={item.id}>
+              {/* 图标 */}
+              {Icon ? <Icon /> : null}
+~~~
+
+### 新增账单
+
+- 不同类型的账单列表渲染
+- 支出与收入两种状态切换
+
+~~~jsx
+  // 记账类型
+  const [billType, setBillType] = useState('pay') 
+  
+		 <Button
+            shape="rounded"
+            className={classNames(billType === 'pay' ? 'selected' : '')}
+            onClick={() => setBillType('pay')}
+          >
+            支出
+          </Button>
+          <Button
+            className={classNames(billType === 'income' ? 'selected' : '')}
+            shape="rounded"
+            onClick={() => setBillType('income')}
+          >
+            收入
+          </Button>
+~~~
+
+- 点击保存实现记账功能
+
+~~~jsx
+const New = () => {
+  const navigate = useNavigate()
+  // 记账类型
+  const [billType, setBillType] = useState('pay') 
+  // 金额
+  const [money, setMoney] = useState('0.00')
+  // 金额改变时触发
+  const moneyChange =(value)=> {
+    setMoney(value)
+  }
+  // 收集账单类型
+  const [useFor, setUseFor] = useState('')
+  const dispatch = useDispatch()
+  // 保存账单
+  const saveBill = () => {
+    // 收集表单数据
+    const data = {
+      type: billType,
+      money: billType === 'pay' ? -money : money,
+      date: new Date(),
+      useFor: useFor,
+    }
+    console.log(data);
+    // 触发异步action
+    dispatch(addBillList(data))
+~~~
+
+~~~jsx
+    // 同步修改添加账单
+    addBill(state, action) {
+      state.billList.push(action.payload)
+    }
+  }
+})
+const addBillList = (data) => {
+  return async (dispatch) => {
+    // 发送异步请求
+    const res = await axios.post('http://localhost:3000/ka', data)
+    // 触发同步reducer
+    dispatch(addBill(res.data))
+  }
+~~~
+

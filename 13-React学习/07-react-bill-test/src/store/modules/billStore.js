@@ -11,11 +11,15 @@ const billSlice = createSlice({
     // 同步修改设置账单列表
     setBillList(state, action) {
       state.billList = action.payload
+    },
+    // 同步修改添加账单
+    addBill(state, action) {
+      state.billList.push(action.payload)
     }
   }
 })
 // 解构出action
-const { setBillList } = billSlice.actions
+const { setBillList, addBill } = billSlice.actions
 // 编写异步action
 const getBillList = () => {
   return async (dispatch) => {
@@ -25,7 +29,15 @@ const getBillList = () => {
     dispatch(setBillList(res.data))
   }
 }
-export { getBillList }
+const addBillList = (data) => {
+  return async (dispatch) => {
+    // 发送异步请求
+    const res = await axios.post('http://localhost:3000/ka', data)
+    // 触发同步reducer
+    dispatch(addBill(res.data))
+  }
+}
+export { getBillList, addBillList }
 
 // 导出reducer
 export default billSlice.reducer

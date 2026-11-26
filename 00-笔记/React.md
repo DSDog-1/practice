@@ -1618,3 +1618,272 @@ const addBillList = (data) => {
   }
 ~~~
 
+## 11.项目
+
+### 初始化
+
+![image-20261126144133980](D:\desktop\代码\00-笔记\React\image-20261126144133980.png)
+
+#### 安装SCSS
+
+预编译CSS语言，更加高效灵活
+
+> npm install sass -D
+
+#### 安装Ant Design组件库
+
+PC端组件库，内置现成组件
+
+> npm install antd --save
+
+#### 配置基础路由
+
+> npm i react-router-dom
+
+![image-20261126151728881](D:\desktop\代码\00-笔记\React\image-20261126151728881.png)
+
+~~~jsx
+// 基础路由组件
+const Layout = () => (
+  <div>
+    <h1>Layout</h1>
+  </div>
+);
+
+export default Layout;  
+~~~
+
+~~~jsx
+// 导出router实例
+import { createBrowserRouter } from 'react-router-dom';
+import Layout from '../pages/Layout';
+import Login from '../pages/Login';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+  },
+]);
+
+export default router;
+~~~
+
+~~~jsx
+// 入口文件渲染，传入实例
+import { RouterProvider } from 'react-router-dom'
+import router from './router'
+
+createRoot(document.getElementById('root')).render(
+  <RouterProvider router={router} />
+)
+~~~
+
+#### 配置@别名路径
+
+@替代scr路径，方便路径查找访问
+
+~~~jsx
+// vite.config.js
+
+import react from '@vitejs/plugin-react'
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite'
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+})
+~~~
+
+~~~jsx
+// jsconfig.json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src"]
+}
+~~~
+
+### 登录
+
+#### 准备基础静态结构
+
+主要组件：Card、Form、Input、Button
+
+#### 表单校验
+
+~~~jsx
+    <div className="login">
+      <Card className="login-container">
+        <img className="login-logo" src={logo} alt="" />
+        {/* 登录表单 */}
+        {/* 失焦验证 */}
+        <Form validateTrigger="onBlur">
+          {/* name与后端接口参数名一致 */}
+          <Form.Item name="mobile"
+            rules={[
+              // 多条校验按顺序执行
+              {
+                required: true,
+                message: '请输入手机号!'
+              },
+              // 手机号格式验证
+              {
+                pattern: /^1[3456789]\d{9}$/,
+                message: '请输入正确的手机号!'
+              }
+            ]}>
+            <Input size="large" placeholder="请输入手机号" />
+          </Form.Item>
+          <Form.Item name="code"
+            rules={[{ required: true, message: '请输入验证码!' }]}>
+            <Input size="large" placeholder="请输入验证码" />
+          </Form.Item>
+~~~
+
+#### 获取表单数据
+
+~~~jsx
+  const onFinish = (values) => {
+    console.log(values)
+  }
+  return (
+      // 校验通过自动回调函数
+      <Form onFinish={onFinish} >
+~~~
+
+#### 封装request请求模块
+
+网络请求使用axios做好统一封装，方便更统一管理和复用
+
+> npm i axios
+
+~~~jsx
+// axios封装处理
+import axios from 'axios'
+
+const request = axios.create({
+  // 1.根域名配置
+  baseURL: 'https://geek.itheima.net/v1_0',
+  // 2.超时时间
+  timeout: 5000
+})
+
+// 3. 请求拦截器/响应拦截器
+request.interceptors.request.use(
+  (config) => {
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+request.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+export default request
+~~~
+
+#### 使用Redux管理token
+
+Token需要在多个模块共享，Redux方便解决共享状态问题
+
+> npm i react-redux @reduxjs/toolkit
+
+~~~jsx
+// 和用户相关的状态管理
+import { createSlice } from '@reduxjs/toolkit'
+import request from '@/utils/request'
+
+const userStore = createSlice({
+  name: 'user',
+  // 数据状态
+  initialState: {
+    token: ''
+  },
+  // 同步修改方法
+  reducers: {
+    setToken(state, action) {
+      state.token = action.payload
+    }
+  }
+})
+
+// 异步修改方法
+const fetchLogin = (loginForm) => {
+  return async (dispatch) => {
+    // 1.发送异步请求
+    const res = await request.post('/authorizations', loginForm)
+    // 2.提交同步action进行状态token存入
+    dispatch(setToken(res.data.token))
+  }
+}
+
+// 解构
+const { setToken } = userStore.actions
+const userReducer = userStore.reducer
+export { setToken, fetchLogin }
+export default userReducer
+~~~
+
+#### Token持久化
+
+防止刷新时丢失Token
+
+~~~jsx
+const userStore = createSlice({
+  name: 'user',
+  // 数据状态
+  initialState: {
+    token: localStorage.getItem('token_key') || ''
+  },
+  // 同步修改方法
+  reducers: {
+    setToken(state, action) {
+      state.token = action.payload
+      // 保存到本地存储
+      localStorage.setItem('token_key', action.payload)
+    }
+  }
+})
+~~~
+
+#### 封装Token的存取删方法
+
+对于Token的各类操作在项目多个模块中都有用到，为了共享复用可以封装成工具函数
+
+~~~JSX
+// 封装和token相关的方法
+
+const TOKENKEY = 'token_key'
+function getToken() {
+  return localStorage.getItem(TOKENKEY) || ''
+}
+function setToken(token) {
+  localStorage.setItem(TOKENKEY, token)
+}
+function removeToken() {
+  localStorage.removeItem(TOKENKEY)
+}
+
+export { getToken, setToken, removeToken }
+~~~
+

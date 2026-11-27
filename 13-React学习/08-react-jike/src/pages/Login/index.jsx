@@ -13,13 +13,17 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const onFinish = async (values) => {
-    console.log(values)
-    // 触发异步action
-    await dispatch(fetchLogin(values))
-    // 登录成功后跳转到首页
-    navigate('/')
-    // 提示用户
-    message.success('登录成功')
+    try {
+      // 触发异步action
+      await dispatch(fetchLogin(values))
+      // 提示用户
+      message.success('登录成功')
+      // 登录成功后跳转到首页
+      navigate('/')
+    } catch (error) {
+      console.error('登录失败:', error)
+      message.error(error?.response?.data?.message || '登录失败，请稍后重试')
+    }
   }
   return (
     <div className="login">

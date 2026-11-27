@@ -1887,3 +1887,144 @@ function removeToken() {
 export { getToken, setToken, removeToken }
 ~~~
 
+#### Axios请求拦截器注入Token
+
+~~~jsx
+request.interceptors.request.use(
+  (config) => {
+    // 获取token
+    const token = getToken()
+    if (token) {
+      // 添加到请求头(固定写法)
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+~~~
+
+#### Token做路由权限控制
+
+~~~jsx
+// 封装高阶组件
+import { Navigate } from 'react-router-dom'
+import { getToken } from '@/utils/token'
+
+export function AuthRoute({ children }) {
+  const token = getToken()
+  if (token) {
+    return children  // 有返回正常组件
+  }else{
+    return <Navigate to={"/login"} replace />	// 没有跳回登录界面
+  }
+}
+// 测试
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <AuthRoute>
+        <Layout />
+      </AuthRoute>
+    ),
+~~~
+
+### Layout
+
+#### 静态界面搭建
+
+样式全局初始化
+
+>  npm install normalize.css
+>
+> import 'normalize.css'
+
+#### 二级路由配置
+
+~~~jsx
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: 
+      <AuthRoute>
+        <Layout />
+      </AuthRoute>,
+      children: [
+      {
+        index: true,  // 默认路由
+        element: <Home />,
+      },
+      {
+        path: '/article',
+        element: <Article />,
+      },
+      {
+        path: '/publish',
+        element: <Publish />,
+      },
+    ]
+  },
+~~~
+
+#### 菜单点击跳转路由
+
+~~~jsx
+  const navigate = useNavigate()
+  const onMenuClick = (e) => {
+    navigate(e.key)
+  }
+              onClick={onMenuClick}
+~~~
+
+#### 根据路径高亮菜单
+
+~~~jsx
+  // 反向高亮
+  const location = useLocation()
+  const selectedKey = location.pathname
+              selectedKey={selectedKey}  // 选中当前路由路径对应的key
+~~~
+
+#### 展示个人信息 
+
+~~~jsx
+    setUserInfo(state, action) {
+      state.userInfo = action.payload
+    }
+  }
+})
+// 获取用户信息
+const fetchUserInfo = () => {
+  return async (dispatch) => {
+    // 1.发送异步请求
+    const res = await request.get('/user/profile')
+    // 2.提交同步action进行状态userInfo存入
+    dispatch(setUserInfo(res.data))
+  }
+}
+  // 从store中获取用户信息
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchUserInfo())
+  }, [dispatch])
+useSelector(state => state.user.userInfo) 
+~~~
+
+#### 退出登录实现
+
+~~~jsx
+    clearUserInfo(state) {
+      // 清除token
+      state.token = ''
+      state.userInfo = {}
+      removeToken()
+    }
+  // 退出登录
+  const onConfirm = () => {
+    dispatch(clearUserInfo())
+    navigate('/login')
+  }
+~~~
+
+#### 处理Token失效
+
+用户长时间未在网站中做任何操作且规定失效时间到达之后，Token失效，不能再作为用户令牌标识请求隐私数据

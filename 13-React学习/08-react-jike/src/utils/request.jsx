@@ -1,6 +1,6 @@
 // axios封装处理
 import axios from 'axios'
-import { getToken } from './token'
+import { getToken, removeToken } from './token'
 
 const request = axios.create({
   // 1.根域名配置
@@ -32,13 +32,11 @@ request.interceptors.response.use(
   },
   (error) => {
     // 401状态码表示token过期，需要重新登录
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       // 清除token
       removeToken()
-      // 跳转到登录页
-      navigate('/login')
-      // 强制刷新当前页面
-      window.location.reload()
+      // 跳转到登录页(这里不是组件，不能用 useNavigate)
+      window.location.href = '/login'
     }
     // 其他错误码，直接抛出错误
     return Promise.reject(error)

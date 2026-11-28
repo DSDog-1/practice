@@ -37,7 +37,7 @@ const fetchLogin = (loginForm) => {
     // 1.发送异步请求
     const res = await loginAPI(loginForm)
     // 2.提交同步action进行状态token存入
-    dispatch(setToken(res.data.token))
+    dispatch(setToken(res.data.data.token))
   }
 }
 // 获取用户信息
@@ -46,7 +46,7 @@ const fetchUserInfo = () => {
     // 1.发送异步请求
     const res = await getUserInfoAPI()
     // 2.提交同步action进行状态userInfo存入
-    dispatch(setUserInfo(res.data))
+    dispatch(setUserInfo(res.data.data))
   }
 }
 

@@ -2027,4 +2027,231 @@ useSelector(state => state.user.userInfo)
 
 #### 处理Token失效
 
-用户长时间未在网站中做任何操作且规定失效时间到达之后，Token失效，不能再作为用户令牌标识请求隐私数据
+用户长时间未在网站中做任何操作且规定失效时间到达之后，Token失效后端返回**401状态码**，不能再作为用户令牌标识请求隐私数据
+
+~~~jsx
+// 4. 响应拦截器
+request.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    // 401状态码表示token过期，需要重新登录
+    if (error.response.status === 401) {
+      // 清除token
+      removeToken()
+      // 跳转到登录页
+      navigate('/login')
+      // 强制刷新当前页面
+      window.location.reload()
+    }
+    // 其他错误码，直接抛出错误
+    return Promise.reject(error)
+  }
+)
+~~~
+
+### Home
+
+#### 基础图表实现
+
+> npm install echarts
+
+~~~jsx
+import * as echarts from 'echarts';
+import { useEffect, useRef } from 'react';
+const Home = () => {
+  const chartRef = useRef(null);
+  useEffect(() => {
+    // 保证dom可用，才渲染
+    // 获取渲染图表的dom节点
+    const chartDom = chartRef.current;
+    // 初始化图表实例
+    const myChart = echarts.init(chartDom);
+    // 配置图表参数
+    const option = {
+      xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          data: [120, 200, 150, 80, 70, 110, 130],
+          type: 'bar',
+          showBackground: true,
+          backgroundStyle: {
+            color: 'rgba(180, 180, 180, 0.2)'
+          }
+        }
+      ]
+    };
+    // 使用配置参数渲染图表实例
+    option && myChart.setOption(option);
+  }, [])
+  return (
+    <div>
+      <div ref={chartRef} style={{ width: '500px', height: '400px' }}></div>
+    </div>
+  )
+}
+export default Home
+~~~
+
+#### 组件封装实现
+
+~~~jsx
+const BarChart = ({ title }) => {
+    const chartRef = useRef(null);
+  useEffect(() => { 
+// 配置图表参数
+    const option = {
+      title: {
+        text: title
+      },
+        
+        const Home = () => {
+  return (
+    <div>
+      <BarChart title="ECharts 入门示例" />
+      <BarChart title="ECharts 进阶示例" />
+    </div>
+~~~
+
+#### API模块封装
+
+~~~jsx
+import request from '@/utils/request'
+// 1.登录请求
+export function loginAPI(formData){
+  return request({
+    url: '/authorizations',
+    method: 'POST',
+    data: formData
+  })
+}
+// 2.获取用户信息
+export function getUserInfoAPI(){
+  return request({
+    url: '/user/profile',
+    method: 'GET'
+  })
+}
+~~~
+
+### 文章发布
+
+#### 创建基础结构 
+
+组件：Breadcrumb、Form、Input、Select-Option、Button
+
+#### 富文本编辑器
+
+> npm install react-quill-new --save
+
+~~~jsx
+import ReactQuill from 'react-quill-new'
+import 'react-quill-new/dist/quill.snow.css'
+
+            <ReactQuill
+              className="publish-quill"
+              theme="snow"
+              placeholder="请输入文章内容"
+            />
+~~~
+
+#### 频道数据获取渲染
+
+~~~jsx
+import request from '@/utils/request'
+
+// 1.频道列表
+export function getChannelListAPI(){
+  return request({
+    url: '/channels',
+    method: 'GET'
+  })
+}
+const Publish = () => {
+  // 获取频道列表
+  const [channelList, setChannelList] = useState([])
+  useEffect(() => {
+    const getChannelList = async () => {
+      const res = await getChannelListAPI()
+      setChannelList(res.data.data.channels)
+    }
+    getChannelList()
+  }, [])
+                <Select placeholder="请选择文章频道" style={{ width: 400 }}>
+             {channelList.map(item => (
+               <Option key={item.id} value={item.id}>{item.name}</Option>
+             ))}
+            </Select>
+~~~
+
+#### 收集表单数据提交表单
+
+~~~jsx
+  // 2.提交文章表单
+export function createArticleAPI(data){
+  return request({
+    url: 'mp/articles?draft=false',
+    method: 'POST',
+    data
+  })
+}
+  // 提交表单
+  const onFinish = async (formValues) => {
+    console.log(formValues)
+    const {title,channel_id,content} = formValues
+    // 处理数据
+    const reqData = {
+      title,
+      content,
+      cover:{
+        type:0,
+        images:[]
+     },
+      channel_id
+    }
+    // 提交文章表单
+    createArticleAPI(reqData)
+  }
+~~~
+
+#### 上传文章封面
+
+~~~jsx
+  // 上传图片
+  const [imgList, setImgList] = useState([])
+  const onChange = (value) => {
+    setImgList(value.fileList)
+  }
+            <Upload
+              listType="picture-card"  // 选择文件框的样式
+              showUploadList  // 是否显示上传列表
+              action={'http://geek.itheima.net/v1_0/upload'}
+              name="image"
+              onChange={onChange}
+            >
+~~~
+
+#### 切换封面类型
+
+~~~jsx
+  // 处理封面类型改变
+  const [imgType, setImgType] = useState(1)
+  const onTypeChange = (e) => {
+    console.log('封面类型改变', e.target.value)
+    setImgType(e.target.value)
+  }
+~~~
+
+#### 控制上传图片的数量
+
+~~~jsx
+              maxCount={imgType}
+~~~
+
